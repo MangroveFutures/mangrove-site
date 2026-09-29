@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mangrove Research</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #050c09;
+      --accent:       #0F6E56;
+      --accent-light: #5DCAA5;
+      --serif:        'Cormorant Garamond', Georgia, serif;
+      --sans:         system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: #fff;
+      font-family: var(--sans);
+    }
+
+    /* ── HERO ──────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100svh;
+      min-height: 520px;
+      overflow: hidden;
+    }
+
+    #c {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      pointer-events: none;
+    }
+
+    .wordmark {
+      font-family: var(--serif);
+      font-size: clamp(11px, 1.2vw, 13px);
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .hero-headline {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 8rem);
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .hero-sub {
+      font-size: clamp(12px, 1vw, 14px);
+      color: rgba(255,255,255,0.32);
+      margin-top: 1.2rem;
+      line-height: 1.65;
+      max-width: 380px;
+    }
+
+    .hero-nav {
+      display: flex;
+      gap: clamp(1.2rem, 3vw, 2.5rem);
+      pointer-events: all;
+    }
+
+    .hero-nav a {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .hero-nav a:hover { color: rgba(255,255,255,0.9); }
+
+    .hero-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 140px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+    }
+
+    /* ── SECTIONS (stubs — pending Claude Design) ─── */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(3rem, 6vw, 7rem) clamp(1.5rem, 4vw, 3rem);
+      border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 0.5px solid rgba(255,255,255,0.08);
+    }
+
+    .stub-note {
+      font-family: var(--serif);
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(255,255,255,0.12);
+      line-height: 1.4;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────── */
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem clamp(1.5rem, 4vw, 3rem);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.18);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <canvas id="c"></canvas>
+  <div class="hero-content">
+    <div class="wordmark">Mangrove Research</div>
+    <div>
+      <h1 class="hero-headline">
+        A new kind of<br>
+        system. For <em>every</em><br>
+        kind of mind.
+      </h1>
+      <p class="hero-sub">Independent research lab &amp; studio — human, AI, and the space between.</p>
+    </div>
+    <nav class="hero-nav">
+      <a href="#lab">Lab</a>
+      <a href="#work">Work</a>
+      <a href="#writing">Writing</a>
+      <a href="#services">Services</a>
+    </nav>
+  </div>
+  <div class="hero-fade"></div>
+</section>
+
+<!-- ── LAB ── -->
+<section class="section" id="lab">
+  <div class="section-label">Lab</div>
+  <p class="stub-note">Design placeholder — Mangrove Research, Kronoscope, second-order cybernetics, the human-AI dyad, papers</p>
+</section>
+
+<!-- ── WORK ── -->
+<section class="section" id="work">
+  <div class="section-label">Work</div>
+  <p class="stub-note">Design placeholder — Epoch, Choreotope, WingMan, Mindsweeper, Islands of Doc Tomorrow, data art</p>
+</section>
+
+<!-- ── WRITING ── -->
+<section class="section" id="writing">
+  <div class="section-label">Writing</div>
+  <p class="stub-note">Design placeholder — In Defence of Tangential Thinking (book), essays, papers</p>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="section" id="services">
+  <div class="section-label">Services</div>
+  <p class="stub-note">Design placeholder — workshops, 1:1 work, how consulting funds the research</p>
+</section>
+
+<footer>
+  <span>mangrove.org.uk</span>
+  <a href="mailto:hello@mangrove.org.uk">hello@mangrove.org.uk</a>
+</footer>
+
+<script>
+  // Boids flocking simulation — Craig Reynolds (1987)
+  // Three local rules per particle: separation, alignment, cohesion.
+  // The murmuration pattern is emergent — not scripted.
+
+  const canvas = document.getElementById('c');
+  const ctx    = canvas.getContext('2d');
+  let W, H;
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const N          = 130;
+  const SPD        = 2.0;
+  const PERCEPTION = 60;
+  const SEP_DIST   = 22;
+
+  const boids = Array.from({ length: N }, () => {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = SPD * (0.8 + Math.random() * 0.4);
+    return {
+      x:    Math.random() * 1400,
+      y:    Math.random() * 900,
+      vx:   Math.cos(angle) * speed,
+      vy:   Math.sin(angle) * speed,
+      warm: Math.random() < 0.07   // ~7% gold accent boids
+    };
+  });
+
+  function tick() {
+    for (const b of boids) {
+      let sx = 0, sy = 0, sc = 0;
+      let ax = 0, ay = 0;
+      let cx = 0, cy = 0, nc = 0;
+
+      for (const o of boids) {
+        if (o === b) continue;
+        // Wrap-aware distance calculation
+        let dx = o.x - b.x, dy = o.y - b.y;
+        if (dx >  W / 2) dx -= W;
+        if (dx < -W / 2) dx += W;
+        if (dy >  H / 2) dy -= H;
+        if (dy < -H / 2) dy += H;
+        const d = Math.sqrt(dx * dx + dy * dy);
+
+        if (d > 0 && d < SEP_DIST) {
+          sx -= dx / d; sy -= dy / d; sc++;
+        }
+        if (d < PERCEPTION) {
+          ax += o.vx; ay += o.vy;
+          cx += o.x;  cy += o.y;
+          nc++;
+        }
+      }
+
+      // Apply three rules
+      if (sc) { b.vx += (sx / sc) * 0.12; b.vy += (sy / sc) * 0.12; }  // separation
+      if (nc) {
+        b.vx += (ax / nc - b.vx) * 0.055;   // alignment
+        b.vy += (ay / nc - b.vy) * 0.055;
+        b.vx += (cx / nc - b.x)  * 0.005;   // cohesion
+        b.vy += (cy / nc - b.y)  * 0.005;
+      }
+
+      // Speed limits
+      const sp    = Math.sqrt(b.vx * b.vx + b.vy * b.vy) || 1;
+      const maxSp = SPD * 1.5;
+      const minSp = SPD * 0.5;
+      if (sp > maxSp) { b.vx = b.vx / sp * maxSp; b.vy = b.vy / sp * maxSp; }
+      if (sp < minSp) { b.vx = b.vx / sp * minSp; b.vy = b.vy / sp * minSp; }
+
+      // Wrap edges
+      b.x = (b.x + b.vx + W) % W;
+      b.y = (b.y + b.vy + H) % H;
+    }
+  }
+
+  function frame() {
+    // Trail effect: semi-transparent fill instead of clearing
+    ctx.fillStyle = 'rgba(5,12,9,0.16)';
+    ctx.fillRect(0, 0, W, H);
+
+    for (const b of boids) {
+      const sp  = Math.sqrt(b.vx * b.vx + b.vy * b.vy) || 1;
+      const nx  = b.vx / sp;
+      const ny  = b.vy / sp;
+      const len = 5 + sp * 2.5;
+
+      ctx.beginPath();
+      ctx.moveTo(b.x, b.y);
+      ctx.lineTo(b.x - nx * len, b.y - ny * len);
+      ctx.strokeStyle = b.warm
+        ? 'rgba(239,172,55,0.9)'
+        : 'rgba(255,255,255,0.52)';
+      ctx.lineWidth = b.warm ? 1.1 : 0.75;
+      ctx.stroke();
+    }
+
+    tick();
+    requestAnimationFrame(frame);
+  }
+
+  // Initial fill before first frame
+  ctx.fillStyle = '#050c09';
+  ctx.fillRect(0, 0, W, H);
+  frame();
+</script>
+
+</body>
+</html>
