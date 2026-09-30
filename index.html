@@ -25,7 +25,7 @@
       font-family: var(--sans);
     }
 
-    /* ── HERO ──────────────────────────────────────── */
+    /* ── HERO ─────────────────────────────────────── */
     .hero {
       position: relative;
       width: 100%;
@@ -34,123 +34,169 @@
       overflow: hidden;
       background: var(--bg);
     }
-
-    #c {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      cursor: none;
-    }
-
+    #c { position: absolute; inset: 0; width: 100%; height: 100%; cursor: none; }
     .hero-content {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: space-between;
       padding: clamp(1.5rem, 4vw, 3rem);
       pointer-events: none;
     }
-
     .wordmark {
-      font-family: var(--serif);
-      font-size: clamp(11px, 1.2vw, 13px);
-      font-weight: 500;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
+      font-family: var(--serif); font-size: clamp(11px, 1.2vw, 13px);
+      font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase;
       color: rgba(30,34,53,0.45);
     }
-
     .hero-headline {
-      font-family: var(--serif);
-      font-size: clamp(2.8rem, 8vw, 8rem);
-      font-weight: 300;
-      line-height: 1.02;
-      letter-spacing: -0.01em;
-      color: var(--ink);
+      font-family: var(--serif); font-size: clamp(2.8rem, 8vw, 8rem);
+      font-weight: 300; line-height: 1.02; letter-spacing: -0.01em; color: var(--ink);
     }
-
-    .hero-headline em {
-      font-style: italic;
-      color: rgba(30,34,53,0.45);
-    }
-
+    .hero-headline em { font-style: italic; color: rgba(30,34,53,0.45); }
     .hero-sub {
-      font-size: clamp(12px, 1vw, 14px);
-      color: rgba(30,34,53,0.38);
-      margin-top: 1.2rem;
-      line-height: 1.65;
-      max-width: 380px;
+      font-size: clamp(12px, 1vw, 14px); color: rgba(30,34,53,0.38);
+      margin-top: 1.2rem; line-height: 1.65; max-width: 380px;
     }
-
-    .hero-nav {
-      display: flex;
-      gap: clamp(1.2rem, 3vw, 2.5rem);
-      pointer-events: all;
-    }
-
+    .hero-nav { display: flex; gap: clamp(1.2rem, 3vw, 2.5rem); pointer-events: all; }
     .hero-nav a {
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(30,34,53,0.32);
-      text-decoration: none;
-      transition: color 0.2s;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(30,34,53,0.32); text-decoration: none; transition: color 0.2s;
     }
-
     .hero-nav a:hover { color: var(--ink); }
-
     .hero-fade {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 140px;
+      position: absolute; bottom: 0; left: 0; right: 0; height: 140px;
       background: linear-gradient(to bottom, transparent, var(--bg));
       pointer-events: none;
     }
 
-    /* ── SECTIONS (stubs — pending Claude Design) ─── */
+    /* ── SHARED SECTION ───────────────────────────── */
     .section {
-      max-width: 1200px;
-      margin: 0 auto;
+      max-width: 1200px; margin: 0 auto;
       padding: clamp(3rem, 6vw, 7rem) clamp(1.5rem, 4vw, 3rem);
       border-bottom: 0.5px solid rgba(30,34,53,0.08);
     }
-
     .section-label {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(30,34,53,0.22);
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 0.5px solid rgba(30,34,53,0.07);
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(30,34,53,0.22); margin-bottom: 2.5rem;
+      padding-bottom: 1rem; border-bottom: 0.5px solid rgba(30,34,53,0.07);
     }
 
-    .stub-note {
-      font-family: var(--serif);
-      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-      font-weight: 300;
-      font-style: italic;
-      color: rgba(30,34,53,0.14);
-      line-height: 1.4;
+    /* ── LAB ──────────────────────────────────────── */
+    .lab-intro {
+      font-family: var(--serif); font-size: clamp(1.15rem, 2.2vw, 1.7rem);
+      font-weight: 300; line-height: 1.55; color: var(--ink);
+      max-width: 720px; margin-bottom: 2rem;
+    }
+    .area-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.5rem; }
+    .area-tag {
+      font-size: 11px; letter-spacing: 0.06em;
+      color: rgba(30,34,53,0.45); border: 0.5px solid rgba(30,34,53,0.18);
+      padding: 4px 10px; border-radius: 2px;
+    }
+    .lab-papers { margin-bottom: 2rem; }
+    .paper-row {
+      display: grid; grid-template-columns: 68px 1fr 72px;
+      gap: 1rem; padding: 0.9rem 0;
+      border-bottom: 0.5px solid rgba(30,34,53,0.07); align-items: baseline;
+    }
+    .paper-year { font-size: 11px; color: rgba(30,34,53,0.28); font-variant-numeric: tabular-nums; }
+    .paper-title { font-family: var(--serif); font-size: 1rem; font-weight: 300; color: var(--ink); line-height: 1.3; }
+    .paper-title em { font-style: italic; }
+    .paper-type { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(30,34,53,0.28); text-align: right; }
+    .lab-note {
+      font-size: 12px; line-height: 1.65; color: rgba(30,34,53,0.35);
+      border-top: 0.5px solid rgba(30,34,53,0.07); padding-top: 1.5rem;
+      max-width: 560px;
     }
 
-    /* ── FOOTER ─────────────────────────────────────── */
+    /* ── WORK ─────────────────────────────────────── */
+    .project-featured {
+      margin-bottom: 3rem; padding-bottom: 3rem;
+      border-bottom: 0.5px solid rgba(30,34,53,0.08);
+    }
+    .project-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2.5rem 3rem; margin-bottom: 2.5rem;
+    }
+    .project-item {}
+    .p-type {
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(30,34,53,0.28); margin-bottom: 0.5rem;
+    }
+    .p-title-lg {
+      font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300; line-height: 1.02; color: var(--ink); margin-bottom: 0.9rem;
+    }
+    .p-title {
+      font-family: var(--serif); font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+      font-weight: 300; line-height: 1.1; color: var(--ink); margin-bottom: 0.7rem;
+    }
+    .p-desc {
+      font-size: 13px; line-height: 1.7; color: rgba(30,34,53,0.5);
+      margin-bottom: 0.9rem; max-width: 520px;
+    }
+    .p-footer { display: flex; align-items: center; gap: 1.2rem; }
+    .p-year { font-size: 11px; color: rgba(30,34,53,0.28); font-variant-numeric: tabular-nums; }
+    .p-status { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; }
+    .s-live    { color: var(--accent); }
+    .s-dev     { color: rgba(30,34,53,0.28); }
+    .s-early   { color: rgba(30,34,53,0.4); }
+    .s-ongoing { color: rgba(30,34,53,0.28); }
+    .work-divider { border: none; border-top: 0.5px solid rgba(30,34,53,0.08); margin: 0 0 2.5rem; }
+
+    /* ── WRITING ──────────────────────────────────── */
+    .writing-entry {
+      display: grid; grid-template-columns: 68px 1fr 80px;
+      gap: 1.2rem; padding: 1rem 0;
+      border-bottom: 0.5px solid rgba(30,34,53,0.07); align-items: baseline;
+    }
+    .w-year { font-size: 11px; color: rgba(30,34,53,0.28); font-variant-numeric: tabular-nums; }
+    .w-title { font-family: var(--serif); font-size: clamp(1rem, 1.8vw, 1.25rem); font-weight: 300; line-height: 1.3; color: var(--ink); }
+    .w-title em { font-style: italic; }
+    .w-type { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(30,34,53,0.28); text-align: right; }
+
+    /* ── SERVICES ─────────────────────────────────── */
+    .services-intro {
+      font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.5rem);
+      font-weight: 300; line-height: 1.6; color: rgba(30,34,53,0.6);
+      max-width: 640px; margin-bottom: 2.5rem;
+    }
+    .service-block {
+      border-top: 0.5px solid rgba(30,34,53,0.08);
+      padding: 1.8rem 0;
+      display: grid; grid-template-columns: 220px 1fr; gap: 2.5rem; align-items: start;
+    }
+    .svc-title { font-family: var(--serif); font-size: clamp(1rem, 1.6vw, 1.2rem); font-weight: 300; color: var(--ink); }
+    .svc-body { font-size: 13px; line-height: 1.7; color: rgba(30,34,53,0.5); }
+    .svc-for { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+    .for-tag {
+      font-size: 10px; letter-spacing: 0.06em;
+      border: 0.5px solid rgba(30,34,53,0.14); padding: 3px 8px;
+      border-radius: 2px; color: rgba(30,34,53,0.38);
+    }
+    .services-meta {
+      margin-top: 2rem; padding-top: 1.5rem;
+      border-top: 0.5px solid rgba(30,34,53,0.07);
+      font-size: 12px; line-height: 1.7; color: rgba(30,34,53,0.32);
+      font-style: italic; max-width: 580px;
+    }
+
+    /* ── FOOTER ───────────────────────────────────── */
     footer {
-      max-width: 1200px;
-      margin: 0 auto;
+      max-width: 1200px; margin: 0 auto;
       padding: 2rem clamp(1.5rem, 4vw, 3rem);
-      font-size: 11px;
-      letter-spacing: 0.04em;
-      color: rgba(30,34,53,0.18);
-      display: flex;
-      justify-content: space-between;
+      font-size: 11px; letter-spacing: 0.04em;
+      color: rgba(30,34,53,0.18); display: flex; justify-content: space-between;
     }
-
     footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── RESPONSIVE ───────────────────────────────── */
+    @media (max-width: 640px) {
+      .project-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .service-block { grid-template-columns: 1fr; gap: 1rem; }
+      .writing-entry { grid-template-columns: 52px 1fr; }
+      .w-type { display: none; }
+      .paper-row { grid-template-columns: 52px 1fr; }
+      .paper-type { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -179,27 +225,269 @@
 </section>
 
 <!-- ── LAB ── -->
+<!-- COPY PLACEHOLDER: lab-intro to be written in conversation with Rosie -->
 <section class="section" id="lab">
   <div class="section-label">Lab</div>
-  <p class="stub-note">Design placeholder — Mangrove Research, Kronoscope, second-order cybernetics, the human-AI dyad, papers</p>
+  <p class="lab-intro">
+    Mangrove Research is an independent research lab studying the intersection of human
+    and artificial cognition — how people and AI systems can think together, over time,
+    in ways that adapt to the person rather than the other way round.
+  </p>
+  <div class="area-row">
+    <span class="area-tag">Human–AI dyad</span>
+    <span class="area-tag">Second-order cybernetics</span>
+    <span class="area-tag">Neurodiversity</span>
+    <span class="area-tag">Knowledge graphs</span>
+    <span class="area-tag">Emergent coordination</span>
+    <span class="area-tag">Stigmergy</span>
+    <span class="area-tag">Cognitive prosthetics</span>
+    <span class="area-tag">Temporal reasoning</span>
+  </div>
+  <div class="lab-papers">
+    <div class="paper-row">
+      <span class="paper-year">2026</span>
+      <span class="paper-title">The human–AI dyad as unit of analysis</span>
+      <span class="paper-type">Essay</span>
+    </div>
+    <div class="paper-row">
+      <span class="paper-year">2026</span>
+      <span class="paper-title">Coherence, not compliance</span>
+      <span class="paper-type">Essay</span>
+    </div>
+    <div class="paper-row">
+      <span class="paper-year">2026</span>
+      <span class="paper-title">Errors as smoke tests — a practice of deliberate low-stakes failure</span>
+      <span class="paper-type">Paper</span>
+    </div>
+  </div>
+  <p class="lab-note">
+    Mangrove Research funds its independent work through consulting, 1:1 practice,
+    writing, and the tools it builds. Everything on this site was made using Mangrove's
+    own methods and tools.
+  </p>
 </section>
 
 <!-- ── WORK ── -->
 <section class="section" id="work">
   <div class="section-label">Work</div>
-  <p class="stub-note">Design placeholder — Epoch, Choreotope, WingMan, Mindsweeper, Islands of Doc Tomorrow, data art</p>
+
+  <!-- Featured: Epoch -->
+  <div class="project-featured">
+    <div class="p-type">Platform</div>
+    <h2 class="p-title-lg">Epoch</h2>
+    <p class="p-desc">
+      A personal cognitive operating system and knowledge platform. Epoch ingests conversation
+      history across AI tools, structures it as a typed hypergraph, and produces materialised
+      views — notebook, wiki, agent summaries — that stay current without manual effort.
+      Built by Mangrove, used by Mangrove to build itself.
+    </p>
+    <div class="p-footer">
+      <span class="p-year">2024–</span>
+      <span class="p-status s-dev">In development</span>
+    </div>
+  </div>
+
+  <!-- Grid: tools and research -->
+  <div class="project-grid">
+
+    <div class="project-item">
+      <div class="p-type">Engine</div>
+      <h3 class="p-title">Choreotope</h3>
+      <p class="p-desc">
+        A murmuration engine for movement and pattern visualisation. Generates emergent
+        flocking behaviour from natural-language descriptions of rhythm, density, and
+        relationship. The visual language of this site comes from Choreotope.
+      </p>
+      <div class="p-footer">
+        <span class="p-year">2026</span>
+        <span class="p-status s-dev">In development</span>
+      </div>
+    </div>
+
+    <div class="project-item">
+      <div class="p-type">Research</div>
+      <h3 class="p-title">Kronoscope</h3>
+      <p class="p-desc">
+        Hypergraph analysis layer for the Mangrove conversation corpus. Studies the topology
+        of long-running human–AI dialogue — how ideas cluster, which nodes are structurally
+        critical, how the graph evolves over time.
+      </p>
+      <div class="p-footer">
+        <span class="p-year">2025–</span>
+        <span class="p-status s-dev">In development</span>
+      </div>
+    </div>
+
+    <div class="project-item">
+      <div class="p-type">App</div>
+      <h3 class="p-title">WingMan</h3>
+      <p class="p-desc">
+        Group event planning tool. Coordinates RSVPs, logistics, shared information and
+        timing for groups. First instance: a stag do app. Built on Mangrove's platform.
+      </p>
+      <div class="p-footer">
+        <span class="p-year">2026</span>
+        <span class="p-status s-live">Live</span>
+      </div>
+    </div>
+
+    <div class="project-item">
+      <div class="p-type">Tool</div>
+      <h3 class="p-title">Mindsweeper</h3>
+      <p class="p-desc">
+        AI conversation analysis and personal knowledge graph ingestion. Extracts patterns,
+        decisions, and relationships from AI chat histories and brings them into the graph.
+        The first step of the Mangrove extraction cascade.
+      </p>
+      <div class="p-footer">
+        <span class="p-year">2026</span>
+        <span class="p-status s-early">Early access</span>
+      </div>
+    </div>
+
+    <div class="project-item">
+      <div class="p-type">App</div>
+      <h3 class="p-title">InnPut</h3>
+      <p class="p-desc">
+        Group accommodation research tool. Helps groups find, compare, and coordinate
+        on accommodation options — rooms, prices, proximity, preferences — without
+        the usual spreadsheet chaos.
+      </p>
+      <div class="p-footer">
+        <span class="p-year">2026</span>
+        <span class="p-status s-dev">In development</span>
+      </div>
+    </div>
+
+    <div class="project-item">
+      <div class="p-type">World / Game</div>
+      <h3 class="p-title"><em>Islands of Doc Tomorrow</em></h3>
+      <p class="p-desc">
+        A speculative fiction world game. An alternative future, built as a navigable
+        world with its own bibliography, characters, and rules. A long-running creative
+        project alongside the research.
+      </p>
+      <div class="p-footer">
+        <span class="p-year">2024–</span>
+        <span class="p-status s-ongoing">Ongoing</span>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="work-divider">
+
+  <!-- Creative / data art -->
+  <div class="project-item">
+    <div class="p-type">Creative practice</div>
+    <h3 class="p-title">Data art</h3>
+    <p class="p-desc">
+      Work made from real and found datasets — photography, directing, sculpture.
+      A separate practice from the research and tools, kept deliberately distinct.
+    </p>
+    <div class="p-footer">
+      <span class="p-year">Ongoing</span>
+    </div>
+  </div>
+
 </section>
 
 <!-- ── WRITING ── -->
 <section class="section" id="writing">
   <div class="section-label">Writing</div>
-  <p class="stub-note">Design placeholder — In Defence of Tangential Thinking (book), essays, papers</p>
+
+  <div class="writing-entry">
+    <span class="w-year">2026</span>
+    <span class="w-title"><em>In Defence of Tangential Thinking</em></span>
+    <span class="w-type">Book</span>
+  </div>
+  <div class="writing-entry">
+    <span class="w-year">2026</span>
+    <span class="w-title">The human–AI dyad as unit of analysis</span>
+    <span class="w-type">Essay</span>
+  </div>
+  <div class="writing-entry">
+    <span class="w-year">2026</span>
+    <span class="w-title">Coherence, not compliance</span>
+    <span class="w-type">Essay</span>
+  </div>
+  <div class="writing-entry">
+    <span class="w-year">2026</span>
+    <span class="w-title">Errors as smoke tests</span>
+    <span class="w-type">Essay</span>
+  </div>
+  <div class="writing-entry">
+    <span class="w-year">2006</span>
+    <span class="w-title"><em>Nice Stories</em></span>
+    <span class="w-type">Book</span>
+  </div>
+
 </section>
 
 <!-- ── SERVICES ── -->
 <section class="section" id="services">
   <div class="section-label">Services</div>
-  <p class="stub-note">Design placeholder — workshops, 1:1 work, how consulting funds the research</p>
+
+  <!-- COPY PLACEHOLDER: services-intro to be written in conversation with Rosie -->
+  <p class="services-intro">
+    [Placeholder: a sentence or two on what the services offer and how they connect to
+    the research — to be written in conversation.]
+  </p>
+
+  <div class="service-block">
+    <div class="svc-title">Workshops</div>
+    <div class="svc-body">
+      Introductions to AI for organisations, schools, and teams — practical, honest, and
+      adapted to the audience. Covering how to use AI tools well, what to know about
+      their limits, and how to build workflows that actually help rather than add noise.
+      <div class="svc-for">
+        <span class="for-tag">Organisations</span>
+        <span class="for-tag">Schools</span>
+        <span class="for-tag">Freelancers</span>
+        <span class="for-tag">ADHD &amp; neurodivergent</span>
+        <span class="for-tag">Google Workspace</span>
+        <span class="for-tag">Claude</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="service-block">
+    <div class="svc-title">1:1 work</div>
+    <div class="svc-body">
+      Focused work with individuals — entrepreneurs, C-suite, consultants, and people
+      who want to understand AI properly and build it into how they think and work.
+      Sessions are part coaching, part technical, part thinking-together.
+      <div class="svc-for">
+        <span class="for-tag">Entrepreneurs</span>
+        <span class="for-tag">C-suite</span>
+        <span class="for-tag">Individuals</span>
+        <span class="for-tag">Freelancers</span>
+        <span class="for-tag">Upskilling</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="service-block">
+    <div class="svc-title">Research consulting</div>
+    <div class="svc-body">
+      Longer-term consulting with organisations building AI-adjacent products or
+      practices — strategy, systems design, and the kind of thinking that only comes
+      from having actually built this. Scope varies.
+      <div class="svc-for">
+        <span class="for-tag">Organisations</span>
+        <span class="for-tag">Product teams</span>
+        <span class="for-tag">Scale-ups</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="services-meta">
+    Consulting and 1:1 work fund Mangrove's independent research — into human–AI cognition,
+    neurodiversity, and the design of systems that adapt to people rather than the other
+    way round. Everything offered here is also a demonstration of what Mangrove's tools
+    and methods make possible.
+  </p>
+
 </section>
 
 <footer>
@@ -209,15 +497,12 @@
 
 <script>
   // Boids flocking simulation — Craig Reynolds (1987)
-  // Visual style: cream ground + dark navy ink + neighbor connection lines,
-  // matched to the Choreotope tool aesthetic.
-  // Interaction: cursor acts as a gentle repeller.
+  // Visual style matched to Choreotope: cream ground, dark navy, connection lines.
 
   const canvas = document.getElementById('c');
   const ctx    = canvas.getContext('2d');
   let W, H;
 
-  // Track cursor in canvas-pixel space
   const mouse = { x: -9999, y: -9999 };
   canvas.addEventListener('mousemove', e => {
     const r = canvas.getBoundingClientRect();
@@ -233,124 +518,56 @@
   resize();
   window.addEventListener('resize', resize);
 
-  const N            = 130;
-  const SPD          = 1.8;
-  const PERCEPTION   = 62;   // physics + connection radius
-  const CONN_RADIUS  = 55;   // connection line radius (slightly tighter than physics)
-  const SEP_DIST     = 22;
-  const MOUSE_RADIUS = 100;
-  const MOUSE_FORCE  = 0.20;
-
-  // Ink colour components for rgba construction
+  const N = 130, SPD = 1.8, PERCEPTION = 62, CONN_RADIUS = 55, SEP_DIST = 22;
+  const MOUSE_RADIUS = 100, MOUSE_FORCE = 0.20;
   const R = 30, G = 34, B = 53;
 
   const boids = Array.from({ length: N }, () => {
-    const angle = Math.random() * Math.PI * 2;
-    const speed = SPD * (0.8 + Math.random() * 0.4);
-    return {
-      x:  Math.random() * 1400,
-      y:  Math.random() * 900,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-    };
+    const a = Math.random() * Math.PI * 2, sp = SPD * (0.8 + Math.random() * 0.4);
+    return { x: Math.random() * 1400, y: Math.random() * 900, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp };
   });
 
   function tick() {
     for (const b of boids) {
-      let sx = 0, sy = 0, sc = 0;
-      let ax = 0, ay = 0;
-      let cx = 0, cy = 0, nc = 0;
-
+      let sx=0,sy=0,sc=0,ax=0,ay=0,cx=0,cy=0,nc=0;
       for (const o of boids) {
-        if (o === b) continue;
-        let dx = o.x - b.x, dy = o.y - b.y;
-        // Wrap-aware distance
-        if (dx >  W/2) dx -= W;
-        if (dx < -W/2) dx += W;
-        if (dy >  H/2) dy -= H;
-        if (dy < -H/2) dy += H;
-        const d = Math.sqrt(dx*dx + dy*dy);
-        if (d > 0 && d < SEP_DIST)  { sx -= dx/d; sy -= dy/d; sc++; }
-        if (d < PERCEPTION)          { ax += o.vx; ay += o.vy; cx += o.x; cy += o.y; nc++; }
+        if (o===b) continue;
+        let dx=o.x-b.x, dy=o.y-b.y;
+        if (dx>W/2) dx-=W; if (dx<-W/2) dx+=W;
+        if (dy>H/2) dy-=H; if (dy<-H/2) dy+=H;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if (d>0&&d<SEP_DIST) { sx-=dx/d; sy-=dy/d; sc++; }
+        if (d<PERCEPTION)    { ax+=o.vx; ay+=o.vy; cx+=o.x; cy+=o.y; nc++; }
       }
-
-      // Three flocking rules
-      if (sc) { b.vx += (sx/sc) * 0.12; b.vy += (sy/sc) * 0.12; }
-      if (nc) {
-        b.vx += (ax/nc - b.vx) * 0.055;  // alignment
-        b.vy += (ay/nc - b.vy) * 0.055;
-        b.vx += (cx/nc - b.x)  * 0.005;  // cohesion
-        b.vy += (cy/nc - b.y)  * 0.005;
-      }
-
-      // Cursor repulsion — boids gently part around the pointer
-      const mdx = b.x - mouse.x, mdy = b.y - mouse.y;
-      const md  = Math.sqrt(mdx*mdx + mdy*mdy);
-      if (md > 0 && md < MOUSE_RADIUS) {
-        const str = MOUSE_FORCE * (1 - md / MOUSE_RADIUS);
-        b.vx += (mdx/md) * str;
-        b.vy += (mdy/md) * str;
-      }
-
-      // Speed limits
-      const sp = Math.sqrt(b.vx*b.vx + b.vy*b.vy) || 1;
-      const mx = SPD * 1.6, mn = SPD * 0.45;
-      if (sp > mx) { b.vx = b.vx/sp*mx; b.vy = b.vy/sp*mx; }
-      if (sp < mn) { b.vx = b.vx/sp*mn; b.vy = b.vy/sp*mn; }
-
-      // Wrap edges
-      b.x = (b.x + b.vx + W) % W;
-      b.y = (b.y + b.vy + H) % H;
+      if (sc) { b.vx+=(sx/sc)*0.12; b.vy+=(sy/sc)*0.12; }
+      if (nc) { b.vx+=(ax/nc-b.vx)*0.055; b.vy+=(ay/nc-b.vy)*0.055; b.vx+=(cx/nc-b.x)*0.005; b.vy+=(cy/nc-b.y)*0.005; }
+      const mdx=b.x-mouse.x, mdy=b.y-mouse.y, md=Math.sqrt(mdx*mdx+mdy*mdy);
+      if (md>0&&md<MOUSE_RADIUS) { const s=MOUSE_FORCE*(1-md/MOUSE_RADIUS); b.vx+=(mdx/md)*s; b.vy+=(mdy/md)*s; }
+      const sp=Math.sqrt(b.vx*b.vx+b.vy*b.vy)||1, mx=SPD*1.6, mn=SPD*0.45;
+      if (sp>mx){b.vx=b.vx/sp*mx;b.vy=b.vy/sp*mx;} if (sp<mn){b.vx=b.vx/sp*mn;b.vy=b.vy/sp*mn;}
+      b.x=(b.x+b.vx+W)%W; b.y=(b.y+b.vy+H)%H;
     }
   }
 
   function frame() {
-    // Cream trail — slow fade preserves motion history like the Choreotope
-    ctx.fillStyle = 'rgba(237,233,227,0.18)';
-    ctx.fillRect(0, 0, W, H);
-
-    // ── Connection lines (the signature Choreotope mesh texture) ──
-    // Draw lines between boids within connection radius;
-    // opacity falls off with distance to create the wing/membrane effect.
-    for (let i = 0; i < N; i++) {
-      for (let j = i + 1; j < N; j++) {
-        const dx = boids[j].x - boids[i].x;
-        const dy = boids[j].y - boids[i].y;
-        const d  = Math.sqrt(dx*dx + dy*dy);
-        if (d < CONN_RADIUS) {
-          const alpha = (1 - d / CONN_RADIUS) * 0.13;
-          ctx.beginPath();
-          ctx.moveTo(boids[i].x, boids[i].y);
-          ctx.lineTo(boids[j].x, boids[j].y);
-          ctx.strokeStyle = `rgba(${R},${G},${B},${alpha.toFixed(3)})`;
-          ctx.lineWidth = 0.35;
-          ctx.stroke();
-        }
+    ctx.fillStyle='rgba(237,233,227,0.18)'; ctx.fillRect(0,0,W,H);
+    for (let i=0;i<N;i++) for (let j=i+1;j<N;j++) {
+      const dx=boids[j].x-boids[i].x, dy=boids[j].y-boids[i].y, d=Math.sqrt(dx*dx+dy*dy);
+      if (d<CONN_RADIUS) {
+        ctx.beginPath(); ctx.moveTo(boids[i].x,boids[i].y); ctx.lineTo(boids[j].x,boids[j].y);
+        ctx.strokeStyle=`rgba(${R},${G},${B},${((1-d/CONN_RADIUS)*0.13).toFixed(3)})`; ctx.lineWidth=0.35; ctx.stroke();
       }
     }
-
-    // ── Velocity streaks (directional dashes) ──
     for (const b of boids) {
-      const sp  = Math.sqrt(b.vx*b.vx + b.vy*b.vy) || 1;
-      const nx  = b.vx/sp, ny = b.vy/sp;
-      const len = 4 + sp * 2;
-      ctx.beginPath();
-      ctx.moveTo(b.x, b.y);
-      ctx.lineTo(b.x - nx*len, b.y - ny*len);
-      ctx.strokeStyle = `rgba(${R},${G},${B},0.78)`;
-      ctx.lineWidth = 0.75;
-      ctx.stroke();
+      const sp=Math.sqrt(b.vx*b.vx+b.vy*b.vy)||1, nx=b.vx/sp, ny=b.vy/sp, len=4+sp*2;
+      ctx.beginPath(); ctx.moveTo(b.x,b.y); ctx.lineTo(b.x-nx*len,b.y-ny*len);
+      ctx.strokeStyle=`rgba(${R},${G},${B},0.78)`; ctx.lineWidth=0.75; ctx.stroke();
     }
-
-    tick();
-    requestAnimationFrame(frame);
+    tick(); requestAnimationFrame(frame);
   }
 
-  // Initial cream fill
-  ctx.fillStyle = '#EDE9E3';
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle='#EDE9E3'; ctx.fillRect(0,0,W,H);
   frame();
 </script>
-
 </body>
 </html>
