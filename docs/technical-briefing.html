@@ -1,0 +1,123 @@
+<!-- Mangrove Research — technical briefing for graph/DB colleague conversation
+     Source: Claude Chat session 2026-09-30
+     To pick up: open this file, or continue from https://claude.ai/artifact/DRuYjXznTuDGv63ZnU2G75
+     Related: docs/squarespace-migration.md, design-system/index.html
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mangrove Research — technical briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#EDE9E3;--ink:#1e2235;--mid:rgba(30,34,53,.55);--low:rgba(30,34,53,.3);
+  --ghost:rgba(30,34,53,.08);--accent:#0F6E56;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.65}
+.wrap{max-width:720px;margin:0 auto;padding:clamp(2rem,6vw,5rem) clamp(1.5rem,4vw,3rem)}
+.label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--low);margin-bottom:.5rem}
+h1{font-family:var(--serif);font-size:clamp(2rem,5vw,3.5rem);font-weight:300;line-height:1.05;margin-bottom:.5rem}
+.sub{font-size:14px;color:var(--mid);margin-bottom:3rem;padding-bottom:2rem;border-bottom:.5px solid var(--ghost)}
+h2{font-family:var(--serif);font-size:clamp(1.3rem,2.5vw,1.8rem);font-weight:300;margin-bottom:.8rem;margin-top:3rem;padding-top:2rem;border-top:.5px solid var(--ghost)}
+p{color:var(--mid);margin-bottom:1rem;max-width:620px}
+p strong{color:var(--ink);font-weight:500}
+.row{display:grid;grid-template-columns:140px 1fr;gap:1rem;padding:.9rem 0;border-bottom:.5px solid var(--ghost)}
+.row-key{font-size:12px;color:var(--low);padding-top:2px}
+.row-val{font-size:14px;color:var(--mid);line-height:1.6}
+.row-val strong{color:var(--ink)}
+.callout{border-left:2px solid var(--accent);padding:.8rem 1.2rem;margin:1.5rem 0;background:rgba(15,110,86,.05);border-radius:0 6px 6px 0}
+.callout p{margin:0;color:var(--ink)}
+.q-list{margin:.5rem 0 1.5rem}
+.q-item{display:flex;gap:.75rem;padding:.6rem 0;border-bottom:.5px solid var(--ghost)}
+.q-num{font-size:11px;color:var(--low);width:20px;flex-shrink:0;padding-top:2px}
+.q-text{font-size:14px;color:var(--mid)}
+.status-row{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
+.pill{font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:2px;border:.5px solid var(--ghost);color:var(--low)}
+.pill.done{border-color:var(--accent);color:var(--accent)}
+.pill.active{border-color:var(--ink);color:var(--ink)}
+footer{margin-top:4rem;padding-top:1.5rem;border-top:.5px solid var(--ghost);font-size:12px;color:var(--low)}
+@media(max-width:560px){.row{grid-template-columns:1fr;gap:.3rem}.row-key{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="label">Mangrove Research — technical briefing for a graph/DB conversation</div>
+<h1>A cognitive prosthetic for human-AI memory</h1>
+<p class="sub">Draft September 2026. For a colleague with a strong graph and database background. Intended to make a technical conversation productive by establishing what the system is, why it is designed this way, and where the hard questions are.</p>
+
+<h2>The problem being solved</h2>
+
+<p>Most tools for knowledge and memory are built on hierarchical or linear structures — folders, lists, timelines, tables. These structures are easy to implement and easy to query. They are a poor match for how human cognition actually works, and a particularly poor match for the way neurodivergent (ND) minds — ADHD, autistic, dyslexic — tend to organize and retrieve information.</p>
+
+<p>Human memory is <strong>associative and context-dependent</strong>. A thought is retrievable not because it sits at a predictable address, but because you can follow a chain of related things to find it. Things belong in multiple places simultaneously. Connections between distant concepts are often the most valuable things — and they are exactly what flat structures lose.</p>
+
+<p>ND brains tend to have a particularly high density of these cross-domain connections. The scatteredness that feels like a problem is often a structural feature: the thinking is richly connected, but the tools impose a flat address space it was never meant to fit in.</p>
+
+<div class="callout">
+<p>The core claim of this project: the right structure for an external cognitive memory is a <strong>labelled property hypergraph with a temporal axis</strong> — not a folder hierarchy, not a relational database, not a flat document store. The connections are first-class. Chronology is an axis, not a primary key. Multiple things can be simultaneously true, in development, or valid for different contexts.</p>
+</div>
+
+<h2>What the system consists of</h2>
+
+<div class="row"><div class="row-key">The corpus</div><div class="row-val">~15 million words of conversation across two years — Claude AI, Claude Code, ChatGPT, and other tools. Append-only. Contains the actual reasoning behind every decision.</div></div>
+<div class="row"><div class="row-key">The graph (Epoch)</div><div class="row-val">A <strong>multiplex property hypergraph</strong>. Same nodes, multiple relationship layers (semantic, provenance, access, temporal). Hyperedges for relationships with more than two participants.</div></div>
+<div class="row"><div class="row-key">Extraction cascade</div><div class="row-val">Pipeline that reads conversations and produces typed graph nodes and edges. Still being built. Conversations currently produce structured documents as a workaround.</div></div>
+<div class="row"><div class="row-key">Materialized views</div><div class="row-val">Human-readable outputs from the graph: notebook, wiki, summaries. CQRS-inspired model — write model (graph) and read models (views) separated.</div></div>
+<div class="row"><div class="row-key">Agent team</div><div class="row-val">Named AI agents with specific roles. Blackboard architecture: agents monitor the graph for relevant work and act. No central controller.</div></div>
+<div class="row"><div class="row-key">Projection surfaces</div><div class="row-val">Separate repos/apps that read from the graph for specific purposes. All read-only projections. None write back.</div></div>
+
+<h2>Key design decisions</h2>
+
+<div class="row"><div class="row-key">Graph not relational</div><div class="row-val">Relationships are first-class data. A conversation references a project, decision, person, principle, and time interval simultaneously. The graph makes relationships the structure.</div></div>
+<div class="row"><div class="row-key">Hypergraph not simple graph</div><div class="row-val">Many relationships are not binary. A meeting involves multiple participants. A hyperedge connects any number of nodes. This is the right primitive.</div></div>
+<div class="row"><div class="row-key">Multiplex layers</div><div class="row-val">Same nodes, distinct edge types: semantic, provenance, access, temporal. Each layer can be queried independently while nodes are shared.</div></div>
+<div class="row"><div class="row-key">Allen's interval algebra</div><div class="row-val">Timestamps are insufficient. Interval relationships matter (overlaps, during, meets, contains). Same formalism used in the Choreotope movement-notation project.</div></div>
+<div class="row"><div class="row-key">Append-only corpus</div><div class="row-val">Raw conversation corpus never modified. History of reasoning is itself research data.</div></div>
+
+<h2>The self-similarity</h2>
+
+<div class="row"><div class="row-key">Layer 0</div><div class="row-val"><strong>Raw, append-only.</strong> Conversations, rough ideas. No commitment to structure.</div></div>
+<div class="row"><div class="row-key">Layer 1</div><div class="row-val"><strong>Typed, named.</strong> Graph nodes with identity and type.</div></div>
+<div class="row"><div class="row-key">Layer 2</div><div class="row-val"><strong>Relational.</strong> Hyperedges — how things relate to each other.</div></div>
+<div class="row"><div class="row-key">Layer 3</div><div class="row-val"><strong>Materialised views.</strong> Human-readable projections of the graph.</div></div>
+
+<p>This appears in the design system, research practice, engineering, and principle hierarchy. The shape is the same in every domain. For ND people, recognising this self-similarity is load-reducing: one mental model, many materials.</p>
+
+<h2>Questions for the graph/DB expert</h2>
+
+<div class="q-list">
+<div class="q-item"><span class="q-num">1</span><span class="q-text">What graph database fits this model? Needs: hyperedges, multiplex layers, temporal interval properties, property graphs, full-text search. Tradeoffs between Neo4j, ArangoDB, Memgraph, TigerGraph?</span></div>
+<div class="q-item"><span class="q-num">2</span><span class="q-text">Deduplication in the extraction cascade. Canonical patterns for idempotent event-driven ingestion into a graph?</span></div>
+<div class="q-item"><span class="q-num">3</span><span class="q-text">Temporal consistency at scale. How to store and query Allen interval relationships efficiently? What indexing strategies exist?</span></div>
+<div class="q-item"><span class="q-num">4</span><span class="q-text">Hyperedge schema. What shape works for an edge connecting 4+ nodes, with its own properties, participating in multiple layers?</span></div>
+<div class="q-item"><span class="q-num">5</span><span class="q-text">Community detection and summarisation. Established algorithms for cluster detection in a multiplex hypergraph? Where does LLM summarisation plug in usefully?</span></div>
+<div class="q-item"><span class="q-num">6</span><span class="q-text">Graph versioning. Snapshot vs. temporal graph (versioning as intrinsic to every node and edge)?</span></div>
+<div class="q-item"><span class="q-num">7</span><span class="q-text">Access patterns. Neighbourhood traversal, temporal subgraph extraction, cross-layer queries, full-text into Layer 0. What query language and indexing does this imply?</span></div>
+</div>
+
+<h2>Current status</h2>
+
+<div class="status-row">
+<span class="pill done">Corpus: ~15M words, two years</span>
+<span class="pill done">Graph schema: in epoch monorepo</span>
+<span class="pill done">Allen interval algebra: implemented in Choreotope</span>
+<span class="pill active">Extraction cascade: in progress</span>
+<span class="pill active">Agent team: partial</span>
+<span class="pill">Hyperedge schema: draft only</span>
+<span class="pill">Community summaries: not started</span>
+<span class="pill">Temporal graph: design only</span>
+</div>
+
+<footer>Mangrove Research · September 2026 · Saved from Claude Chat session · See also: docs/WORKING_PHILOSOPHY.md, docs/TRANSLATION_LAYER.md in epoch repo</footer>
+
+</div>
+</body>
+</html>
