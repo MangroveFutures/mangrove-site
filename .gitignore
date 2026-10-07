@@ -1,0 +1,90 @@
+# General-purpose .gitignore for MangroveFutures repos.
+# Built from GitHub's own collection (https://github.com/github/gitignore): Global/macOS, Global/Windows,
+# Global/Linux, Global/VisualStudioCode, Global/JetBrains, Python and Node, trimmed to what we use.
+# Add language- or tool-specific lines below the last section, not in the middle.
+
+# --- Operating systems ---
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*~
+.directory
+
+# --- Editors ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+
+# --- Secrets and local config: never commit these ---
+# Commit a .env.example with the variable names (no values) instead.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+token.json
+*_token.json
+client_secret*.json
+service-account*.json
+secrets/
+.secrets/
+# .mcp.json is ignored because a token once leaked through it (Mangrove-main). If this repo needs a
+# shared one, commit it with ${VAR} placeholders only, never real secrets, and remove this line.
+.mcp.json
+
+# --- Databases and data files: never commit these ---
+*.duckdb
+*.duckdb.wal
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.ipynb_checkpoints/
+
+# --- Node ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.next/
+.nuxt/
+.turbo/
+out/
+coverage/
+
+# --- Logs and temporary files ---
+*.log
+logs/
+tmp/
+.cache/
+
+# --- Generated diagrams that are rebuilt from source (see docs/architecture/c4/README.md) ---
+# (Committed on purpose, so nothing is listed here. Add a line only if a generated file should not be committed.)

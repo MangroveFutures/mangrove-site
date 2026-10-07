@@ -1,0 +1,24 @@
+# Checks that every link between files in this repo points at a file that exists.
+# Tool: lychee (https://lychee.cli.rs), run by its official GitHub Action. Actions are pinned to a
+# commit SHA, as GitHub's security hardening guide recommends; the tag is in the comment.
+# --offline checks only links inside the repo, so a flaky external website can't fail the build.
+# No secrets needed. Moves to a shared workflow in MangroveFutures/.github once one exists (home #1, #30).
+name: Docs links
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: --offline --no-progress './**/*.md'
+          fail: true
