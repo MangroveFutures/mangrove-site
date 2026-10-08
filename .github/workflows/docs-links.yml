@@ -22,3 +22,6 @@ jobs:
         with:
           args: --offline --no-progress './**/*.md'
           fail: true
+          # This repo's Markdown has no links between files yet. lychee-action fails on "0 links
+          # found" by default (failIfEmpty), which is a config guard, not a broken link.
+          failIfEmpty: false
