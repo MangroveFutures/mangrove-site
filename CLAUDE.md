@@ -54,7 +54,7 @@ Studio quality. References: Superflux, Dunne & Raby, Ink & Switch. Not: startup 
 
 - Display typeface: Cormorant Garamond weight 300 (loaded from Google Fonts)
 - Body pairing: TBD from Claude Design session
-- Accent: `#0F6E56` (teal-600, light mode) / `#5DCAA5` (teal-400, dark mode)
+- Accent: TBD. **Never teal** — Rosie hates it. Teal still in `index.html` is a leftover to replace.
 - Background: `#050c09`
 
 ## GitHub Pages

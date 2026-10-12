@@ -13,7 +13,8 @@ Detailed tokens and components belong in `design-system/`. This doc is the short
 
 ## Already decided
 - Governing metaphor: murmurations and stigmergy. The Boids hero is the identity, not decoration.
-- Ground: cream `#EDE9E3`. Ink: dark navy `#1e2235`. Accent: teal `#0F6E56`.
+- Ground: cream `#EDE9E3`. Ink: dark navy `#1e2235`.
+- **No teal, anywhere.** Rosie hates it. Accent colour is undecided.
 - Boids with connection lines between nearest neighbours (the tensile mesh look), cursor repulsion.
 - Display type: Cormorant Garamond, weight 300.
 - Bar: studio quality. References named: Superflux, Dunne & Raby, Ink & Switch.
@@ -24,6 +25,7 @@ Detailed tokens and components belong in `design-system/`. This doc is the short
 - `design-system/README.md` refers to `design-system/index.html`, which is not in the repo. Where is it (Claude artifact? another branch)?
 
 ## Still open
+- Accent colour (not teal). Teal is still live in `index.html` and `docs/technical-briefing.html` and must be replaced once an accent is chosen.
 - Body typeface (Inter has been used in the briefing doc — confirm).
 - Work section layout — being designed in Claude Design.
 - Motion, imagery and photography rules.
