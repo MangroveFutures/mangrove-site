@@ -21,11 +21,11 @@ Detailed tokens and components belong in `design-system/`. This doc is the short
 - Rejected: plain editorial/broadsheet ("too dry"), dark per-project cards, symmetric card grids, corporate palettes.
 
 ## Conflicts to resolve
-- `CLAUDE.md` still lists a dark background (`#050c09`) and gold particles. Later decisions moved to cream/navy. Which is canonical? Update `CLAUDE.md` once settled.
+- `index.html` hero still uses gold particles from the earlier dark version. Keep or drop?
 - `design-system/README.md` refers to `design-system/index.html`, which is not in the repo. Where is it (Claude artifact? another branch)?
 
 ## Still open
-- Accent colour (not teal). Teal is still live in `index.html` and `docs/technical-briefing.html` and must be replaced once an accent is chosen.
+- Accent colour (not teal). For now the accent falls back to the navy ink.
 - Body typeface (Inter has been used in the briefing doc — confirm).
 - Work section layout — being designed in Claude Design.
 - Motion, imagery and photography rules.

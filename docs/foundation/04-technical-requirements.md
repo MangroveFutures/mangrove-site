@@ -30,5 +30,3 @@ Each real decision here should become a short ADR (architecture decision record)
 - Changes should be possible by asking an agent — no desktop-only setup or manual dashboard clicking.
 - TBD: performance and accessibility targets.
 
-## Stale info to fix
-- `CLAUDE.md` still names `rosie-max/epoch` and `rosie-max/mangrove-site`. Both now live under `MangroveFutures`.
