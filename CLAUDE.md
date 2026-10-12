@@ -21,7 +21,8 @@ This repo is a **projection surface** (read model) of the epoch monorepo (`rosie
 /
 ├── index.html    Landing page (live — Boids hero + 4 section stubs)
 ├── CLAUDE.md     This file
-└── README.md     GitHub default
+├── README.md     GitHub default
+└── docs/foundation/  The six pre-build docs (PRD → implementation plan). Read these before building.
 ```
 
 ## The hero — do not change without discussion
