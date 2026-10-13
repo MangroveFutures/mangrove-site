@@ -70,21 +70,20 @@ Clients and people who are fine being listed: Space Intelligence, TDC PR, Rebecc
 - What introducers send: just the link, so the front page must work cold for someone who has never met Rosie.
 - Writing and "who we are": a Writing page and an About page each, alongside the three spaces.
 - Clients-only area (epoch#707, epoch#710): same site, built after v1.
-- Success a month from now: enquiry emails, introductions made, and paid work started from the site.
+- Success a month from now: enquiry emails, introductions made, and paid work started from the site. Not counted formally: judged by feel for the first month (Rosie, 13 Oct 2026).
+- Sign-off of listings and quotes: not needed again. The people named agreed when they were on the old Squarespace site, which held the details; the quotes are likely also in Google Docs (Rosie, 13 Oct 2026). The Squarespace text is not yet recovered (see [00](00-content-inventory.md) section 9), so the quotes have to come from that export or the Google Docs.
 
 ## Open questions for Rosie
 
-9. Should each named client and person confirm the exact wording of their listing or quote?
-10. How do we count where an enquiry came from: ask in the reply, a separate email address, or not at all?
+None left on 01 for now. The advisor list is being confirmed with Rosie in session.
+
 
 ## Out of scope for v1
 - The clients-only area (after v1).
 - Separate sites on the other domains.
 
 ## How we'll know it's working
-Counted monthly, from the first month live:
+Signs to look for in the first month, judged by feel, not counted (Rosie, 13 Oct 2026):
 - Enquiry emails that arrived through the site.
 - Introductions friends made by sending the link.
 - Paid work that started from a site visit.
-
-How each is counted (for example, a "how did you find us" line in the reply) is open: 10 below.
