@@ -1,7 +1,7 @@
 ---
 id: foundation-02-app-flow
 title: App flow (sitemap, page tables, user flows)
-status: placeholder, partly seeded (merges the 12 Oct placeholder and the 6 Oct sitemap draft)
+status: draft, Q&A round 1 answered 13 Oct 2026
 updated: 2026-10-13
 method: Sitemap / information architecture, plus page tables (content-first design; Kristina Halvorson / Brain Traffic page tables, also known as content templates)
 depends_on: 00-content-inventory.md (C-xx IDs), 01-product-requirements.md
@@ -17,43 +17,37 @@ A page table lists, for one page: its purpose, its audience, the content slots i
 
 | Date | Decision | By |
 |---|---|---|
-| 6 Oct 2026 | v1 is a **single scrolling page**: hero, three doors, selected work, services, contact (option B of A/B/C). | Rosie |
+| 6 Oct 2026 | v1 is a single scrolling page. **Replaced on 13 Oct (below).** | Rosie |
+| 13 Oct 2026 | **v1 is five pages: Lab, Studio, Services, Writing and About**, with a front page of three doors (Lab, Studio, Services). No lead audience; each space speaks to its own people. | Rosie, in session |
+| 13 Oct 2026 | **One site, mangrove.org.uk**, perhaps with a different look, feel or layout per space. The other domains are not separate doors for now. | Rosie |
+| 13 Oct 2026 | **Hero line:** "Independent research lab & studio: human, AI, and the space between." (C-03) | Rosie |
+| 13 Oct 2026 | **Studio selected work:** Choreotope (the murmuration and movement engine, Benesh and murmuration visuals), Epoch, data art and sculpture, and the design and software portfolio Cooper is building (about 20 apps and products, including WingMan, Mindsweeper, Sketchin and Would You Rather). | Rosie |
+| 13 Oct 2026 | **Writing becomes a reading room:** a selection of papers and essays (essays may link to Substack) and the books in development. | Rosie |
+| 13 Oct 2026 | **Contact is email.** Clients and advisors may be named (list in [01](01-product-requirements.md)). The clients-only area is on the same site, after v1. | Rosie |
 
-Nothing else here is decided.
+## Conflicts
 
-## Conflicts (marked, not resolved)
-
-1. **Page count.** The 12 Oct placeholder sitemap has seven kinds of page (home, lab, work, project pages, writing, services, contact). The 6 Oct decision is one scrolling page for v1, with separate pages "later". Read the 12 Oct tree as the *later* shape, not v1, until Rosie says otherwise.
-2. **Section names.** Two sets exist and neither is chosen.
-   - IDX (`index.html`, 12 Oct tree): Lab, Work, Writing, Services.
-   - D1/D2 (Drive docs, 6 Oct tree): Research, Studio, Services, About (with Products as a layer).
-   The two later trees below differ for the same reason: `/lab` vs `/research`, `/work` vs `/studio`, and Writing and Contact present in one but not the other.
-3. **Number of doors.** The 6 Oct decision says "three doors". The IDX page has four sections. Which three (or four) is open (question 1).
-4. **"Services first, portfolio as proof"** (Rosie, 13 Oct, see [01](01-product-requirements.md)) may change the order of the v1 slots below. Not yet applied.
+All four conflicts recorded on 13 Oct are now settled by the decisions above: page count (five pages), section names (Lab, Studio, Services, plus Writing and About), doors (three), and order (services first, with the portfolio as proof, per 01).
 
 ## Open questions
 
-1. Section names, and how many doors (conflicts 2 and 3).
-2. **Artist / tech split** (D1): one site, two strands within one site, or separate sites on the extra domains (human-general-intelligence.com, hybrid-general-intelligence.com, hyperthick.com)? Linked to the audience question in [01](01-product-requirements.md): does each audience need its own front door?
-3. Which 3 or 4 projects go in v1 selected work? Candidates are C-30 to C-37, plus any from inventory 3b that have a visual ready.
-4. Which hero line: C-02, C-03, C-04, C-05, or something new?
-5. Which clients, if any, are named publicly (C-80)? Permission is not confirmed.
-6. Contact route (C-72, C-95): email only, booking link, or form? (12 Oct list also asks: page, form, or email link.)
-7. Do writing pieces live on the site or link out (`/writing/<piece>`, 12 Oct)?
-8. Client-only pages: a gated area has been asked for in epoch#707 and epoch#710 (Collision Unknown first). Where does it sit in the map, and does it share the public pages' navigation? Depends on hosting ([04](04-technical-requirements.md)).
+1. How the Studio shows about 20 products without becoming a wall. **Rosie, 13 Oct 2026: Cooper proposes two or three directions** (her portfolio work, home PR #220, feeds this).
+2. Does each space get its own look, feel or layout, and how far apart? (Goes to the design brief, [03](03-design-brief.md), and Cooper.)
+3. Which papers and essays go in the reading room for v1, and which books are shown, and how (cover, status, a sample)?
+4. Where the clients-only area sits in the map after v1, and whether it shares the public navigation (depends on [04](04-technical-requirements.md)).
 
 ## Sitemap
 
-### v1 (decided 6 Oct)
+### v1 (decided 13 Oct 2026)
 ```
-/  (one scrolling page)
-├── Hero
-├── Three doors
-├── Selected work
-├── Services
-├── About (short)
-└── Contact
+/            Front page: hero line + three doors
+├── /lab       research, programme, papers
+├── /studio    selected work; the portfolio of about 20 products
+├── /services  the menu, who it is for, testimonials, email
+├── /writing   the reading room: papers, essays (some on Substack), books in development
+└── /about     who we are, advisors, how the site was made
 ```
+The 6 Oct single scrolling page is replaced.
 
 ### Later, draft A (6 Oct, "next 1-2 weeks, to be confirmed")
 ```
@@ -122,12 +116,16 @@ Nothing else here is decided.
 ## Key journeys
 
 Pick two or three and trace them click by click.
-- TBD: a prospective client looking for a workshop or 1:1 work
-- TBD: a friend in sales passing the link to someone who might hire Rosie (new, from 13 Oct audiences)
-- TBD: a collaborator checking out the research
-- TBD: someone arriving from a link to one project
+Rosie chose three to trace first (13 Oct 2026):
+1. **A prospective client** looking for a workshop, a setup or 1:1 work, who ends by sending an email. TBD, click by click.
+2. **A friend's link:** a stranger opens a link a friend sent and must understand Mangrove in about ten seconds. TBD.
+3. **One-project arrival:** someone lands on one project page from a shared link. TBD.
+
+Later: a collaborator checking out the Lab.
 
 ## Change log
+
+- 13 Oct 2026: Q&A round 1 answered by Rosie; v1 becomes five pages; conflicts settled; new open questions.
 
 - 6 Oct 2026: sitemap and page tables created from a claude.ai planning session; v1 shape recorded.
 - 12 Oct 2026: placeholder app-flow doc seeded.
