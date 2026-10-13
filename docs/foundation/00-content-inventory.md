@@ -165,3 +165,8 @@ Recorded so nothing is assumed complete:
 - Other Drive docs and chat history beyond the two dumps above
 - Issues in MangroveFutures/epoch beyond #321 (since 6 Oct, epoch#707 and epoch#710 have added client-portal and services-page asks for this site)
 - Drive docs "WEBSITE and todos" (`13ZN9wEhznHamVVT-6bbN6i_E1BkIxbH4bY1CDUePVhY`, = D2) and "Interim website/portfolio" (`1slYpPvKUdIjR4Dq0ZwKHO2fDi_29OPCfrC5y7GGCpxs`, = D1) were the sources for this inventory; re-read them when rows are reviewed
+
+
+## Advisor quotes found (13 Oct 2026)
+
+Found for three of the six advisors Rosie confirmed in [01](01-product-requirements.md): Clive Grinyer, Larry Jones and Oli Pocknell. They were published on Mangrove's earlier Jimdo team page (mangrove-2.jimdosite.com/team, no longer reachable) and survive in a ChatGPT relay of that page dated 13 May 2025 (corpus turn `chatgpt:d0b491ec-d953-408f-b344-721bdb409295`). Check each against the original wording before use: it is a relay, not the page. No site quote was found for Kam Chana, Christina Liciaga or Ed Greig, and no client testimonial was found. No advisor headshots were found in Drive; the Jimdo page probably had them.
