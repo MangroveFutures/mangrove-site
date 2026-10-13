@@ -56,6 +56,12 @@ This is a stub. Each block below lists the inventory rows that already hold word
 - Rows: C-72 (call to action), C-95 (email in the footer; mailbox not confirmed to exist).
 - Open: contact route (02 question 6).
 
+## Lab and the reading room
+**Decided 13 Oct 2026 (Rosie, in session):**
+- **The Lab shows in v1:** the research question (the human-AI pair studied over about two years and some 15 million words), Kronoscope (C-32), the maths lens (category theory, topology and graphs: what organisations have in common), and the funding model (client work funds the research; everyone benefits from what is learned).
+- **Books in the reading room:** *In Defence of Tangential Thinking* is the main one, offered for **pre-order**. The others are shown as in development: the systems book (the category theory and topology of organisations), and 12,000 Years, which has an essay that can be read. Doc Tomorrow sits as Mangrove's speculative fiction universe rather than a book. Little is readable yet, so the room shows status, not full texts.
+- **Substack:** Rosie has one; the reading room links to it (address to add).
+
 ## Later blocks (not for v1)
 Lab and papers (C-10 to C-21), work entries (C-30 to C-37 and inventory 3b), writing (C-50 to C-56). Entry format is in [05](05-content-schema.md).
 
