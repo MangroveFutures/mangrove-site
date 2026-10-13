@@ -33,7 +33,7 @@ updated: 2026-10-13
 
 ## Sections
 
-**The three spaces (Rosie, 13 Oct 2026): Lab · Studio · Services.** This settles the naming conflict noted in [02](02-app-flow.md): "Work" becomes Studio. Where Writing and a "who we are" area sit is still open (question 8).
+**The three spaces (Rosie, 13 Oct 2026): Lab · Studio · Services.** This settles the naming conflict noted in [02](02-app-flow.md): "Work" becomes Studio. Writing and About get a page each, alongside the three spaces (Rosie, 13 Oct 2026).
 
 The 12 Oct table, for reference:
 | Section | Scope |
