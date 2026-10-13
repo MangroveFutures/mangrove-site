@@ -1,12 +1,14 @@
 ---
-id: doc-content-inventory
+id: foundation-00-content-inventory
 title: Content inventory — mangrove.org.uk
-status: draft — to be reviewed with Rosie
-updated: 2026-10-06
+status: draft, to be reviewed with Rosie (consolidated 13 Oct 2026; rows unchanged since 6 Oct)
+updated: 2026-10-13
 method: Content inventory / audit (standard content-strategy practice; see Kristina Halvorson, "Content Strategy for the Web")
 ---
 
-# Content inventory
+# 0 · Content inventory
+
+**Answers:** what content already exists, where it came from, and what is missing. Work this one first: every other doc points at its rows.
 
 One row per piece of content that could appear on the site. Nothing here is approved yet. Wording is copied verbatim from its source so nothing is lost; rewriting happens later, in review.
 
@@ -18,7 +20,7 @@ One row per piece of content that could appear on the site. Nothing here is appr
 - **D2** — Drive doc "WEBSITE and todos" (10–11 Aug 2026)
 - **MEM** — notes from earlier site sessions (Sept 2026)
 
-Row IDs (C-xx) are stable so the page tables can point at them.
+Row IDs (C-xx) are stable so the page tables in [02-app-flow.md](02-app-flow.md) and the copy stub in [07-copy.md](07-copy.md) can point at them.
 
 ---
 
@@ -134,9 +136,24 @@ Project entries should follow the agreed project schema (MEM): title, type, stat
 
 | ID | Item | Detail | Source | Status |
 |---|---|---|---|---|
-| C-95 | Email | hello@mangrove.org.uk (in footer) — **not confirmed the mailbox exists** | IDX | review |
+| C-95 | Email | the contact address shown in the `index.html` footer — **not confirmed the mailbox exists** | IDX | review |
 | C-96 | Domain | mangrove.org.uk (IONOS), not yet pointed at hosting | MEM | gap |
-| C-97 | Squarespace export | XML export never downloaded (see docs/squarespace-migration.md) | MEM | gap |
+| C-97 | Squarespace export | XML exports never downloaded (see section 9 below) | MEM | gap |
+
+---
+
+## 9. Old Squarespace site: migration status
+
+Folded in from the former `docs/squarespace-migration.md` (status was `pending`, 30 Sep 2026), so this is its only home. Status checked 13 Oct 2026: the XML text exports are **still missing**.
+
+- The old mangrove.org.uk was on Squarespace. The subscription expired (payment failed May 2026).
+- Drive folder `squarespace_backup` (id `1dxKLEIPI_X_vGov6DSV3xuJpJ2o9VZog`, read-only) holds: `image_urls.txt` (70 CDN image URLs captured June 2026, with a download script), `README.md` (status log of what was and was not captured), `scrape_site.py` (fetched page text before expiry).
+- **The critical gap:** two WordPress-format XML exports were generated on 9 Jun 2026, but the download failed and the files were never saved. They hold the page text: manifesto, consulting descriptions, testimonials, press.
+- To recover: squarespace.com/config, Website, Export, then export each collection as WordPress XML. This is often still possible for a short time after expiry. Collections: **12000 Year Almanac** (Manifesto, Motorway Method, Consulting, ADHD, HealthStory AI, Workshops & Courses, Soho Theatre, Young Vic, VSO proposals) and **Press**.
+- Pages the old site had (from the scraper URL list): `/home`, `/about`, `/about-1`, `/terms-of-engagement`, `/canary-diagnostics`, `/consulting-read-more`, `/hyperthick`, `/clothesline`, `/white-papers`. Some may not survive.
+- Probably worth migrating: bio text, client testimonials, advisor quotes, consulting and services descriptions (Motorway Method, Canary Diagnostics), press mentions, selected project descriptions (Hyperthick, Clothesline; need assessing). These feed C-64 to C-67, C-81, C-82 and C-90.
+- Not site content: the Drive file `dsar_export_rosie_2026-07-16.zip` is a Claude/Anthropic data-access export, not Squarespace. Ignore it for the site.
+- **Next action (Rosie, behind her login):** export the XMLs. After that, one session reviews them and decides what to bring forward, and inventory rows are added.
 
 ---
 
@@ -146,4 +163,5 @@ Recorded so nothing is assumed complete:
 - Cooper's design-reference research and sketchbook (D1 asks for this; not located)
 - Lovable, Replit and Squarespace dumps (D1, D2 mention app lists there)
 - Other Drive docs and chat history beyond the two dumps above
-- Issues in MangroveFutures/epoch beyond #321
+- Issues in MangroveFutures/epoch beyond #321 (since 6 Oct, epoch#707 and epoch#710 have added client-portal and services-page asks for this site)
+- Drive docs "WEBSITE and todos" (`13ZN9wEhznHamVVT-6bbN6i_E1BkIxbH4bY1CDUePVhY`, = D2) and "Interim website/portfolio" (`1slYpPvKUdIjR4Dq0ZwKHO2fDi_29OPCfrC5y7GGCpxs`, = D1) were the sources for this inventory; re-read them when rows are reviewed

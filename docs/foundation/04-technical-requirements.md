@@ -2,7 +2,7 @@
 id: foundation-04-technical-requirements
 title: Technical requirements
 status: placeholder
-updated: 2026-10-12
+updated: 2026-10-13
 ---
 
 # 4 · Technical requirements
@@ -16,6 +16,7 @@ Each real decision here should become a short ADR (architecture decision record)
 - Repo: `MangroveFutures/mangrove-site`.
 - Registered in epoch as a projection surface (read model): it shows epoch content, never writes back.
 - Domain `mangrove.org.uk` registered with IONOS, not yet pointed anywhere.
+- Related asks that touch hosting: a clients-only login gate (epoch#707, epoch#710; GitHub Pages is static only, so it needs other hosting) and epoch#688 (proposes Cloudflare Workers with Cloudflare Access). Align with these rather than choosing separately.
 
 ## Decisions needed
 | Decision | Options on the table | Notes |

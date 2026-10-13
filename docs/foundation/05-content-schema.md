@@ -2,7 +2,7 @@
 id: foundation-05-content-schema
 title: Content schema (backend schema)
 status: placeholder
-updated: 2026-10-12
+updated: 2026-10-13
 ---
 
 # 5 · Content schema
@@ -28,6 +28,8 @@ For a static site this is a content model rather than a database. If client data
 | tags | list | |
 
 Projects to show first: Epoch, Kronoscope, Choreotope, WingMan, Mindsweeper, Islands of Doc Tomorrow.
+
+Existing content for each project is in [00-content-inventory.md](00-content-inventory.md) (C-30 to C-37, and inventory 3b for projects not yet written up).
 
 ## Other content types (TBD)
 - Writing piece
