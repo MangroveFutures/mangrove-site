@@ -119,7 +119,7 @@ Project entries should follow the agreed project schema (MEM): title, type, stat
 | ID | Item | Detail | Source | Status |
 |---|---|---|---|---|
 | C-80 | Clients | TDC PR, VSO International, London Theatre Consortium, Space Intelligence | D1 | review — **permission to name each client not yet confirmed** |
-| C-81 | Testimonials | from Murray C, Rafa, Rebecca Edelman | D2 | gap (quotes not collected) |
+| C-81 | Testimonials | from Murray C, Rafa, Rebecca Edelman | D2 | gap for Murray C and Rebecca Edelman. Rafa's quote is recovered from the old site (terms-of-engagement page; see "Testimonials found in the old site" below), as is one more from Becky |
 | C-82 | Advisors with quotes | "quotes exist in chat logs across channels" | MEM | gap |
 | C-83 | "Macro site" with testimonials/advisors/who we are | location unknown | MEM | gap |
 
@@ -138,22 +138,87 @@ Project entries should follow the agreed project schema (MEM): title, type, stat
 |---|---|---|---|---|
 | C-95 | Email | the contact address shown in the `index.html` footer — **not confirmed the mailbox exists** | IDX | review |
 | C-96 | Domain | mangrove.org.uk (IONOS), not yet pointed at hosting | MEM | gap |
-| C-97 | Squarespace export | XML exports never downloaded (see section 9 below) | MEM | gap |
+| C-97 | Squarespace export | XML exports never downloaded (see section 9 below). The page text itself is recovered from the 11 Jun 2026 scrape, in `sources/old-site/` | MEM | gap (XML only) |
 
 ---
 
 ## 9. Old Squarespace site: migration status
 
-Folded in from the former `docs/squarespace-migration.md` (status was `pending`, 30 Sep 2026), so this is its only home. Status checked 13 Oct 2026: the XML text exports are **still missing**.
+Folded in from the former `docs/squarespace-migration.md` (status was `pending`, 30 Sep 2026), so this is its only home. Status updated 13 Oct 2026.
 
+**The page text is recovered.** Scraped page copies (archived 11 Jun 2026, Markdown) sit in Drive folder `1or3zfxR2nE0aRcprt397hwmkHjnVNwaX`. They are saved in this repo, one file per page, in [sources/old-site/](sources/old-site/). They are not the WordPress XML export; that was never saved.
+
+**Pages recovered (17):** [about](sources/old-site/about.md), [consulting](sources/old-site/consulting.md), [how-we-work](sources/old-site/how-we-work.md), [mangrove-manifesto](sources/old-site/mangrove-manifesto.md), [hgi-manifesto](sources/old-site/hgi-manifesto.md), [motorway-method](sources/old-site/motorway-method.md), [clothesline](sources/old-site/clothesline.md), [canary-diagnostics](sources/old-site/canary-diagnostics.md), [terms-of-engagement](sources/old-site/terms-of-engagement.md), [soho-theatre](sources/old-site/soho-theatre.md), [young-vic](sources/old-site/young-vic.md), [hyperthick](sources/old-site/hyperthick.md), [healthstory-ai](sources/old-site/healthstory-ai.md) (a separate project for now), [adhd](sources/old-site/adhd.md), [design](sources/old-site/design.md), [white-papers](sources/old-site/white-papers.md), [12000-year-almanac](sources/old-site/12000-year-almanac.md) (one contact line redacted).
+
+**Limits of the scrape:**
+- Six pages were cut off by the scraper (8000-character cap or console truncation): consulting, how-we-work, soho-theatre, young-vic, hgi-manifesto, motorway-method. Each file says where it stops. The rest of those pages needs the XML export or the live page.
+- Not found: press, a team or advisors page, a home page, a contact page, "Workshops & Courses", "VSO proposals", resources, and any separate testimonials page. A search of the other Drive backup folders found none of them. Only `terms-of-engagement` carries testimonials.
+- Other backup folders hold duplicates of these pages; none was used.
+
+- Drive folder `squarespace_backup` (id `1dxKLEIPI_X_vGov6DSV3xuJpJ2o9VZog`, read-only) holds: `image_urls.txt` (70 CDN image URLs captured June 2026, with a download script), `README.md` (status log), `scrape_site.py` (the scraper that produced these copies).
 - The old mangrove.org.uk was on Squarespace. The subscription expired (payment failed May 2026).
-- Drive folder `squarespace_backup` (id `1dxKLEIPI_X_vGov6DSV3xuJpJ2o9VZog`, read-only) holds: `image_urls.txt` (70 CDN image URLs captured June 2026, with a download script), `README.md` (status log of what was and was not captured), `scrape_site.py` (fetched page text before expiry).
-- **The critical gap:** two WordPress-format XML exports were generated on 9 Jun 2026, but the download failed and the files were never saved. They hold the page text: manifesto, consulting descriptions, testimonials, press.
-- To recover: squarespace.com/config, Website, Export, then export each collection as WordPress XML. This is often still possible for a short time after expiry. Collections: **12000 Year Almanac** (Manifesto, Motorway Method, Consulting, ADHD, HealthStory AI, Workshops & Courses, Soho Theatre, Young Vic, VSO proposals) and **Press**.
-- Pages the old site had (from the scraper URL list): `/home`, `/about`, `/about-1`, `/terms-of-engagement`, `/canary-diagnostics`, `/consulting-read-more`, `/hyperthick`, `/clothesline`, `/white-papers`. Some may not survive.
-- Probably worth migrating: bio text, client testimonials, advisor quotes, consulting and services descriptions (Motorway Method, Canary Diagnostics), press mentions, selected project descriptions (Hyperthick, Clothesline; need assessing). These feed C-64 to C-67, C-81, C-82 and C-90.
+- **Still missing:** the two WordPress-format XML exports generated on 9 Jun 2026 (download failed, never saved), and anything the scraper missed, chiefly **press** and possibly more testimonials. To recover: squarespace.com/config, Website, Export, then export each collection as WordPress XML (often possible for a short time after expiry). Collections: **12000 Year Almanac** (Manifesto, Motorway Method, Consulting, ADHD, HealthStory AI, Workshops & Courses, Soho Theatre, Young Vic, VSO proposals) and **Press**.
 - Not site content: the Drive file `dsar_export_rosie_2026-07-16.zip` is a Claude/Anthropic data-access export, not Squarespace. Ignore it for the site.
-- **Next action (Rosie, behind her login):** export the XMLs. After that, one session reviews them and decides what to bring forward, and inventory rows are added.
+- **Next action (Rosie, behind her login):** export the XMLs for press and the truncated tails. Meanwhile the recovered pages feed section 10 below.
+
+---
+
+## 10. Passages recovered from the old site (11 Jun 2026 scrape)
+
+Quoted wording is verbatim from the file named. All rows start at `review`; only Rosie moves them on. Client names and the staff named on the Soho Theatre page need the client's agreement before reuse.
+
+| ID | Item | Passage (verbatim, shortened) | Source file | Status |
+|---|---|---|---|---|
+| C-100 | Manifesto: mission | "We exist to fundamentally redesign the environment of human work." | [mangrove-manifesto](sources/old-site/mangrove-manifesto.md) | review |
+| C-101 | Manifesto: design failure | "When systems are brittle, inefficient, and haven't been redesigned in decades, the resulting burnout and struggle are a design failure, not a personal one." | [mangrove-manifesto](sources/old-site/mangrove-manifesto.md) | review |
+| C-102 | Manifesto: design signal | "The Design Signal: We treat friction—the daily struggle with admin, data storage, and endless meetings—as a vital design signal. If people are stressed, the system is broken." | [mangrove-manifesto](sources/old-site/mangrove-manifesto.md) | review |
+| C-103 | Manifesto: not a quick fix | "We are not here to sell a quick fix; we are here to co-design a preferable, adaptive future. We advocate for systems that see the human first, the technology second, and the opportunity for redesign everywhere." | [mangrove-manifesto](sources/old-site/mangrove-manifesto.md) | review |
+| C-104 | Manifesto: revenue and research | "Revenue generated from our consulting, coaching, and products flows directly back to support the Mangrove Fellows Program, which drives the R&D and testing of EpochOS." (Check the 10 million words figure here against "15 million" on the HGI page before use.) | [mangrove-manifesto](sources/old-site/mangrove-manifesto.md), [hgi-manifesto](sources/old-site/hgi-manifesto.md) | review |
+| C-105 | HGI: dual track | "Track One focuses on immediate, tangible benefits … We start by identifying non-controversial wins: automating manual processes, reducing overwhelm, and saving time." "Track Two is the R&D loop." | [hgi-manifesto](sources/old-site/hgi-manifesto.md) | review |
+| C-106 | HGI: stance | "We're not naive AI evangelists; we are critical, design-led partners" and "We work with the \"willing\"" | [hgi-manifesto](sources/old-site/hgi-manifesto.md) | review |
+| C-107 | About: the reframing | "what if we considered ADHD not through the lens of deficit and disorder, but approached it as a design challenge?" | [about](sources/old-site/about.md) | review |
+| C-108 | About: ecosystem image | "Its visible \"branches\" represent diverse projects and ventures, while an unseen \"mycelial network\" of ideas, data, and insights forms the intricate root system beneath." | [about](sources/old-site/about.md) | review |
+| C-109 | About: founder line | "\"I'd have given everything I owned for this system, but it didn't exist - so I had to build it myself\" — Mangrove's founder" | [about](sources/old-site/about.md) | review |
+| C-110 | About: four branches | Epoch OS, The Lab, The Fund, Content and IP Development (one line each) | [about](sources/old-site/about.md) | review |
+| C-111 | About: Rosie's background | "her experience as a creative—a photographer, and director by trade—with deep expertise in technology and a focus on human-centered design" (third person, from the Soho Theatre page) | [soho-theatre](sources/old-site/soho-theatre.md) | review |
+| C-112 | Consulting: the offer | "We step in as your R&D Partner. We offer clarity, reducing immediate administrative friction while guiding your organisation toward a future of human thriving. We help you implement new, future-thinking workflows using the tools you already own (Google Workspace, Microsoft 365, Co-Pilot)." | [consulting](sources/old-site/consulting.md) | review |
+| C-113 | Consulting: not a big consultancy | "We are not a large digital transformation consultancy. We advocate for quick, lightweight improvements immediately" and "emergence and discovery over brittle top-down planning; coherence over compliance." | [consulting](sources/old-site/consulting.md) | review |
+| C-114 | Consulting: Insight Sprints | "Our initial step is always to understand your unique reality." Light or Medium; Q&A sessions and optional 1-to-1 interviews; maps friction, "vibe" and concerns around AI, and workflows | [consulting](sources/old-site/consulting.md) | review |
+| C-115 | Consulting: Core Workshops | Open Q&A: Concerns and Opportunities ("usually where we start"); AI Efficiency & Admin Reduction; AI Basics for Complete Beginners | [consulting](sources/old-site/consulting.md) | review |
+| C-116 | Consulting: Strategic R&D Partnerships | Strategic AI Governance & Future Readiness Sprint; AI Chief of Staff Implementation (Medium / Full) | [consulting](sources/old-site/consulting.md) | review |
+| C-117 | Consulting: sector value | Education (staff, pupils, parents); charities and publicly funded organisations (page cut off mid-section) | [consulting](sources/old-site/consulting.md) | review |
+| C-118 | Consulting: safety first | "All our support is grounded in data privacy, common AI concerns, and human-centred design." | [consulting](sources/old-site/consulting.md) | review |
+| C-119 | Canary Diagnostics | "We uniquely leverage insights from neurodivergence and team friction as vital 'canaries in the coal mine' – early signals of deeper, systemic design flaws in your operations, tools, and culture." Method: "lightweight, rapid discovery sprints using structured interviews, anonymous inputs, and sensitive facilitation". Compare Rosie's one-line version in [07](07-copy.md) | [canary-diagnostics](sources/old-site/canary-diagnostics.md) | review |
+| C-120 | Motorway Method | "A way to make sense of projects, pace, pressure, and who's in the vehicle with you." Six vehicles (motorbike, tour bus, family car, camper van, bike ride, private jet) and the core questions (responsibility, role, speed, destination, support, headspace) | [motorway-method](sources/old-site/motorway-method.md) | review |
+| C-121 | Clothesline Method | Four steps: Just Start; Externalise and Spread; Emergent Structure; AI-Powered Reflection | [clothesline](sources/old-site/clothesline.md) | review |
+| C-122 | How we work: who we are | "We are not a technology company and we are not a traditional consultancy. We are researchers who build things" | [how-we-work](sources/old-site/how-we-work.md) | review |
+| C-123 | How we work: the inversion | "It is now significantly faster and cheaper to build a prototype and discuss it than it is to plan and justify the prototyping. Everything is inverted." | [how-we-work](sources/old-site/how-we-work.md) | review |
+| C-124 | How we work: data and views | The five-event-calendars case study, ending "views become free. You do not build the weekly report — you request it." (Client unnamed.) | [how-we-work](sources/old-site/how-we-work.md) | review |
+| C-125 | Terms of engagement: scope | "Mangrove partners with organisations as an exploratory Research & Development (R&D) collaborator … We do not assume operational responsibility" | [terms-of-engagement](sources/old-site/terms-of-engagement.md) | review |
+| C-126 | Terms of engagement: boundaries | Not a data processor; no sensitive or personal data handled; no guarantee of outcomes; client keeps all decisions and compliance. "without pressure, jargon, or risk transfer." | [terms-of-engagement](sources/old-site/terms-of-engagement.md) | review |
+| C-127 | Project: Soho Theatre | Case write-up of the R&D discovery phase: time saving, headspace creation, work-life balance; "not to \"slap AI everywhere.\"" Page cut off. Staff are named; client permission needed | [soho-theatre](sources/old-site/soho-theatre.md) | review |
+| C-128 | Project: Young Vic | Case write-up of 1-on-1 discovery and a 90-minute session; bottlenecks in HR, executive support, marketing and access; "like hiring Einstein to do photocopying". Page cut off | [young-vic](sources/old-site/young-vic.md) | review |
+| C-129 | Project: Hyperthick | "inspired by Clifford Geertz's 'thick description' but scaled for the AI age" (one paragraph) | [hyperthick](sources/old-site/hyperthick.md) | review |
+| C-130 | Project: HealthStory AI | "Your health story, in all its glory." **A separate project for now**, not part of the Mangrove site offer. Kept as a record | [healthstory-ai](sources/old-site/healthstory-ai.md) | review |
+| C-131 | Research recruitment: ADHD | Call for ADHD participants in market research ("From this egg to that egg"). Written in the first person singular; likely out of date | [adhd](sources/old-site/adhd.md) | review |
+| C-132 | Design lab and almanac | "Mangrove is a living speculative design lab." Design page lists AI Prototypes and Products; the 12,000-year almanac is a worked prototype | [design](sources/old-site/design.md), [12000-year-almanac](sources/old-site/12000-year-almanac.md) | review |
+| C-133 | Writing: white papers | Five Substack titles (links not in the scrape) | [white-papers](sources/old-site/white-papers.md) | review |
+| C-134 | Named influence | Sean McClure, "discovery, not design" (a phrase borrowed from him) | [about](sources/old-site/about.md) | review |
+
+### Testimonials found in the old site
+
+Searched all 17 pages for testimonials, quotes and named clients or advisors on 13 Oct 2026. Two client testimonials exist, both at the end of [terms-of-engagement](sources/old-site/terms-of-engagement.md). Verbatim:
+
+1. "Working with Rosie on integrating AI into our daily operations has been truly inspiring. Her support goes beyond streamlining processes like timesheet reporting, where we're already seeing tangible benefits; She is also guiding us in exploring AI's potential across the business and on a personal level to enhance our creativity and efficiency." — Rafa, Operations Lead
+2. "Working with Rosie has been honestly amazing — it's hard to describe exactly what she does, but it's sort of like therapy, only super practical and immediate. Her approach spans mind, body, breath — and it's really good. What I loved most is how adaptable and intuitive it all is. It's like having this flexible accessory you can take into any high-pressure situation — whether it's a Hyrox race or a work presentation — and it helps me rethink how I relate to my nervous system." — Becky, Top-20 International Hyrox athlete at 2025 World Championships
+
+Notes:
+- Rafa's organisation is not named. Murray C and Rebecca Edelman (C-81) have no quote in these pages.
+- Becky's quote is about coaching (mind, body, breath), not organisational work; it may suit a coaching page more than the services page.
+- Both need the person's agreement to publish again.
+- Clients named in running text: Big Issue, VSO International, Soho Theatre and HPPC School ([consulting](sources/old-site/consulting.md)); Young Vic ([young-vic](sources/old-site/young-vic.md)). TDC PR, London Theatre Consortium and Space Intelligence (C-80) do not appear in the old pages.
+- Staff of a client named on [soho-theatre](sources/old-site/soho-theatre.md): Mark (Executive Director) and Jess Draper. The same page has unnamed staff remarks (for example AI for fundraising bids as a "lifesaver"); these are paraphrased findings, not testimonials.
+- No advisor is named or quoted on these pages. The only person cited is Sean McClure, as an influence (C-134). The advisor quotes in the section below come from the earlier Jimdo page, not this site.
 
 ---
 
