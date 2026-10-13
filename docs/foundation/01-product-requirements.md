@@ -59,7 +59,7 @@ Also mentioned: a "who we are" area with advisors and quotes. TBD whether it is 
 
 ## Who may be named (Rosie, 13 Oct 2026)
 
-Clients and people who are fine being listed: Space Intelligence, TDC PR, Rebecca Edelman, and Wychwood Tree Surgery (Dean Tucker). Advisors are listed too, because they show value; their names come from the logs and Google files and Rosie confirms each before it goes live.
+Clients and people who are fine being listed: Space Intelligence, TDC PR, Rebecca Edelman, and Wychwood Tree Surgery (Dean Tucker). Advisors are listed too, because they show value (Rosie, 13 Oct 2026): **Clive Grinyer, Kam Chana, Christina Liciaga, Ed Greig, Larry Jones and Oli Pocknell.** Rosie says images and quotes exist for all six; where they live is being found. Bios are written fresh for Rosie to check, not reused from old AI drafts, several of which were wrong.
 
 ## Answered on 13 Oct 2026
 - One thing to leave knowing: see Purpose.
@@ -75,7 +75,7 @@ Clients and people who are fine being listed: Space Intelligence, TDC PR, Rebecc
 
 ## Open questions for Rosie
 
-None left on 01 for now. The advisor list is being confirmed with Rosie in session.
+None left on 01 for now.
 
 
 ## Out of scope for v1
