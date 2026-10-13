@@ -44,12 +44,15 @@ This is a stub. Each block below lists the inventory rows that already hold word
 
 - Rows: C-60 (intro, a gap), C-61 to C-72 (promise, how we work, the service menu, call to action).
 - Services come first this month (Rosie, 13 Oct), so this is the block to write first.
-- Source for more wording: the Squarespace text exports, still missing (inventory section 9).
+- Source for more wording: the old site text, recovered from the 11 Jun 2026 scrape and saved in [sources/old-site/](sources/old-site/). Most useful: [consulting](sources/old-site/consulting.md) (offer, Insight Sprints, workshops, strategic partnerships), [canary-diagnostics](sources/old-site/canary-diagnostics.md), [motorway-method](sources/old-site/motorway-method.md), [terms-of-engagement](sources/old-site/terms-of-engagement.md), [how-we-work](sources/old-site/how-we-work.md), and the project pages [soho-theatre](sources/old-site/soho-theatre.md) and [young-vic](sources/old-site/young-vic.md). Inventory rows C-112 to C-130 in [00](00-content-inventory.md) pick out passages. Six pages are cut off in the scrape; the full text needs the XML export.
+- Compare the old Canary Diagnostics wording (C-119) with the one-liner decided above before choosing.
 
 ## Testimonials
 **Rosie, 13 Oct 2026:** the testimonials are all in Google somewhere. Next step: an agent searches Google Docs and Drive for them; the advisor quotes found so far are listed in [00](00-content-inventory.md).
 
-- Rows: C-81 (Murray C, Rafa, Rebecca Edelman; quotes not collected), C-82.
+**Found in the old site (13 Oct):** two client testimonials, from Rafa (Operations Lead) and Becky (Hyrox athlete), at the end of [terms-of-engagement](sources/old-site/terms-of-engagement.md). Verbatim text and notes: "Testimonials found in the old site" in [00](00-content-inventory.md). No others in the 17 recovered pages; press and any testimonials page are still missing.
+
+- Rows: C-81 (Murray C, Rafa, Rebecca Edelman; Rafa's quote now recovered, the other two not), C-82.
 - Needs: the quotes, and each person's agreement to publish.
 
 ## Contact
