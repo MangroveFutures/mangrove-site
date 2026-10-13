@@ -25,7 +25,7 @@ updated: 2026-10-13
 
 Not yet answered: the ranking within that list, and whether each audience needs its own front door or entry domain. The 12 Oct framing in epoch#668 asks for the question to be answered four ways first: by relationship to Mangrove (hire, fund, collaborate, read, buy), by job to be done (Christensen / Ulwick), by persona (Cooper) built from real people, and by arrival route (a talk, a referral, a link to one project, a search). Working-out goes in epoch#668; answers land here.
 
-## Sections (already decided)
+## Sections (listed 12 Oct as decided; section names conflict with the Drive set, see [02](02-app-flow.md))
 | Section | Scope |
 |---|---|
 | Lab | Research and theory, papers, funding note |
