@@ -1,7 +1,7 @@
 ---
 id: foundation-05-content-schema
 title: Content schema (backend schema)
-status: placeholder
+status: draft, Q&A round 1 answered 13 Oct 2026
 updated: 2026-10-13
 ---
 
@@ -31,15 +31,37 @@ Projects to show first: Epoch, Kronoscope, Choreotope, WingMan, Mindsweeper, Isl
 
 Existing content for each project is in [00-content-inventory.md](00-content-inventory.md) (C-30 to C-37, and inventory 3b for projects not yet written up).
 
-## Other content types (TBD)
-- Writing piece
+## Other content types
+
+### Service (Rosie, 13 Oct 2026)
+| Field | Type | Notes |
+|---|---|---|
+| title | text | |
+| who_for | text | the audience line (see 07) |
+| first_step | one of | call, diagnostic, quote (07: depends on the service) |
+| proof | list of links | a testimonial, project or case study that backs it up |
+| description | text | |
+
+No price field for now (prices come after the 14 Oct session; add a field then if they are shown).
+
+### Book (Rosie, 13 Oct 2026)
+| Field | Type | Notes |
+|---|---|---|
+| title | text | |
+| cover | media | |
+| line | text | one sentence |
+| status | one of | Pre-order / In development |
+| link | url | pre-order or more |
+| sample | text or link, optional | a short readable extract or the essay (e.g. the 12,000 Years essay) |
+
+### Still TBD
+- Writing piece (essay; may link to Substack)
 - Paper / research entry
-- Service
-- Testimonial
-- Advisor
+- Testimonial (quote, person, role, organisation, link to the service or project it backs)
+- Advisor (name, role, photo, quote)
 
 ## Where it lives
-- TBD: files in this repo (e.g. one Markdown/JSON file per entry) or exported from epoch.
+**Files now, Supabase later (Rosie, 13 Oct 2026):** v1 keeps one small file per entry in this repo. Once epoch's write path exists, entries move to Supabase and the site reads them from there.
 
 ## Who sees what
-- `visibility: Internal` entries never publish. TBD how that is enforced (build step or check).
+- `visibility: Internal` entries never publish. **Enforced by an automatic check (Rosie, 13 Oct 2026):** the build fails if an internal entry would be published.
