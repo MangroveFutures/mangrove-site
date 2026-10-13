@@ -31,11 +31,10 @@ All four conflicts recorded on 13 Oct are now settled by the decisions above: pa
 
 ## Open questions
 
-1. How the Studio shows about 20 products without becoming a wall: a few featured, then an index? (Cooper's portfolio work, home PR #220, feeds this.)
+1. How the Studio shows about 20 products without becoming a wall. **Rosie, 13 Oct 2026: Cooper proposes two or three directions** (her portfolio work, home PR #220, feeds this).
 2. Does each space get its own look, feel or layout, and how far apart? (Goes to the design brief, [03](03-design-brief.md), and Cooper.)
 3. Which papers and essays go in the reading room for v1, and which books are shown, and how (cover, status, a sample)?
 4. Where the clients-only area sits in the map after v1, and whether it shares the public navigation (depends on [04](04-technical-requirements.md)).
-5. The key journeys below: which two or three to trace first.
 
 ## Sitemap
 
@@ -117,10 +116,12 @@ The 6 Oct single scrolling page is replaced.
 ## Key journeys
 
 Pick two or three and trace them click by click.
-- TBD: a prospective client looking for a workshop or 1:1 work
-- TBD: a friend in sales passing the link to someone who might hire Rosie (new, from 13 Oct audiences)
-- TBD: a collaborator checking out the research
-- TBD: someone arriving from a link to one project
+Rosie chose three to trace first (13 Oct 2026):
+1. **A prospective client** looking for a workshop, a setup or 1:1 work, who ends by sending an email. TBD, click by click.
+2. **A friend's link:** a stranger opens a link a friend sent and must understand Mangrove in about ten seconds. TBD.
+3. **One-project arrival:** someone lands on one project page from a shared link. TBD.
+
+Later: a collaborator checking out the Lab.
 
 ## Change log
 
