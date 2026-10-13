@@ -37,6 +37,11 @@ This is a stub. Each block below lists the inventory rows that already hold word
 - First audiences: see [01](01-product-requirements.md).
 
 ## Services
+**Decided 13 Oct 2026 (Rosie, in session):**
+- **First step depends on the service:** workshops are quoted directly; systems work starts with a diagnostic; 1:1 work starts with a call.
+- **Canary Diagnostics, one line (draft from Rosie's choice):** an early-warning review that maps failure demand and finds quick wins.
+- **What a services visitor should feel:** all three of relief ("someone gets how messy it is, and it can be calm"), curiosity ("a new way of working I want to try") and confidence ("they've done this before").
+
 - Rows: C-60 (intro, a gap), C-61 to C-72 (promise, how we work, the service menu, call to action).
 - Services come first this month (Rosie, 13 Oct), so this is the block to write first.
 - Source for more wording: the Squarespace text exports, still missing (inventory section 9).
