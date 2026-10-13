@@ -67,17 +67,24 @@ Clients and people who are fine being listed: Space Intelligence, TDC PR, Rebecc
 - One site or several: one site.
 - Next step for a visitor: email.
 - Naming clients: yes, the four above; advisors too.
+- What introducers send: just the link, so the front page must work cold for someone who has never met Rosie.
+- Writing and "who we are": a Writing page and an About page each, alongside the three spaces.
+- Clients-only area (epoch#707, epoch#710): same site, built after v1.
+- Success a month from now: enquiry emails, introductions made, and paid work started from the site.
 
 ## Open questions for Rosie
 
-5. What would your friends in sales actually send: the link, a one-page summary, or a short intro line? (Shapes the first page a stranger sees.)
-6. Is a clients-only area (epoch#707, epoch#710) part of the same site and audience, or a separate job?
-7. What counts as "working" a month from now: enquiries, calls booked, introductions made?
-8. Where do Writing (essays, the book) and "who we are" (bio, advisors) sit: inside Lab, its own page, or on every space?
 9. Should each named client and person confirm the exact wording of their listing or quote?
+10. How do we count where an enquiry came from: ask in the reply, a separate email address, or not at all?
 
 ## Out of scope for v1
-- TBD
+- The clients-only area (after v1).
+- Separate sites on the other domains.
 
 ## How we'll know it's working
-- TBD (question 7)
+Counted monthly, from the first month live:
+- Enquiry emails that arrived through the site.
+- Introductions friends made by sending the link.
+- Paid work that started from a site visit.
+
+How each is counted (for example, a "how did you find us" line in the reply) is open: 10 below.
