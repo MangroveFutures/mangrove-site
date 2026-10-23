@@ -41,8 +41,8 @@ placeWonkyBase();
 const atmosBtn = document.getElementById('atmos');
 function labelAtmos() {
   const dark = root.getAttribute('data-theme') !== 'light';
-  atmosBtn.querySelector('span').innerHTML = dark ? 'Silt<span class="sr">: switch to the lighter sky</span>'
-                                                  : 'Dusk<span class="sr">: switch to the darker sky</span>';
+  // One fixed name; the state is exposed with role=switch + aria-checked (on = Silt, the lighter sky).
+  atmosBtn.setAttribute('aria-checked', dark ? 'false' : 'true');
 }
 atmosBtn.addEventListener('click', () => {
   root.setAttribute('data-theme', root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
@@ -85,6 +85,9 @@ addEventListener('touchend', (e) => {
 }, { passive: true });
 
 const tiltBtn = document.getElementById('tilt');
+let tiltAsk = false;
+// The button shows only where tilt can do something: permission still to ask, a renderer, and motion allowed.
+function syncTiltBtn() { tiltBtn.hidden = !(tiltAsk && renderer && !reducedMotion()); }
 function onTilt(e) {
   if (e.gamma == null) return;
   tilt = true;
@@ -92,10 +95,11 @@ function onTilt(e) {
 }
 if ('DeviceOrientationEvent' in window && coarse) {
   if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-    tiltBtn.hidden = false;                              // iOS asks first, and only after a tap
+    tiltAsk = true;                                      // iOS asks first, and only after a tap
     tiltBtn.addEventListener('click', async () => {
-      try { if (await DeviceOrientationEvent.requestPermission() === 'granted') { addEventListener('deviceorientation', onTilt, { passive: true }); tiltBtn.hidden = true; } }
-      catch (e) { tiltBtn.hidden = true; }
+      try { if (await DeviceOrientationEvent.requestPermission() === 'granted') { addEventListener('deviceorientation', onTilt, { passive: true }); tiltAsk = false; } }
+      catch (e) { tiltAsk = false; }
+      syncTiltBtn();
     });
   } else addEventListener('deviceorientation', onTilt, { passive: true });
 }
@@ -560,6 +564,7 @@ function start() {
 function stop() { running = false; cancelAnimationFrame(rafId); }
 function decide() {
   readPalette();
+  syncTiltBtn();
   if (reducedMotion()) { stop(); renderStill(); }
   else if (document.hidden) stop();
   else start();

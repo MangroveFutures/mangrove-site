@@ -18,7 +18,6 @@ assets:
   - fonts/bricolage-grotesque-var.woff2  # Bricolage Grotesque, SIL OFL 1.1
   - fonts/OFL-bricolage-grotesque.txt
   - shots/*.jpg           # Playwright renders at 390, 768 and 1440 px; falcon (mouse, held touch); stoop; scroll positions; Silt; reduced motion; no JavaScript
-  - shots/2026-10-23-direction-d2-interaction-15s.webm  # Playwright recordVideo, 52 s captured under software WebGL, sped up x3.5 to 15 s
   - provenance.yaml       # this file
 textures_and_images: none from outside. The sky, light, grain and shadows are generated in a shader (flock.js) and an SVG feTurbulence filter (index.html). No photographs, no stock, no unlicensed images.
 
@@ -71,3 +70,16 @@ rejected:
 
 reviewer: none yet. Ask the coordinator for Feynman's design review (red-team skill, section 7).
 rosie_verdict: ""
+
+removed_from_repo:
+  - file: shots/2026-10-23-direction-d2-interaction-15s.webm
+    why: 3.4 MB; it would publish with the page and into a public repo's history (design review F3, 23 Oct 2026)
+    where_it_went: not kept. It is regenerable - Playwright recordVideo at 1440 px over the falcon, stoop, scroll and Silt switch, about 52 s under software WebGL, sped up x3.5 with ffmpeg. The PNG/JPEG screenshots in shots/ stay.
+
+figures:
+  - claim: "about 19 million words (index.html, intro to Research)"
+    computed: 2026-10-23
+    source: Supabase project epoch, table turn
+    query: "select sum(array_length(regexp_split_to_array(trim(coalesce(body,'')), '\\s+'),1)) from turn where role in ('user','assistant')"
+    result: "19,407,773 words over 96,438 turns (whitespace split; user and assistant turns; counts move)"
+    note: replaces the typed 'some 15 million words'. Re-run before publishing; the figure is computed, never typed.
