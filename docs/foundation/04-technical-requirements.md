@@ -27,6 +27,14 @@ Each real decision here should become a short ADR (architecture decision record)
 | Analytics | **Privacy-friendly only:** Cloudflare's cookie-free page counts | No cookie banner needed. |
 | Word-count figure on the site | **Use the live corpus figure** | Counted 13 Oct 2026 in Supabase: about **19.1 million words** of human-AI dialogue in about 2,455 conversations, Dec 2022 to Oct 2026 (user and assistant turns only). The corpus is partial, so the honest phrasing is "over 19 million words". This replaces the old site's "10 million" and "15 million" (C-104). |
 
+## Decided on 23 Oct 2026 (Rosie, in session)
+| Decision | Answer | Notes |
+|---|---|---|
+| Domain | **Use `mangrove.org.uk`, registered at IONOS, for now** | See [ADR-0001](../adr/0001-host-on-cloudflare-with-the-domain-at-ionos.md). Moving DNS needs the mail records copied first, so `info@mangrove.org.uk` keeps working. |
+| First version live | **A simple interim page this weekend** | `interim/index.html`; plan in [06](06-implementation-plan.md). |
+| Contact | **`info@mangrove.org.uk`** | The older full draft (`index.html`) says `hello@`; the interim page uses `info@` as Rosie said. |
+| Hero | **The flocking animation; the mouse or finger acts as a falcon** | Touch listeners are passive so the page still scrolls. Reduced-motion visitors get a still frame. |
+
 ## Decisions still open
 | Decision | Options on the table | Notes |
 |---|---|---|
