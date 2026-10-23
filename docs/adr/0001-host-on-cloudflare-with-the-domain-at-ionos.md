@@ -2,7 +2,7 @@
 id: adr-0001
 type: adr
 title: "ADR-0001: Host the site on Cloudflare; keep the domain registered at IONOS"
-status: "accepted for Cloudflare (Rosie, 13 Oct 2026) and for using mangrove.org.uk now (Rosie, 23 Oct 2026); Workers-versus-Pages and the DNS route are proposed, not yet checked"
+status: "accepted: Cloudflare Pages, nameservers stay at IONOS (Rosie, 13 and 23 Oct 2026); the IONOS apex redirect over HTTPS is not yet verified"
 created: 2026-10-23
 owner: rosie
 drafted_by: Claude (draft for Rosie to correct)
@@ -25,19 +25,22 @@ The site is plain HTML with no build step (`docs/foundation/04-technical-require
 - Email at the domain must keep working.
 
 ## Considered options
-1. **Cloudflare, Workers with static assets** (proposed).
-2. Cloudflare Pages.
+1. Cloudflare, Workers with static assets (not chosen: custom domains on an external-DNS apex were not confirmed).
+2. **Cloudflare Pages** (chosen).
 3. GitHub Pages (static only, no client login).
 4. Vercel (blocked for organisation repos on the free plan, per `epoch/docs/ops/stack-and-subscriptions.md`).
 
 ## Decision outcome
-Cloudflare (accepted, 13 Oct 2026). Between Workers with static assets and Pages: Workers with static assets, because third-party sources of Oct 2026 say Cloudflare steers new projects there and Pages stays supported; **not yet checked against Cloudflare's own documentation, check before building**. The first deploy goes to a free `workers.dev` address so the page can be looked at before the domain moves.
+Cloudflare (accepted, 13 Oct 2026), using **Cloudflare Pages**, with **the nameservers staying at IONOS** (Rosie, 23 Oct 2026: "I don't want to move NS to Cloudflare, just ensure the domain points to our actual site for now").
 
-## The domain and email (proposed, check before acting)
-- The registrar stays IONOS. Only where the domain's DNS is answered changes.
-- A Cloudflare custom domain, as far as the author knows, needs the domain's DNS to be served by Cloudflare, so the nameservers at IONOS would point at Cloudflare. **Not verified in this session.**
-- **Risk, in order to avoid losing email:** before changing nameservers, copy every IONOS DNS record (especially MX, SPF/TXT and DKIM for `info@mangrove.org.uk`) into Cloudflare DNS, and send a test email afterwards. Moving nameservers without the mail records stops mail arriving.
-- The step is Rosie's: it needs her IONOS login.
+Why Pages and not Workers with static assets: Cloudflare's own Pages documentation (read 23 Oct 2026, https://developers.cloudflare.com/pages/configuration/custom-domains/) says a **subdomain** can use a Pages project without being a Cloudflare zone, through a CNAME record at the external DNS provider, but an **apex** domain needs the site added as a Cloudflare zone with Cloudflare nameservers. Whether Workers custom domains have the same rule was not checked; Pages is the documented route that fits the constraint.
+
+## The domain and email (accepted route, steps are Rosie's)
+- The registrar and the nameservers stay at IONOS. Mail records (MX, SPF, DKIM) are not touched, so `info@mangrove.org.uk` keeps working.
+- Make a Pages project, add the custom domain `www.mangrove.org.uk` in the Pages dashboard first (adding the CNAME before that gives an error 522), then at IONOS add `www` CNAME pointing to `<project>.pages.dev`.
+- The bare `mangrove.org.uk` cannot point at Pages without Cloudflare nameservers. Set an IONOS redirect from `mangrove.org.uk` to `https://www.mangrove.org.uk`. **Not verified in this session:** whether IONOS's redirect serves HTTPS on the bare domain; if it does not, visitors who type the bare name over HTTPS see a certificate warning until the nameservers move.
+- Cost of this route: the bare domain is a redirect, not the site itself, and a future client login on the apex (Cloudflare Access) will need the nameservers to move.
+- Before the Pages project exists, the first look is the free `*.pages.dev` address.
 
 ## Consequences
 - One place (Cloudflare) answers for hosting, DNS and later sign-in.

@@ -24,8 +24,8 @@ Two phases. Rosie's rule for this: a lovely, simple page now is better than noth
 |---|---|---|---|
 | 1 | Build `interim/index.html`: the flocking hero where the visitor's mouse or finger is a falcon, a short "studio, research, services" explanation, and `info@mangrove.org.uk`. | Claude | Done 23 Oct 2026; checked at 390 px and 1440 px, no sideways scroll, no script errors |
 | 2 | Rosie reads it and edits the words (the copy is a draft, hers to change). | Rosie | Open |
-| 3 | Deploy to a free `workers.dev` address and look at it there. Going public needs Rosie's yes. | Claude | Waiting on step 2 |
-| 4 | Point `mangrove.org.uk` at it: copy IONOS DNS records (mail first), move nameservers to Cloudflare, add the custom domain, send a test email to `info@`. See [ADR-0001](../adr/0001-host-on-cloudflare-with-the-domain-at-ionos.md). | Rosie (IONOS login) with Claude | Open |
+| 3 | Deploy to a free `pages.dev` address and look at it there. Going public needs Rosie's yes. | Claude | Waiting on step 2 |
+| 4 | Point `mangrove.org.uk` at it: copy IONOS DNS records (mail first), leave the nameservers at IONOS, add `www.mangrove.org.uk` as a Pages custom domain, add the `www` CNAME at IONOS, set an IONOS redirect from the bare domain to `www`, send a test email to `info@`. See [ADR-0001](../adr/0001-host-on-cloudflare-with-the-domain-at-ionos.md). | Rosie (IONOS login) with Claude | Open |
 | 5 | Check the finished site on a phone, and that the animation stops for visitors who ask for reduced motion. | Claude | Open |
 
 ### Phase 1: the full site
