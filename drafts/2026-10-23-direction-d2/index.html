@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark" data-lib-a11y-themes="light dark" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mangrove · speculative design studio and research lab</title>
+<meta name="description" content="Mangrove is a speculative design studio and research lab. Write to info@mangrove.org.uk.">
+<meta name="design-record" content="design/records/2026-10-23-mangrove-site-direction-d2.md">
+<meta name="provenance" content="provenance.yaml">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark light">
+<script>
+  document.documentElement.classList.replace('no-js', 'js');
+  /* The accessibility kit offers easier fonts. Keep every request on this site: no Google Fonts. */
+  window.libA11yConfig = { fonts: {
+    atkinson: { name: 'Atkinson Hyperlegible', family: '"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,sans-serif', css: null, local: true },
+    lexend: { name: 'Lexend', family: '"Lexend",system-ui,sans-serif', css: null, local: true }
+  } };
+</script>
+<link rel="preload" href="fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bricolage-grotesque-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="modulepreload" href="vendor/three/three.module.min.js">
+<style>
+@font-face{font-family:"Newsreader";src:url("fonts/newsreader-var.woff2") format("woff2");
+  font-weight:200 800;font-style:normal;font-display:swap;}
+@font-face{font-family:"Bricolage Grotesque";src:url("fonts/bricolage-grotesque-var.woff2") format("woff2");
+  font-weight:200 800;font-stretch:75% 100%;font-style:normal;font-display:swap;}
+
+/* ── Two atmospheres. Dusk (D, Rosie's pick) and Silt (v3's pale field). Same features. ── */
+:root,[data-theme="dark"]{
+  --sky-top:#0c1117; --sky-mid:#141b23; --sky-low:#2b2420; --glow:#d0703f;
+  --ink:#ece6da; --ink-soft:#b3ada3; --falcon:#ff6a47; --heat:#ffb07a;
+  --scrim:rgba(12,17,23,.94); --grain-op:.10; --shadow:0 0 0 transparent;
+  --lib-a11y-ground:#141b23; --lib-a11y-ink:#ece6da; --lib-a11y-accent:#ff6a47;
+  --lib-a11y-line:rgba(236,230,218,.25); --lib-a11y-surface:#1b232d;
+}
+[data-theme="light"]{
+  --sky-top:#e7e9e4; --sky-mid:#d7dbd4; --sky-low:#c3c6bb; --glow:#e09468;
+  --ink:#15191c; --ink-soft:#40474b; --falcon:#b8341a; --heat:#c4521f;
+  --scrim:rgba(228,230,225,.95); --grain-op:.14;
+  --lib-a11y-ground:#e7e9e4; --lib-a11y-ink:#15191c; --lib-a11y-accent:#b8341a;
+  --lib-a11y-line:rgba(21,25,28,.25); --lib-a11y-surface:#f1f2ef;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{background:var(--sky-mid);color:var(--ink);-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}}
+html[data-lib-motion="reduce"]{scroll-behavior:auto;}
+body{margin:0;min-height:100vh;overflow-x:hidden;
+  font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  font-variation-settings:"opsz" 14;font-size:1.0625rem;line-height:1.6;
+  /* The sky without JavaScript or WebGL: the same gradient the shader draws. */
+  background:
+    radial-gradient(120% 60% at 30% 78%, color-mix(in srgb, var(--glow) 22%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 48%, var(--sky-low) 100%) fixed;
+  background-color:var(--sky-mid);}
+::selection{background:var(--falcon);color:var(--sky-top);}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.18em;}
+a:hover{text-decoration-thickness:2px;}
+:focus-visible{outline:2px solid var(--falcon);outline-offset:4px;border-radius:2px;}
+
+/* Layers: sky canvas, then light, then grain, then words. */
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none;}
+.grain{position:fixed;inset:-50%;z-index:1;pointer-events:none;opacity:var(--grain-op);mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.6 -.3'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+html.no-gl #sky{display:none;}
+html.gl .grain{opacity:calc(var(--grain-op) * .45);}  /* the shader adds its own moving grain */
+
+.page{position:relative;z-index:2;overflow-x:clip;}
+.wrap{width:min(100% - 2.5rem, 84rem);margin-inline:auto;}
+@media (min-width:48rem){.wrap{width:min(100% - 5rem, 84rem);}}
+
+.skip{position:absolute;left:1rem;top:-4rem;z-index:50;padding:.6rem .9rem;background:var(--sky-top);color:var(--ink);}
+.skip:focus{top:1rem;}
+
+/* Header */
+.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-block:1.25rem;}
+.mark{font-family:"Newsreader",Georgia,serif;font-variation-settings:"opsz" 36;font-weight:420;font-size:1.35rem;
+  letter-spacing:-.01em;text-decoration:none;}
+.top-right{display:flex;align-items:center;gap:1.25rem;font-size:.95rem;}
+.atmos{appearance:none;background:none;border:0;color:var(--ink-soft);font:inherit;cursor:pointer;
+  min-height:44px;padding:0 .25rem;display:inline-flex;align-items:center;gap:.5rem;}
+.atmos:hover{color:var(--ink);}
+.atmos svg{width:18px;height:18px;flex:none;}
+.top a.mail{min-height:44px;display:inline-flex;align-items:center;}
+@media (max-width:30rem){.top a.mail{display:none;}}
+
+/* Hero: the flock is the picture; the tagline sits in it like a caption. */
+.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding-bottom:clamp(5.5rem,14vh,9rem);position:relative;}
+.hero .top{position:absolute;top:0;left:0;right:0;}
+.tagline{font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 72;
+  font-size:clamp(2.5rem,7.2vw,6rem);line-height:1.02;letter-spacing:-.025em;margin:0;max-width:13ch;
+  text-wrap:balance;transform-origin:0 100%;will-change:transform,filter;}
+.hint{margin:1.4rem 0 0;max-width:36ch;color:var(--ink-soft);font-size:1rem;}
+.hint .touch{display:none;}
+@media (hover:none) and (pointer:coarse){.hint .mouse{display:none;}.hint .touch{display:inline;}}
+.still-note{display:none;}
+html.still .still-note{display:inline;} html.still .hint .live{display:none;}
+html.no-js .hint,html.no-gl .hint{display:none;}
+
+/* The time axis: D's scrubber, now the page's own navigation. */
+.axis{position:sticky;top:0;z-index:10;padding-top:.6rem;
+  background:linear-gradient(180deg,var(--scrim) 0%,var(--scrim) 55%,transparent 100%);}
+.axis .wrap{position:relative;}
+.axis ol{list-style:none;margin:0;padding:0 0 1.4rem;display:flex;justify-content:space-between;position:relative;}
+.axis ol::before{content:"";position:absolute;left:0;right:0;top:22px;height:1px;
+  background:repeating-linear-gradient(90deg,currentColor 0 1px,transparent 1px 12px);opacity:.45;}
+.axis a{display:inline-flex;flex-direction:column;gap:.15rem;min-height:44px;min-width:44px;padding-top:30px;
+  text-decoration:none;color:var(--ink-soft);font-size:.92rem;position:relative;}
+.axis a::before{content:"";position:absolute;top:16px;left:0;width:1px;height:13px;background:currentColor;}
+.axis li:last-child a{align-items:flex-end;text-align:right;}
+.axis li:last-child a::before{left:auto;right:0;}
+.axis a:hover,.axis a[aria-current="true"]{color:var(--ink);}
+.axis .dot{position:absolute;top:17px;left:0;width:11px;height:11px;margin-left:-5px;border-radius:50%;
+  background:var(--falcon);
+  pointer-events:none;transform:translateX(0);}
+html.no-js .axis .dot{display:none;}
+
+/* Rooms: Research, Studio, Services. B's sentences under E's wonky words. */
+.room{min-height:88vh;min-height:88svh;display:flex;flex-direction:column;justify-content:center;padding-block:4rem;}
+.room:nth-of-type(2){align-items:center;}
+.room:nth-of-type(2) .room-in{margin-left:clamp(0rem,18vw,22rem);}
+.room:nth-of-type(3) .room-in{margin-left:clamp(0rem,36vw,40rem);}
+@media (max-width:48rem){.room:nth-of-type(2) .room-in,.room:nth-of-type(3) .room-in{margin-left:0;}.room:nth-of-type(2){align-items:stretch;}}
+.room-in{max-width:34rem;}
+.wonky{font-family:"Bricolage Grotesque",ui-sans-serif,sans-serif;font-weight:760;font-stretch:88%;
+  font-variation-settings:"opsz" 96;letter-spacing:-.035em;line-height:.95;margin:0 0 1.4rem;
+  font-size:clamp(3.2rem,11vw,8.5rem);transform-origin:0 60%;will-change:transform,filter;}
+.wonky .l{display:inline-block;will-change:transform;}
+.room p{margin:0;max-width:34ch;font-size:clamp(1.08rem,1.6vw,1.28rem);line-height:1.55;color:var(--ink);}
+
+/* Write */
+.write{min-height:92vh;min-height:92svh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:6.5rem;}
+.write .lead{font-size:1.05rem;color:var(--ink-soft);margin:0 0 .6rem;}
+.email{font-family:"Bricolage Grotesque",ui-sans-serif,sans-serif;font-weight:700;font-stretch:90%;
+  font-variation-settings:"opsz" 96;letter-spacing:-.03em;line-height:1;text-decoration:none;
+  font-size:clamp(2rem,8.4vw,7.6rem);display:inline-block;overflow-wrap:anywhere;
+  border-bottom:2px solid color-mix(in srgb,var(--ink) 40%,transparent);padding-bottom:.08em;}
+.email:hover{border-bottom-color:var(--falcon);}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.75rem 1.5rem;margin-top:4.5rem;
+  font-size:.88rem;color:var(--ink-soft);}
+.foot a,.foot button{min-height:44px;display:inline-flex;align-items:center;}
+.draft{border:1px dashed currentColor;padding:.15rem .5rem;border-radius:2px;}
+.tilt{appearance:none;background:none;border:0;color:inherit;font:inherit;cursor:pointer;padding:0;text-decoration:underline;
+  text-underline-offset:.18em;}
+.tilt[hidden]{display:none;}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* More contrast, from the kit or the system. */
+[data-lib-contrast="more"]{--ink-soft:var(--ink);--grain-op:.04;}
+</style>
+<!-- lib-a11y v1 head start -->
+<script id="lib-a11y-head">
+/* Accessibility kit v1, head block (design/library/components/a11y-kit.html).
+   Runs before first paint: reads the saved choices and sets attributes on <html>, so the page never
+   flashes in the wrong size, theme or motion. The js block reads window.libA11yBoot. */
+(() => {
+  if (window.libA11yBoot) return;
+  const KEY = 'lib-a11y-v1', root = document.documentElement;
+  const DEFAULTS = { text: 'default', spacing: 'default', font: 'app', theme: 'app', contrast: 'system',
+    motion: 'system', longer: false, voice: false, shortcuts: true, rate: 1 };
+  const cfg = window.libA11yConfig || {};
+  const FONTS = Object.assign({
+    atkinson: { name: 'Atkinson Hyperlegible', family: '"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,sans-serif',
+      css: 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400..700&display=swap' },
+    lexend: { name: 'Lexend', family: '"Lexend",system-ui,sans-serif',
+      css: 'https://fonts.googleapis.com/css2?family=Lexend:wght@300..700&display=swap' },
+    opendyslexic: { name: 'OpenDyslexic', family: '"OpenDyslexic","OpenDyslexic Regular","OpenDyslexic3",system-ui,sans-serif', css: null, local: true },
+  }, cfg.fonts || {});
+  const mq = (q) => { try { return window.matchMedia(q).matches; } catch (e) { return false; } };
+  const read = () => { try { return Object.assign({}, DEFAULTS, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return Object.assign({}, DEFAULTS); } };
+  const write = (s) => { try { localStorage.setItem(KEY, JSON.stringify(s)); return true; } catch (e) { return false; } };
+  const pageTheme = root.getAttribute('data-theme');   // what the page set itself, restored on "as designed"
+  const loaded = {};
+  const loadFont = (id) => {
+    const f = FONTS[id]; if (!f || !f.css || loaded[id]) return;
+    loaded[id] = true;
+    const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = f.css; l.dataset.libA11yFont = id;
+    document.head.appendChild(l);
+  };
+  const resolve = (s) => ({
+    contrastMore: s.contrast === 'more' || (s.contrast === 'system' && mq('(prefers-contrast: more)')),
+    motionReduced: s.motion === 'reduce' || (s.motion === 'system' && mq('(prefers-reduced-motion: reduce)')),
+    theme: s.theme === 'system' ? (mq('(prefers-color-scheme: dark)') ? 'dark' : 'light') : s.theme,
+  });
+  const apply = (s) => {
+    const r = resolve(s);
+    root.dataset.libText = s.text; root.dataset.libSpacing = s.spacing; root.dataset.libFont = s.font;
+    root.dataset.libContrast = r.contrastMore ? 'more' : 'standard';
+    root.dataset.libMotion = r.motionReduced ? 'reduce' : 'allow';
+    root.dataset.libLongerText = s.longer ? 'on' : 'off';   // not data-lib-longer: that marks content
+    if (r.theme === 'light' || r.theme === 'dark') root.setAttribute('data-theme', r.theme);
+    else if (pageTheme) root.setAttribute('data-theme', pageTheme); else root.removeAttribute('data-theme');
+    const f = FONTS[s.font];
+    if (f) { root.style.setProperty('--lib-a11y-read-font', f.family); loadFont(s.font); }
+    else root.style.removeProperty('--lib-a11y-read-font');
+    return r;
+  };
+  const state = read();
+  window.libA11yBoot = { KEY, DEFAULTS, FONTS, state, read, write, apply, resolve, mq, loadFont };
+  if (root.dataset.libA11y !== 'off') apply(state);
+})();
+</script>
+<!-- lib-a11y v1 head end -->
+<!-- lib-a11y v1 css start -->
+<style id="lib-a11y-css">
+/* Accessibility kit v1 (design/library/components/a11y-kit.html). Every class and token starts lib-a11y-.
+   Token defaults sit in :where(:root), which has no specificity: set any --lib-a11y-* token on :root or
+   on .lib-a11y in your own CSS and it wins, in any order. */
+:where(:root){
+  --lib-a11y-ground:#10172b; --lib-a11y-raised:#182240; --lib-a11y-ink:#eef0f7; --lib-a11y-muted:#b8bfd6;
+  --lib-a11y-line:#3a4774; --lib-a11y-accent:#eab54d; --lib-a11y-on-accent:#0a0f1e; --lib-a11y-focus:#eab54d;
+  --lib-a11y-rec:#a4221a; --lib-a11y-on-rec:#ffffff; --lib-a11y-radius:14px;
+  --lib-a11y-font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --lib-a11y-shadow:0 24px 70px -18px rgb(0 0 0 / .65);
+}
+/* Defaults every page gets. Low specificity, so the page's own focus style wins where it has one. */
+:where(:focus-visible){outline:3px solid var(--lib-a11y-focus);outline-offset:2px}
+:where(body){overflow-wrap:break-word}   /* a long word breaks rather than spill past the edge at large text (1.4.10, 1.4.12) */
+:where(code, kbd, samp, pre){overflow-wrap:anywhere}   /* long paths wrap at large text, so nothing scrolls sideways (1.4.10) */
+.lib-a11y-skip{position:absolute;left:-9999px;top:12px;z-index:2147483001;padding:12px 16px;border-radius:10px;background:var(--lib-a11y-accent);
+  color:var(--lib-a11y-on-accent);font:650 1rem var(--lib-a11y-font);text-decoration:none}
+.lib-a11y-skip:focus{position:fixed;left:12px}
+.lib-a11y-sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* Text size, spacing (WCAG 2.2, 1.4.12 values for "wide"), font, motion, longer text. */
+html[data-lib-text="large"]{font-size:112.5%!important}
+html[data-lib-text="larger"]{font-size:125%!important}
+html[data-lib-text="largest"]{font-size:150%!important}
+html[data-lib-spacing="wide"] body *:not(svg, svg *){line-height:1.5!important;letter-spacing:.12em!important;word-spacing:.16em!important}
+html[data-lib-spacing="wider"] body *:not(svg, svg *){line-height:1.8!important;letter-spacing:.16em!important;word-spacing:.24em!important}
+html[data-lib-spacing="wide"] body p,html[data-lib-spacing="wider"] body p{margin-bottom:1.2em}
+html[data-lib-spacing]:not([data-lib-spacing="default"]) svg{letter-spacing:0!important;word-spacing:0!important}   /* pictures keep their own layout */
+html[data-lib-font]:not([data-lib-font="app"]) body,
+html[data-lib-font]:not([data-lib-font="app"]) body *:not(svg, svg *, code, pre, kbd, samp){font-family:var(--lib-a11y-read-font)!important}
+html[data-lib-motion="reduce"] *,html[data-lib-motion="reduce"] *::before,html[data-lib-motion="reduce"] *::after{
+  animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+body [data-lib-longer]{display:none!important}
+html[data-lib-longer-text="on"] body [data-lib-longer]{display:revert!important}
+html[data-lib-contrast="more"] a{text-decoration-line:underline;text-decoration-thickness:2px}
+html[data-lib-contrast="more"]{--lib-a11y-muted:var(--lib-a11y-ink);--lib-a11y-line:var(--lib-a11y-ink)}
+/* The control: the page's own [data-lib-a11y-open] button, or this small one, bottom left. */
+.lib-a11y-open{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 12px 6px 8px;border-radius:12px;cursor:pointer;
+  border:1px solid var(--lib-a11y-line);background:var(--lib-a11y-ground);color:var(--lib-a11y-ink);font:600 .92rem/1 var(--lib-a11y-font)}
+.lib-a11y-open .lib-a11y-aa{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--lib-a11y-accent);
+  color:var(--lib-a11y-on-accent);font:700 .95rem/1 Georgia,serif;letter-spacing:0!important}
+.lib-a11y-fab{position:fixed;left:12px;bottom:12px;z-index:2147482000;box-shadow:0 8px 24px -10px rgb(0 0 0 / .5)}
+/* The panel: a modal dialog. Layout "sheet" (default): a bottom sheet on a phone, a side sheet on a wide
+   screen. Layout "card": centred. Set data-lib-a11y-layout on <html> to choose; features are the same. */
+.lib-a11y-panel{border:0;padding:0;color:var(--lib-a11y-ink);background:var(--lib-a11y-ground);font:400 1rem/1.45 var(--lib-a11y-font);
+  box-shadow:var(--lib-a11y-shadow);overflow:auto;overscroll-behavior:contain;
+  position:fixed;inset:auto 0 0 0;margin:0;width:100%;max-width:100%;max-height:88svh;border-radius:var(--lib-a11y-radius) var(--lib-a11y-radius) 0 0}
+.lib-a11y-panel::backdrop{background:rgb(3 6 14 / .55)}
+@media (min-width:760px){
+  .lib-a11y-panel{inset:0 0 0 auto;width:min(410px,100vw);height:100svh;max-height:100svh;border-radius:var(--lib-a11y-radius) 0 0 var(--lib-a11y-radius)}
+}
+html[data-lib-a11y-layout="card"] .lib-a11y-panel{inset:0;margin:auto;width:min(620px,calc(100vw - 24px));height:auto;max-height:calc(100svh - 24px);border-radius:var(--lib-a11y-radius)}
+@media (min-width:760px){html[data-lib-a11y-layout="card"] .lib-a11y-panel .lib-a11y-groups{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}}
+.lib-a11y-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;gap:12px;padding:16px 18px 12px;background:var(--lib-a11y-ground);border-bottom:1px solid var(--lib-a11y-line)}
+.lib-a11y-head{flex-wrap:wrap}
+.lib-a11y-head h2{font:650 1.2rem/1.2 var(--lib-a11y-font);margin:0;flex:1;outline-offset:4px}
+.lib-a11y-head p{margin:2px 0 0;color:var(--lib-a11y-muted);font-size:.86rem}
+.lib-a11y-btn{min-height:44px;min-width:44px;padding:8px 14px;border-radius:10px;border:1px solid var(--lib-a11y-line);background:none;color:var(--lib-a11y-ink);
+  font:600 .95rem/1.1 var(--lib-a11y-font);cursor:pointer}
+.lib-a11y-btn[aria-pressed="true"]{background:var(--lib-a11y-ink);color:var(--lib-a11y-ground);border-color:var(--lib-a11y-ink)}
+.lib-a11y-main{background:var(--lib-a11y-accent);color:var(--lib-a11y-on-accent);border-color:var(--lib-a11y-accent)}
+.lib-a11y-btn:disabled{opacity:.55;cursor:not-allowed}
+.lib-a11y-groups{padding:4px 18px 8px}
+.lib-a11y-group{padding:14px 0 6px;border-bottom:1px solid var(--lib-a11y-line)}
+.lib-a11y-group h3{font:650 .82rem/1.2 var(--lib-a11y-font);color:var(--lib-a11y-muted);margin:0 0 6px}
+.lib-a11y-set{border:0;padding:0;margin:0 0 14px;min-width:0}
+.lib-a11y-set legend,.lib-a11y-label{font-weight:600;padding:0;margin-bottom:8px;display:block}
+.lib-a11y-seg{display:flex;flex-wrap:wrap;gap:6px}
+.lib-a11y-seg label{position:relative;flex:1 1 auto}
+.lib-a11y-seg input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.lib-a11y-seg span{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:6px 10px;border:1px solid var(--lib-a11y-line);border-radius:10px;
+  text-align:center;font-size:.93rem;line-height:1.15}
+.lib-a11y-seg input:checked + span{background:var(--lib-a11y-ink);color:var(--lib-a11y-ground);border-color:var(--lib-a11y-ink);font-weight:650}
+.lib-a11y-seg input:checked + span::before{content:"\2713";content:"\2713" / ""}   /* the tick is seen, not read: "Default", not "check mark Default" */
+.lib-a11y-seg input:focus-visible + span{outline:3px solid var(--lib-a11y-focus);outline-offset:2px}
+.lib-a11y-seg input:disabled + span{opacity:.5;text-decoration:line-through}
+.lib-a11y-hint{color:var(--lib-a11y-muted);font-size:.86rem;margin:6px 0 0}
+.lib-a11y-hint a{color:inherit}
+.lib-a11y-sw{position:relative;display:flex;align-items:center;gap:12px;min-height:48px;cursor:pointer;margin-bottom:4px}
+.lib-a11y-sw input{position:absolute;z-index:1;left:0;top:9px;opacity:0;width:52px;height:30px;margin:0;cursor:pointer}
+.lib-a11y-sw .lib-a11y-track{pointer-events:none;position:relative;flex:0 0 52px;height:30px;border-radius:15px;border:2px solid var(--lib-a11y-muted);background:var(--lib-a11y-raised)}
+.lib-a11y-sw .lib-a11y-track::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--lib-a11y-muted);transition:transform .2s}
+.lib-a11y-sw input:checked + .lib-a11y-track{background:var(--lib-a11y-accent);border-color:var(--lib-a11y-accent)}
+.lib-a11y-sw input:checked + .lib-a11y-track::after{transform:translateX(22px);background:var(--lib-a11y-on-accent)}
+.lib-a11y-sw input:focus-visible + .lib-a11y-track{outline:3px solid var(--lib-a11y-focus);outline-offset:3px}
+.lib-a11y-sw b{font-weight:600;flex:1;min-width:0;overflow-wrap:anywhere}
+.lib-a11y-sw small{font-size:.85rem;color:var(--lib-a11y-muted);min-width:2.2em}
+.lib-a11y-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.lib-a11y-keys{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;margin:8px 0 10px;font-size:.92rem}
+.lib-a11y-keys dd{margin:0;min-width:0}
+@media (max-width:480px){.lib-a11y-keys{grid-template-columns:minmax(0,1fr);gap:2px}.lib-a11y-keys dd{margin-bottom:8px}}
+.lib-a11y-keys kbd{font:600 .8rem/1 ui-monospace,Menlo,monospace;border:1px solid var(--lib-a11y-line);border-bottom-width:2px;border-radius:6px;padding:4px 6px;white-space:nowrap}
+.lib-a11y-foot{position:sticky;bottom:0;display:flex;gap:8px;justify-content:space-between;padding:12px 18px;background:var(--lib-a11y-ground);border-top:1px solid var(--lib-a11y-line)}
+/* Bars: reading aloud, and listening (the recording banner pattern). */
+.lib-a11y-bar{position:fixed;left:0;right:0;top:0;z-index:2147483000;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 12px;
+  font:600 .95rem/1.3 var(--lib-a11y-font);background:var(--lib-a11y-ink);color:var(--lib-a11y-ground);box-shadow:0 8px 24px -12px rgb(0 0 0 / .6)}
+.lib-a11y-bar p{flex:1 1 220px;margin:0}
+.lib-a11y-bar small{display:block;font-weight:400;font-size:.82rem;opacity:.9}
+.lib-a11y-bar button{min-height:44px;padding:6px 14px;border-radius:10px;border:2px solid currentColor;background:none;color:inherit;font:700 .95rem var(--lib-a11y-font);cursor:pointer}
+.lib-a11y-bar.lib-a11y-rec{background:var(--lib-a11y-rec);color:var(--lib-a11y-on-rec)}
+.lib-a11y-bar.lib-a11y-rec p::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:currentColor;margin-right:8px}
+.lib-a11y-reading{outline:3px solid var(--lib-a11y-accent)!important;outline-offset:4px;border-radius:4px}
+.lib-a11y-mic{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin:6px 0;padding:6px 12px;border-radius:10px;border:1px solid var(--lib-a11y-line);
+  background:var(--lib-a11y-ground);color:var(--lib-a11y-ink);font:600 .9rem var(--lib-a11y-font);cursor:pointer}
+.lib-a11y-mic[aria-pressed="true"]{background:var(--lib-a11y-rec);color:var(--lib-a11y-on-rec);border-color:var(--lib-a11y-rec)}
+/* A short screen (a phone on its side, or 400 % zoom): the head and foot scroll with the panel, so the settings get the room (1.4.10). */
+@media (max-height:520px){.lib-a11y-head,.lib-a11y-foot{position:static}}
+@media (prefers-reduced-motion:reduce){.lib-a11y-sw .lib-a11y-track::after{transition:none}}
+@media (forced-colors:active){.lib-a11y-seg input:checked + span,.lib-a11y-sw input:checked + .lib-a11y-track{border:3px solid Highlight}}
+</style>
+<!-- lib-a11y v1 css end -->
+</head>
+<body>
+<a class="skip" href="#write">Skip to the email address</a>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="page">
+  <section class="hero" aria-labelledby="tagline">
+    <header class="wrap top" role="banner">
+      <a class="mark" href="#top" id="top">Mangrove</a>
+      <div class="top-right">
+        <button class="atmos" type="button" id="atmos" role="switch" aria-checked="false" aria-label="Silt, the lighter sky">
+          <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 1.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+          <span aria-hidden="true">Silt</span>
+        </button>
+        <a class="mail" href="mailto:info@mangrove.org.uk">info@mangrove.org.uk</a>
+      </div>
+    </header>
+    <div class="wrap">
+      <h1 class="tagline" id="tagline">A speculative design studio and research lab.</h1>
+      <p class="hint"><span class="live"><span class="mouse">Your pointer is a falcon. Chase the flock; press to dive.</span><span class="touch">Your finger is a falcon. Drag through the flock; tap to dive.</span></span><span class="still-note">A still murmuration of starlings, each joined to its seven nearest neighbours.</span></p>
+    </div>
+  </section>
+
+  <nav class="axis" aria-label="On this page">
+    <div class="wrap">
+      <ol>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#studio">Studio</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#write">Write</a></li>
+      </ol>
+      <span class="dot" aria-hidden="true"></span>
+    </div>
+  </nav>
+
+  <main>
+    <section class="room wrap" id="research" aria-labelledby="h-research">
+      <div class="room-in">
+        <h2 class="wonky" id="h-research">Research</h2>
+        <p>Two years of one human–AI working relationship, studied closely: about 19 million words, and the instruments built to read them.</p>
+      </div>
+    </section>
+    <section class="room wrap" id="studio" aria-labelledby="h-studio">
+      <div class="room-in">
+        <h2 class="wonky" id="h-studio">Studio</h2>
+        <p>Speculative and applied R&amp;D. Tools, prototypes and visual work, made with our own methods.</p>
+      </div>
+    </section>
+    <section class="room wrap" id="services" aria-labelledby="h-services">
+      <div class="room-in">
+        <h2 class="wonky" id="h-services">Services</h2>
+        <p>Workshops, 1:1 work, systems set-ups and research consulting, for founders, small teams and purpose-led organisations.</p>
+      </div>
+    </section>
+
+    <section class="write wrap" id="write" aria-labelledby="h-write">
+      <h2 class="lead" id="h-write">Write to us</h2>
+      <a class="email wonky-mail" href="mailto:info@mangrove.org.uk">info@mangrove.org.uk</a>
+      <footer class="foot">
+        <span class="draft">Draft copy, for Rosie to rewrite</span>
+        <button class="tilt" type="button" id="tilt" hidden>Let the sky follow your tilt</button>
+        <a href="provenance.yaml">Sources</a>
+      </footer>
+    </section>
+  </main>
+</div>
+
+<script type="module" src="flock.js"></script>
+<!-- lib-a11y v1 js start -->
+<script id="lib-a11y-js">
+/* Accessibility kit v1, js block (design/library/components/a11y-kit.html). Builds the "Display and
+   reading" control and its dialog, read aloud, voice input and the keyboard-shortcut hook.
+   API: window.libA11y.open(), .get(), .set(key, value), .reset(), .on(fn), .shortcut({...}), .read(el).
+   Opt out: <html data-lib-a11y="off"> (say why in the page's design record). */
+(() => {
+  const boot = window.libA11yBoot, root = document.documentElement;
+  if (!boot || window.libA11y || root.dataset.libA11y === 'off') return;
+  const cfg = window.libA11yConfig || {};
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  let s = boot.read(), saved = true;
+  const listeners = [];
+  const synth = window.speechSynthesis, Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const themes = (root.dataset.libA11yThemes || '').includes('dark');
+
+  /* Two live regions. A modal <dialog> makes everything outside it inert, and inert content leaves the
+     accessibility tree, so a region in the body is not heard while the panel is open. One sits in the
+     body (panel shut), one inside the panel (panel open); say() uses the one that can be heard. */
+  const region = () => { const d = document.createElement('div'); d.className = 'lib-a11y lib-a11y-sr'; d.setAttribute('role', 'status'); d.setAttribute('aria-live', 'polite'); return d; };
+  const live = region(); document.body.appendChild(live);
+  let liveIn = null, panel = null;
+  const say = (t) => { const r = panel && panel.open && liveIn ? liveIn : live; live.textContent = ''; if (liveIn) liveIn.textContent = ''; setTimeout(() => { r.textContent = t; }, 60); };
+
+  /* Skip link, unless the page has one or opts out. */
+  const main = $('main');
+  if (main && root.dataset.libA11ySkip !== 'off' && !$$('a[href^="#"]').slice(0, 3).some((a) => /skip/i.test(a.textContent))) {
+    if (!main.id) main.id = 'main';
+    if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+    const a = document.createElement('a'); a.className = 'lib-a11y lib-a11y-skip'; a.href = '#' + main.id; a.textContent = 'Skip to content';
+    document.body.prepend(a);
+  }
+
+  /* OpenDyslexic is used only if it is on this device, until a self-hosted copy has its intake (ORG-0008). */
+  const hasLocal = (name) => { try { const c = document.createElement('canvas').getContext('2d'), t = 'mmmmmmmmmlli1WQ@';
+    return ['monospace', 'serif'].some((b) => { c.font = `40px ${b}`; const w = c.measureText(t).width; c.font = `40px "${name}", ${b}`; return c.measureText(t).width !== w; }); } catch (e) { return false; } };
+  const odOK = () => !!(boot.FONTS.opendyslexic && (boot.FONTS.opendyslexic.css || ['OpenDyslexic', 'OpenDyslexic Regular', 'OpenDyslexic3'].some(hasLocal)));
+
+  const OPTS = {
+    text: [['default', 'Default'], ['large', 'Large'], ['larger', 'Larger'], ['largest', 'Largest']],
+    spacing: [['default', 'Default'], ['wide', 'Wide'], ['wider', 'Wider']],
+    font: [['app', 'As designed'], ['atkinson', 'Atkinson Hyperlegible'], ['lexend', 'Lexend'], ['opendyslexic', 'OpenDyslexic']],
+    theme: [['app', 'As designed'], ['light', 'Light'], ['dark', 'Dark'], ['system', 'Match my device']],
+    contrast: [['system', 'Match my device'], ['more', 'More'], ['standard', 'Standard']],
+    motion: [['system', 'Match my device'], ['reduce', 'Less'], ['allow', 'As designed']],
+    rate: [['0.8', 'Slower'], ['1', 'Normal'], ['1.25', 'Faster']],
+  };
+  const NAMES = { text: 'Text size', spacing: 'Line and letter spacing', font: 'Font', theme: 'Theme', contrast: 'Contrast', motion: 'Motion', rate: 'Reading speed',
+    longer: 'Longer explanations', voice: 'Speak instead of typing', shortcuts: 'Keyboard shortcuts' };
+  const seg = (key, hint = '') => `<fieldset class="lib-a11y-set"><legend>${NAMES[key]}</legend><div class="lib-a11y-seg">${OPTS[key].map(([v, l]) =>
+    `<label><input type="radio" name="lib-a11y-${key}" value="${v}"><span${key === 'font' && v !== 'app' ? ` style="font-family:${esc(boot.FONTS[v] ? boot.FONTS[v].family : 'inherit')}"` : ''}>${l}</span></label>`).join('')}</div>${hint ? `<p class="lib-a11y-hint" id="lib-a11y-h-${key}">${hint}</p>` : ''}</fieldset>`;
+  const sw = (key, hint) => `<label class="lib-a11y-sw"><input type="checkbox" role="switch" name="lib-a11y-${key}" aria-describedby="lib-a11y-h-${key}"><span class="lib-a11y-track" aria-hidden="true"></span><b>${NAMES[key]}</b><small aria-hidden="true"></small></label><p class="lib-a11y-hint" id="lib-a11y-h-${key}">${hint}</p>`;
+
+  /* Keyboard shortcuts: a hook any app can add to. Alt + Shift + a letter, so typing never sets one off
+     (WCAG 2.2, 2.1.4), and the reader can turn them all off. */
+  const shortcuts = [];
+  const shortcut = (o) => { shortcuts.push(o); drawKeys(); return () => { shortcuts.splice(shortcuts.indexOf(o), 1); drawKeys(); }; };
+  const keyText = (o) => ['Alt', 'Shift', o.key.toUpperCase()].join(' + ');
+
+  panel = document.createElement('dialog');
+  panel.className = 'lib-a11y lib-a11y-panel';
+  panel.setAttribute('aria-labelledby', 'lib-a11y-title');
+  panel.innerHTML = `<div class="lib-a11y-head"><div style="flex:1"><h2 id="lib-a11y-title" tabindex="-1">Display and reading</h2><p>Changes show at once and are kept on this device.</p></div><button type="button" class="lib-a11y-btn" data-k="close">Close</button></div>
+  <div class="lib-a11y-groups">
+   <section class="lib-a11y-group" aria-labelledby="lib-a11y-g1"><h3 id="lib-a11y-g1">Reading</h3>
+    ${seg('text')}${seg('spacing')}
+    ${seg('font', 'Atkinson Hyperlegible and Lexend are made to be easy to read. <span data-k="od-note"></span>')}
+    ${sw('longer', 'Opens the fuller explanations that are folded away.')}</section>
+   <section class="lib-a11y-group" aria-labelledby="lib-a11y-g2"><h3 id="lib-a11y-g2">Seeing</h3>
+    ${themes ? seg('theme') : ''}${seg('contrast')}${seg('motion', 'Less stops animations and moving pictures.')}</section>
+   <section class="lib-a11y-group" aria-labelledby="lib-a11y-g3"><h3 id="lib-a11y-g3">Listening and speaking</h3>
+    <span class="lib-a11y-label">Read aloud</span>
+    <div class="lib-a11y-row"><button type="button" class="lib-a11y-btn lib-a11y-main" data-k="read">Read this page aloud</button><button type="button" class="lib-a11y-btn" data-k="stop">Stop</button></div>
+    ${seg('rate')}
+    <p class="lib-a11y-hint" data-k="read-note">Select some text first to hear only that.</p>
+    ${sw('voice', '')}</section>
+   <section class="lib-a11y-group" aria-labelledby="lib-a11y-g4"><h3 id="lib-a11y-g4">Keyboard</h3>
+    ${sw('shortcuts', 'All shortcuts use Alt and Shift with a letter.')}<dl class="lib-a11y-keys" data-k="keys"></dl></section>
+  </div>
+  <div class="lib-a11y-foot"><button type="button" class="lib-a11y-btn" data-k="reset">Reset all</button><button type="button" class="lib-a11y-btn lib-a11y-main" data-k="close">Done</button></div>`;
+  document.body.appendChild(panel);
+  liveIn = region(); panel.appendChild(liveIn);
+
+  function drawKeys() {
+    const dl = $('[data-k="keys"]', panel); if (!dl) return;
+    dl.innerHTML = shortcuts.map((o) => `<dt><kbd>${esc(keyText(o))}</kbd></dt><dd>${esc(o.label)}</dd>`).join('');
+  }
+
+  /* Voice input, on this device only. Chrome's Web Speech recognition sends the sound to Google's servers
+     unless on-device recognition is asked for, so the kit asks for it (processLocally) and never falls
+     back to a server: no on-device speech, no Speak buttons (the same rule as epoch #694).
+     voiceState: 'checking' | 'ready' | 'download' (a one-time speech pack) | 'none'. */
+  const LANG = root.lang || 'en-GB', RECOPTS = { langs: [LANG], processLocally: true };
+  const canLocal = !!(Rec && 'processLocally' in Rec.prototype && typeof Rec.available === 'function');
+  let voiceState = canLocal ? 'checking' : 'none';
+  const VOICE_HINT = {
+    checking: 'Checking whether this browser can turn speech into text on this device.',
+    ready: 'A Speak button appears under each text box. Speech is turned into text on this device; no sound is sent anywhere.',
+    download: 'This browser can turn speech into text on this device after a one-time download of its speech pack. Turning this on starts the download; no sound is sent anywhere.',
+    none: 'This browser cannot turn speech into text on this device, and we do not send your voice to a server, so this is off. Your phone keyboard’s microphone key works in any box.',
+  };
+  const voiceUI = () => {
+    const i = $('[name="lib-a11y-voice"]', panel); if (!i) return;
+    $('#lib-a11y-h-voice', panel).textContent = VOICE_HINT[voiceState];
+    i.disabled = voiceState === 'none' || voiceState === 'checking';
+  };
+  const checkVoice = async () => {
+    if (!canLocal) { voiceUI(); return; }
+    try { const st = await Rec.available(RECOPTS); voiceState = st === 'available' ? 'ready' : (st === 'downloadable' || st === 'downloading') ? 'download' : 'none'; }
+    catch (e) { voiceState = 'none'; }
+    voiceUI(); mics(); sync();
+  };
+  /* Asked only when someone could use it (the panel opens, or voice was already on), not on every page
+     load: the check wakes the browser's speech service, and Playwright's headless shell crashes on it. */
+  let voiceAsked = false;
+  const ensureVoice = () => { if (!voiceAsked) { voiceAsked = true; checkVoice(); } };
+  const installVoice = async () => {
+    say('Downloading speech for this device.');
+    try { await Rec.install(RECOPTS); } catch (e) {}
+    await checkVoice();
+    say(voiceState === 'ready' ? 'Speech to text is ready on this device.' : 'Speech to text could not be set up on this device.');
+  };
+  voiceUI();
+  if (!synth) { $$('[data-k="read"],[data-k="stop"]', panel).forEach((b) => { b.disabled = true; }); $('[data-k="read-note"]', panel).textContent = 'This browser cannot read aloud.'; }
+
+  const sync = () => {
+    Object.keys(OPTS).forEach((k) => $$(`[name="lib-a11y-${k}"]`, panel).forEach((i) => { i.checked = String(s[k]) === i.value; }));
+    ['longer', 'voice', 'shortcuts'].forEach((k) => { const i = $(`[name="lib-a11y-${k}"]`, panel), on = !!s[k] && (k !== 'voice' || voiceState !== 'none');
+      i.checked = on; i.closest('label').querySelector('small').textContent = on ? 'On' : 'Off'; });
+    const od = $('[name="lib-a11y-font"][value="opendyslexic"]', panel), ok = odOK();
+    od.disabled = !ok;
+    $('[data-k="od-note"]', panel).innerHTML = ok ? 'OpenDyslexic is found on this device.' : 'OpenDyslexic works once it is installed on this device (<a href="https://opendyslexic.org" target="_blank" rel="noopener">opendyslexic.org</a>).';
+  };
+  const VALUE = (k, v) => (OPTS[k] ? (OPTS[k].find((o) => o[0] === String(v)) || [0, v])[1] : (v ? 'on' : 'off'));
+  const set = (k, v, quiet) => {
+    if (k === 'rate') v = Number(v);
+    s[k] = v; boot.apply(s); saved = boot.write(s);
+    if (k === 'longer') openLonger();
+    if (k === 'voice') { if (v && voiceState === 'download') installVoice(); mics(); }
+    sync();
+    if (!quiet) say(`${NAMES[k] || k}: ${VALUE(k, v)}.${saved ? '' : ' This browser will not keep it after you leave.'}`);
+    listeners.forEach((fn) => { try { fn(get()); } catch (e) {} });
+    document.dispatchEvent(new CustomEvent('lib-a11y:change', { detail: get() }));
+  };
+  const get = () => Object.assign({}, s, boot.resolve(s));
+  const openLonger = () => $$('details[data-lib-longer-open]').forEach((d) => { if (s.longer) d.open = true; });
+
+  panel.addEventListener('change', (e) => {
+    const i = e.target, k = (i.name || '').replace('lib-a11y-', '');
+    if (!k) return;
+    set(k, i.type === 'checkbox' ? i.checked : i.value);
+  });
+
+  /* Opening, closing, focus. A native modal dialog makes the page behind it inert; Tab also wraps
+     inside it, Escape closes it, and focus goes back to the control that opened it. */
+  let opener = null, giveBack = true;
+  const open = (from) => {
+    opener = from || document.activeElement; ensureVoice(); sync();
+    Object.keys(boot.FONTS).forEach(boot.loadFont);   // so each font option shows in its own face
+    if (!panel.open) panel.showModal();
+    $('#lib-a11y-title', panel).focus();
+  };
+  const close = () => { if (panel.open) panel.close(); };
+  panel.addEventListener('close', () => { if (giveBack && opener && opener.focus) opener.focus(); giveBack = true; });
+  panel.addEventListener('click', (e) => {
+    if (e.target === panel) return close();
+    const b = e.target.closest('button[data-k]'); if (!b) return;
+    if (b.dataset.k === 'close') close();
+    if (b.dataset.k === 'reset') { s = Object.assign({}, boot.DEFAULTS); boot.apply(s); boot.write(s); stopReading(); mics(); sync(); say('Everything is back as designed.'); }
+    if (b.dataset.k === 'read') { giveBack = false; close(); read(); }
+    if (b.dataset.k === 'stop') stopReading();
+  });
+  panel.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const f = $$('button,input:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])', panel).filter((x) => x.offsetParent !== null || x.type === 'radio');
+    const tabbable = f.filter((x) => x.type !== 'radio' || x.checked || !f.some((y) => y.name === x.name && y.checked));
+    const first = tabbable[0], last = tabbable[tabbable.length - 1];
+    if (e.shiftKey && (document.activeElement === first || document.activeElement === $('#lib-a11y-title', panel))) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  /* The control: every [data-lib-a11y-open] on the page, or one small button of our own. */
+  let openers = $$('[data-lib-a11y-open]');
+  if (!openers.length && cfg.trigger !== false) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'lib-a11y lib-a11y-open lib-a11y-fab'; b.setAttribute('data-lib-a11y-open', '');
+    b.setAttribute('aria-label', 'Display and reading');
+    b.innerHTML = '<span class="lib-a11y-aa" aria-hidden="true">Aa</span>Display';
+    document.body.appendChild(b); openers = [b];
+  }
+  document.addEventListener('click', (e) => { const b = e.target.closest('[data-lib-a11y-open]'); if (b) { e.preventDefault(); open(b); } });
+  openers.forEach((b) => { b.setAttribute('aria-haspopup', 'dialog'); });
+
+  /* Read aloud, block by block, marking the block being read. */
+  let queue = [], reading = null, readBar = null;
+  const blocks = (scope) => {
+    const sel = window.getSelection && String(window.getSelection()).trim();
+    if (sel) return [{ el: null, text: sel }];
+    const r = scope || $('main') || document.body;
+    const cand = $$('h1,h2,h3,h4,h5,h6,p,li,dt,dd,figcaption,blockquote,th,td,summary,label', r)
+      .filter((el) => !el.closest('.lib-a11y,[aria-hidden="true"],[hidden],script,style') && el.offsetParent !== null && el.textContent.trim());
+    return cand.filter((el) => !cand.some((o) => o !== el && el.contains(o))).map((el) => ({ el, text: el.innerText.trim() }));
+  };
+  const bar = (cls, html) => { const b = document.createElement('div'); b.className = `lib-a11y lib-a11y-bar ${cls}`; b.setAttribute('role', 'status'); b.innerHTML = html; document.body.appendChild(b); return b; };
+  const unmark = () => $$('.lib-a11y-reading').forEach((x) => x.classList.remove('lib-a11y-reading'));
+  const next = () => {
+    unmark();
+    const item = queue.shift();
+    if (!item) { stopReading(true); return; }
+    if (item.el) { item.el.classList.add('lib-a11y-reading'); item.el.scrollIntoView({ block: 'center', behavior: get().motionReduced ? 'auto' : 'smooth' }); }
+    const u = new SpeechSynthesisUtterance(item.text);
+    u.lang = LANG; u.rate = Number(s.rate) || 1; u.voice = voice;
+    u.onend = () => { if (reading === u) next(); };
+    u.onerror = () => { if (reading === u) next(); };
+    reading = u; synth.speak(u);
+  };
+  /* Only a voice on this device (localService). Chrome's "Google" voices are network voices: the text goes
+     to Google's servers. Set the voice every time, so the browser's default never picks one of those. */
+  let voice = null;
+  const voices = () => new Promise((res) => { const v = synth.getVoices(); if (v.length) return res(v);
+    const t = setTimeout(() => res(synth.getVoices()), 1500);
+    synth.addEventListener('voiceschanged', () => { clearTimeout(t); res(synth.getVoices()); }, { once: true }); });
+  const pickVoice = (vs) => { const l = vs.filter((x) => x.localService), two = LANG.slice(0, 2).toLowerCase();
+    return l.find((x) => x.lang === LANG) || l.find((x) => (x.lang || '').toLowerCase().startsWith(two)) || null; };
+  async function read(scope) {
+    if (!synth) return;
+    stopReading(true);
+    queue = blocks(scope);
+    if (!queue.length) { say('There is nothing to read here.'); if (opener && !panel.open) opener.focus(); return; }
+    voice = pickVoice(await voices());
+    if (!voice) { queue = []; say('This device has no voice for this language, and we do not send the page to a server, so it cannot read aloud.'); if (opener && !panel.open) opener.focus(); return; }
+    readBar = bar('', '<p>Reading aloud</p><button type="button" data-k="pause">Pause</button><button type="button" data-k="stop">Stop</button>');
+    readBar.addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.k === 'stop') stopReading();
+      if (b.dataset.k === 'pause') { if (synth.paused) { synth.resume(); b.textContent = 'Pause'; } else { synth.pause(); b.textContent = 'Carry on'; } }
+    });
+    $('[data-k="stop"]', readBar).focus();
+    next();
+  }
+  function stopReading(quiet) {
+    if (!synth) return;
+    const was = !!reading; reading = null; queue = []; synth.cancel(); unmark();
+    if (readBar) { const had = readBar.contains(document.activeElement); readBar.remove(); readBar = null; if (had && opener) opener.focus(); }
+    if (was && !quiet) say('Stopped reading.');
+  }
+
+  /* Voice input: a Speak button under each text box while the setting is on, and the listening bar
+     (the recording banner pattern) whenever the microphone is open. */
+  const FIELDS = 'textarea, input:not([type]), input[type="text"], input[type="search"], input[type="email"], input[type="url"]';
+  let rec = null, recBar = null, recBtn = null;
+  const labelOf = (f) => { const l = (f.id && $(`label[for="${CSS.escape(f.id)}"]`)) || f.closest('label'); return (f.getAttribute('aria-label') || (l && l.textContent) || f.placeholder || 'this box').trim(); };
+  function mics() {
+    $$('.lib-a11y-mic').forEach((m) => m.remove());
+    if (!s.voice || voiceState !== 'ready') return;
+    $$(FIELDS).filter((f) => !f.closest('.lib-a11y,[data-lib-a11y-mic="off"]') && !f.disabled && !f.readOnly).forEach((f) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'lib-a11y lib-a11y-mic'; b.setAttribute('aria-pressed', 'false');
+      b.setAttribute('aria-label', `Speak into: ${labelOf(f)}`);
+      b.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5a2.5 2.5 0 0 1 2.5 2.5v4a2.5 2.5 0 0 1-5 0V4A2.5 2.5 0 0 1 8 1.5ZM3.5 7.5a4.5 4.5 0 0 0 9 0M8 12v2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Speak';
+      b.addEventListener('click', () => (rec && recBtn === b ? stopListening() : listen(f, b)));
+      f.insertAdjacentElement('afterend', b);
+    });
+  }
+  const insert = (f, text) => {
+    const a = f.selectionStart ?? f.value.length, z = f.selectionEnd ?? f.value.length, pre = f.value.slice(0, a);
+    const add = (pre && !/\s$/.test(pre) ? ' ' : '') + text;
+    f.value = pre + add + f.value.slice(z); f.selectionStart = f.selectionEnd = a + add.length;
+    f.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+  function listen(f, b) {
+    stopListening(true);
+    if (voiceState !== 'ready') { say('Speech to text is not available on this device.'); return; }
+    try { rec = new Rec(); rec.processLocally = true; } catch (e) { rec = null; say('Speech to text could not start in this browser.'); return; }
+    if (rec.processLocally !== true) { rec = null; say('Speech to text is not available on this device.'); return; }   // never fall back to a server
+    rec.lang = LANG; rec.interimResults = false; rec.continuous = false;
+    recBtn = b; b.setAttribute('aria-pressed', 'true');
+    recBar = bar('lib-a11y-rec', `<p>Listening for: ${esc(labelOf(f))}<small>Turned into text on this device. No sound is sent or kept.</small></p><button type="button">Stop listening</button>`);
+    $('button', recBar).addEventListener('click', () => stopListening());
+    rec.onresult = (e) => { const t = [...e.results].map((r) => r[0].transcript).join(' ').trim(); if (t) { insert(f, t); say(`Added: ${t}`); } };
+    rec.onerror = (e) => { say(e.error === 'not-allowed' ? 'The microphone is blocked for this page.'
+      : (e.error === 'language-not-supported' || e.error === 'service-not-allowed') ? 'Speech to text is not available on this device.' : 'Nothing was heard.'); };
+    rec.onend = () => stopListening(true, f);
+    try { rec.start(); } catch (e) { stopListening(true); }
+  }
+  function stopListening(quiet, back) {
+    if (rec) { const r = rec; rec = null; try { r.stop(); } catch (e) {} }
+    if (recBar) { recBar.remove(); recBar = null; }
+    if (recBtn) { recBtn.setAttribute('aria-pressed', 'false'); recBtn = null; }
+    if (back) back.focus();
+    if (!quiet) say('Stopped listening.');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { if (reading) stopReading(); if (rec) stopListening(); }
+    if (!s.shortcuts || !e.altKey || !e.shiftKey || e.ctrlKey || e.metaKey) return;
+    const o = shortcuts.find((x) => e.code === 'Key' + x.key.toUpperCase());
+    if (o) { e.preventDefault(); o.run(e); }
+  });
+  shortcut({ key: 'a', label: 'Open Display and reading', run: () => open() });
+  shortcut({ key: 'r', label: 'Read this page aloud (Escape stops)', run: () => (reading ? stopReading() : read()) });
+  shortcut({ key: 'v', label: 'Speak into the box you are in', run: () => { const f = document.activeElement; if (f && f.matches && f.matches(FIELDS) && voiceState === 'ready') { if (!s.voice) set('voice', true); const b = f.nextElementSibling; if (b && b.classList.contains('lib-a11y-mic')) listen(f, b); } } });
+
+  /* Follow the device when a setting says "match my device". */
+  ['(prefers-contrast: more)', '(prefers-reduced-motion: reduce)', '(prefers-color-scheme: dark)'].forEach((q) => {
+    try { window.matchMedia(q).addEventListener('change', () => { boot.apply(s); listeners.forEach((fn) => fn(get())); }); } catch (e) {}
+  });
+
+  openLonger(); mics(); sync(); drawKeys(); if (s.voice) ensureVoice(); else voiceUI();
+  window.libA11y = { open, close, get, set: (k, v) => set(k, v), reset: () => $('[data-k="reset"]', panel).click(), on: (fn) => { listeners.push(fn); }, shortcut, read, stop: stopReading };
+})();
+</script>
+<!-- lib-a11y v1 js end -->
+</body>
+</html>
