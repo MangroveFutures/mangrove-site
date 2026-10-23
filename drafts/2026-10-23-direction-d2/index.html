@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mangrove · speculative design studio and research lab</title>
+<meta name="description" content="Mangrove is a speculative design studio and research lab. Write to info@mangrove.org.uk.">
+<meta name="design-record" content="design/records/2026-10-23-mangrove-site-direction-d2.md">
+<meta name="provenance" content="provenance.yaml">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark light">
+<script>
+  document.documentElement.classList.replace('no-js', 'js');
+  /* The accessibility kit offers easier fonts. Keep every request on this site: no Google Fonts. */
+  window.libA11yConfig = { fonts: {
+    atkinson: { name: 'Atkinson Hyperlegible', family: '"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,sans-serif', css: null, local: true },
+    lexend: { name: 'Lexend', family: '"Lexend",system-ui,sans-serif', css: null, local: true }
+  } };
+</script>
+<link rel="preload" href="fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bricolage-grotesque-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="modulepreload" href="vendor/three/three.module.min.js">
+<style>
+@font-face{font-family:"Newsreader";src:url("fonts/newsreader-var.woff2") format("woff2");
+  font-weight:200 800;font-style:normal;font-display:swap;}
+@font-face{font-family:"Bricolage Grotesque";src:url("fonts/bricolage-grotesque-var.woff2") format("woff2");
+  font-weight:200 800;font-stretch:75% 100%;font-style:normal;font-display:swap;}
+
+/* ── Two atmospheres. Dusk (D, Rosie's pick) and Silt (v3's pale field). Same features. ── */
+:root,[data-theme="dark"]{
+  --sky-top:#0c1117; --sky-mid:#141b23; --sky-low:#2b2420; --glow:#d0703f;
+  --ink:#ece6da; --ink-soft:#b3ada3; --falcon:#ff6a47; --heat:#ffb07a;
+  --scrim:rgba(12,17,23,.72); --grain-op:.10; --shadow:0 0 0 transparent;
+  --lib-a11y-ground:#141b23; --lib-a11y-ink:#ece6da; --lib-a11y-accent:#ff6a47;
+  --lib-a11y-line:rgba(236,230,218,.25); --lib-a11y-surface:#1b232d;
+}
+[data-theme="light"]{
+  --sky-top:#e7e9e4; --sky-mid:#d7dbd4; --sky-low:#c3c6bb; --glow:#e09468;
+  --ink:#15191c; --ink-soft:#40474b; --falcon:#b8341a; --heat:#c4521f;
+  --scrim:rgba(222,225,219,.78); --grain-op:.14;
+  --lib-a11y-ground:#e7e9e4; --lib-a11y-ink:#15191c; --lib-a11y-accent:#b8341a;
+  --lib-a11y-line:rgba(21,25,28,.25); --lib-a11y-surface:#f1f2ef;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{background:var(--sky-mid);color:var(--ink);-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}}
+html[data-lib-motion="reduce"]{scroll-behavior:auto;}
+body{margin:0;min-height:100vh;overflow-x:hidden;
+  font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  font-variation-settings:"opsz" 14;font-size:1.0625rem;line-height:1.6;
+  /* The sky without JavaScript or WebGL: the same gradient the shader draws. */
+  background:
+    radial-gradient(120% 60% at 30% 78%, color-mix(in srgb, var(--glow) 22%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 48%, var(--sky-low) 100%) fixed;
+  background-color:var(--sky-mid);}
+::selection{background:var(--falcon);color:var(--sky-top);}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.18em;}
+a:hover{text-decoration-thickness:2px;}
+:focus-visible{outline:2px solid var(--falcon);outline-offset:4px;border-radius:2px;}
+
+/* Layers: sky canvas, then light, then grain, then words. */
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none;}
+.grain{position:fixed;inset:-50%;z-index:1;pointer-events:none;opacity:var(--grain-op);mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.6 -.3'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+html.gl .grain{opacity:calc(var(--grain-op) * .45);}  /* the shader adds its own moving grain */
+
+.page{position:relative;z-index:2;}
+.wrap{width:min(100% - 2.5rem, 84rem);margin-inline:auto;}
+@media (min-width:48rem){.wrap{width:min(100% - 5rem, 84rem);}}
+
+.skip{position:absolute;left:1rem;top:-4rem;z-index:50;padding:.6rem .9rem;background:var(--sky-top);color:var(--ink);}
+.skip:focus{top:1rem;}
+
+/* Header */
+.top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-block:1.25rem;}
+.mark{font-family:"Newsreader",Georgia,serif;font-variation-settings:"opsz" 36;font-weight:420;font-size:1.35rem;
+  letter-spacing:-.01em;text-decoration:none;}
+.top-right{display:flex;align-items:center;gap:1.25rem;font-size:.95rem;}
+.atmos{appearance:none;background:none;border:0;color:var(--ink-soft);font:inherit;cursor:pointer;
+  min-height:44px;padding:0 .25rem;display:inline-flex;align-items:center;gap:.5rem;}
+.atmos:hover{color:var(--ink);}
+.atmos svg{width:18px;height:18px;flex:none;}
+.top a.mail{min-height:44px;display:inline-flex;align-items:center;}
+@media (max-width:30rem){.top a.mail{display:none;}}
+
+/* Hero: the flock is the picture; the tagline sits in it like a caption. */
+.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding-bottom:clamp(5.5rem,14vh,9rem);position:relative;}
+.hero .top{position:absolute;top:0;left:0;right:0;}
+.tagline{font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 72;
+  font-size:clamp(2.5rem,7.2vw,6rem);line-height:1.02;letter-spacing:-.025em;margin:0;max-width:13ch;
+  text-wrap:balance;transform-origin:0 100%;will-change:transform,filter;}
+.hint{margin:1.4rem 0 0;max-width:36ch;color:var(--ink-soft);font-size:1rem;}
+.hint .touch{display:none;}
+@media (hover:none) and (pointer:coarse){.hint .mouse{display:none;}.hint .touch{display:inline;}}
+.still-note{display:none;}
+html.still .still-note{display:inline;} html.still .hint .live{display:none;}
+
+/* The time axis: D's scrubber, now the page's own navigation. */
+.axis{position:sticky;top:0;z-index:10;padding-top:.6rem;
+  background:linear-gradient(180deg,var(--scrim) 0%,var(--scrim) 55%,transparent 100%);}
+.axis .wrap{position:relative;}
+.axis ol{list-style:none;margin:0;padding:0 0 1.4rem;display:flex;justify-content:space-between;position:relative;}
+.axis ol::before{content:"";position:absolute;left:0;right:0;top:22px;height:1px;
+  background:repeating-linear-gradient(90deg,currentColor 0 1px,transparent 1px 12px);opacity:.45;}
+.axis a{display:inline-flex;flex-direction:column;gap:.15rem;min-height:44px;min-width:44px;padding-top:30px;
+  text-decoration:none;color:var(--ink-soft);font-size:.92rem;position:relative;}
+.axis a::before{content:"";position:absolute;top:16px;left:0;width:1px;height:13px;background:currentColor;}
+.axis li:last-child a{align-items:flex-end;text-align:right;}
+.axis li:last-child a::before{left:auto;right:0;}
+.axis a:hover,.axis a[aria-current="true"]{color:var(--ink);}
+.axis .dot{position:absolute;top:17px;left:0;width:11px;height:11px;margin-left:-5px;border-radius:50%;
+  background:var(--falcon);box-shadow:0 0 18px 2px color-mix(in srgb,var(--falcon) 60%,transparent);
+  pointer-events:none;transform:translateX(0);}
+html.no-js .axis .dot{display:none;}
+
+/* Rooms: Research, Studio, Services. B's sentences under E's wonky words. */
+.room{min-height:88vh;min-height:88svh;display:flex;flex-direction:column;justify-content:center;padding-block:4rem;}
+.room:nth-of-type(2){align-items:center;}
+.room:nth-of-type(2) .room-in{margin-left:clamp(0rem,18vw,22rem);}
+.room:nth-of-type(3) .room-in{margin-left:clamp(0rem,36vw,40rem);}
+@media (max-width:48rem){.room:nth-of-type(2) .room-in,.room:nth-of-type(3) .room-in{margin-left:0;}.room:nth-of-type(2){align-items:stretch;}}
+.room-in{max-width:34rem;}
+.wonky{font-family:"Bricolage Grotesque",ui-sans-serif,sans-serif;font-weight:760;font-stretch:88%;
+  font-variation-settings:"opsz" 96;letter-spacing:-.035em;line-height:.95;margin:0 0 1.4rem;
+  font-size:clamp(3.2rem,11vw,8.5rem);transform-origin:0 60%;will-change:transform,filter;}
+.wonky .l{display:inline-block;will-change:transform;}
+.room p{margin:0;max-width:34ch;font-size:clamp(1.08rem,1.6vw,1.28rem);line-height:1.55;color:var(--ink);}
+
+/* Write */
+.write{min-height:92vh;min-height:92svh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:3rem;}
+.write .lead{font-size:1.05rem;color:var(--ink-soft);margin:0 0 .6rem;}
+.email{font-family:"Bricolage Grotesque",ui-sans-serif,sans-serif;font-weight:700;font-stretch:90%;
+  font-variation-settings:"opsz" 96;letter-spacing:-.03em;line-height:1;text-decoration:none;
+  font-size:clamp(2rem,8.4vw,7.6rem);display:inline-block;overflow-wrap:anywhere;
+  border-bottom:2px solid color-mix(in srgb,var(--ink) 40%,transparent);padding-bottom:.08em;}
+.email:hover{border-bottom-color:var(--falcon);}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.75rem 1.5rem;margin-top:4.5rem;
+  font-size:.88rem;color:var(--ink-soft);}
+.foot a,.foot button{min-height:44px;display:inline-flex;align-items:center;}
+.draft{border:1px dashed currentColor;padding:.15rem .5rem;border-radius:2px;}
+.tilt{appearance:none;background:none;border:0;color:inherit;font:inherit;cursor:pointer;padding:0;text-decoration:underline;
+  text-underline-offset:.18em;}
+.tilt[hidden]{display:none;}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* More contrast, from the kit or the system. */
+[data-lib-contrast="more"]{--ink-soft:var(--ink);--grain-op:.04;}
+</style>
+</head>
+<body>
+<a class="skip" href="#write">Skip to the email address</a>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="page">
+  <section class="hero" aria-labelledby="tagline">
+    <div class="wrap top">
+      <a class="mark" href="#top" id="top">Mangrove</a>
+      <div class="top-right">
+        <button class="atmos" type="button" id="atmos" aria-pressed="false">
+          <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 1.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
+          <span>Silt</span>
+        </button>
+        <a class="mail" href="mailto:info@mangrove.org.uk">info@mangrove.org.uk</a>
+      </div>
+    </div>
+    <div class="wrap">
+      <h1 class="tagline" id="tagline">A speculative design studio and research lab.</h1>
+      <p class="hint"><span class="live"><span class="mouse">Your pointer is a falcon. Chase the flock; press to dive.</span><span class="touch">Your finger is a falcon. Drag through the flock; tap to dive.</span></span><span class="still-note">A still murmuration of starlings, each joined to its seven nearest neighbours.</span></p>
+    </div>
+  </section>
+
+  <nav class="axis" aria-label="On this page">
+    <div class="wrap">
+      <ol>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#studio">Studio</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#write">Write</a></li>
+      </ol>
+      <span class="dot" aria-hidden="true"></span>
+    </div>
+  </nav>
+
+  <main>
+    <section class="room wrap" id="research" aria-labelledby="h-research">
+      <div class="room-in">
+        <h2 class="wonky" id="h-research">Research</h2>
+        <p>Two years of one human–AI working relationship, studied closely: some 15 million words, and the instruments built to read them.</p>
+      </div>
+    </section>
+    <section class="room wrap" id="studio" aria-labelledby="h-studio">
+      <div class="room-in">
+        <h2 class="wonky" id="h-studio">Studio</h2>
+        <p>Speculative and applied R&amp;D. Tools, prototypes and visual work, made with our own methods.</p>
+      </div>
+    </section>
+    <section class="room wrap" id="services" aria-labelledby="h-services">
+      <div class="room-in">
+        <h2 class="wonky" id="h-services">Services</h2>
+        <p>Workshops, 1:1 work, systems set-ups and research consulting, for founders, small teams and purpose-led organisations.</p>
+      </div>
+    </section>
+
+    <section class="write wrap" id="write" aria-labelledby="h-write">
+      <h2 class="lead" id="h-write">Write to us</h2>
+      <a class="email wonky-mail" href="mailto:info@mangrove.org.uk">info@mangrove.org.uk</a>
+      <footer class="foot">
+        <span class="draft">Draft copy, for Rosie to rewrite</span>
+        <button class="tilt" type="button" id="tilt" hidden>Let the sky follow your tilt</button>
+        <a href="provenance.yaml">Sources</a>
+      </footer>
+    </section>
+  </main>
+</div>
+
+<script type="module" src="flock.js"></script>
+</body>
+</html>
