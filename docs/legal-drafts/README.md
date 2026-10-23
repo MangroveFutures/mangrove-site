@@ -7,6 +7,8 @@ Draft pages for Rosie to edit, written by Claude on 23 Oct 2026. They are drafts
 | `privacy-policy-draft.md` | Privacy policy URL field on the Oura developer application form |
 | `terms-of-service-draft.md` | Terms of Service URL field on the same form |
 
+Part of the Oura developer application work: https://github.com/MangroveFutures/epoch/issues/1077 (it is on Rosie's plate in the plate spinning room). The rotation record is in https://github.com/MangroveFutures/home/issues/113.
+
 ## Before these can be used
 
 1. Rosie fills in every `[square bracket]` (organisation name, address or contact, hosting place).
