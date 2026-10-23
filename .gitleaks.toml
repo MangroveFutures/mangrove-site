@@ -1,9 +1,0 @@
-# gitleaks configuration for this repo. Decision record: MangroveFutures/home
-# handbook/reference/intake-secret-scanner-2026-10-23.md
-# Default rules stay on. First scan, 23 Oct 2026: no findings, so nothing is allowlisted. Add an entry
-# only for a proven false positive, only after the credential question is settled (rotate first), naming
-# ONE rule and ONE file (see home or epoch .gitleaks.toml for the shape), with a comment saying why.
-title = "mangrove-site"
-
-[extend]
-useDefault = true
