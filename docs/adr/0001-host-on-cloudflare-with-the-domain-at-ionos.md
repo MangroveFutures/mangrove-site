@@ -2,7 +2,7 @@
 id: adr-0001
 type: adr
 title: "ADR-0001: Host the site on Cloudflare; keep the domain registered at IONOS"
-status: "accepted: Cloudflare Pages, nameservers stay at IONOS (Rosie, 13 and 23 Oct 2026); the IONOS apex redirect over HTTPS is not yet verified"
+status: "amended 23 Oct 2026: GitHub Pages for now (Rosie); Cloudflare Pages remains the target for the later client login; nameservers stay at IONOS"
 created: 2026-10-23
 owner: rosie
 drafted_by: Claude (draft for Rosie to correct)
@@ -49,3 +49,6 @@ Why Pages and not Workers with static assets: Cloudflare's own Pages documentati
 
 ## Where this is recorded
 Stack and costs: `epoch/docs/ops/stack-and-subscriptions.md`. Plan: `docs/foundation/06-implementation-plan.md`.
+
+## Amendment, 23 Oct 2026 (Rosie's decision; draft by Claude for her to correct)
+Rosie chose **GitHub Pages for now**, to see how it looks next to Cloudflare. Why it fits today: the apex works with four A records at IONOS and a `www` CNAME, so nameservers stay put (the Cloudflare route needed them moved for the bare domain, which Rosie does not want), and merging to `main` already publishes the repo. What it cannot do: a clients-only login (epoch#707, #710). When that is wanted, move to Cloudflare Pages; the switch is a DNS change, so this is reversible. The IONOS steps are in a calendar reminder for 24 Oct 2026. Email records (MX, TXT) stay untouched. The `CNAME` file for the custom domain is added only after the DNS change, because adding it earlier would redirect the preview address to the old site.
