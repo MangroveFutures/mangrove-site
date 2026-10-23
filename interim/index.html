@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mangrove Research</title>
+  <meta name="description" content="Mangrove is a speculative design studio and independent research lab: human, AI, and the space between.">
+  <meta name="theme-color" content="#EDE9E3">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23EDE9E3'/%3E%3Cpath d='M4 20 L16 8 L28 20 L16 15 Z' fill='%231e2235'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <!--
+    INTERIM PAGE, DRAFT. Written by Claude on 23 Oct 2026 so something is live this weekend.
+    Copy is a draft for Rosie to edit (the site's words are hers). The look and the Boids code come
+    from ../index.html, which is untouched. New in this file: the visitor's mouse or finger is a
+    falcon the flock scatters from, touch works, and the page is readable without the animation.
+    Plan: docs/foundation/06-implementation-plan.md.
+  -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #EDE9E3;
+      --ink:    #1e2235;
+      --quiet:  rgba(30, 34, 53, 0.72);
+      --rule:   rgba(30, 34, 53, 0.18);
+      --serif:  'Cormorant Garamond', Georgia, serif;
+      --sans:   system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --gutter: clamp(1.25rem, 5vw, 4rem);
+    }
+
+    html, body { background: var(--bg); color: var(--ink); font-family: var(--sans); }
+    body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+    a { color: inherit; }
+    a:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+    /* ── HERO ───────────────────────────────────────── */
+    .hero { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; }
+    .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .hero-content {
+      position: relative; z-index: 1; min-height: inherit;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: clamp(1.5rem, 4vw, 3rem) var(--gutter) clamp(2rem, 6vw, 4rem);
+      pointer-events: none;
+    }
+    .wordmark { font-family: var(--serif); font-weight: 400; font-size: 1.05rem; letter-spacing: 0.22em; text-transform: uppercase; }
+    .hero-headline {
+      font-family: var(--serif); font-weight: 300; line-height: 1.04;
+      font-size: clamp(2.6rem, 8.2vw, 6.4rem); max-width: 14ch;
+    }
+    .hero-headline em { font-style: italic; font-weight: 300; }
+    .hero-sub { margin-top: 1.4rem; max-width: 34rem; font-size: clamp(1rem, 1.7vw, 1.2rem); line-height: 1.55; color: var(--quiet); }
+    .hero-foot { display: flex; gap: 1.5rem; align-items: baseline; flex-wrap: wrap; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--quiet); }
+    .hero-foot a { pointer-events: all; text-decoration: none; border-bottom: 1px solid var(--rule); padding: 0.5rem 0; }
+    .hero-hint { transition: opacity .8s ease; margin-left: auto; text-transform: none; letter-spacing: 0.02em; font-style: italic; font-family: var(--serif); font-size: 1rem; }
+
+    /* ── BODY ───────────────────────────────────────── */
+    main { padding: clamp(3.5rem, 9vw, 7rem) var(--gutter); max-width: 74rem; margin: 0 auto; }
+    .lede { font-family: var(--serif); font-weight: 300; font-size: clamp(1.6rem, 3.4vw, 2.5rem); line-height: 1.28; max-width: 36ch; }
+    .three { display: grid; gap: clamp(2rem, 4vw, 3.5rem); margin-top: clamp(3rem, 7vw, 5.5rem); grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr)); }
+    .three article { border-top: 1px solid var(--rule); padding-top: 1.1rem; }
+    .label { font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--quiet); margin-bottom: 0.9rem; }
+    .three h2 { font-family: var(--serif); font-weight: 400; font-size: 1.7rem; line-height: 1.15; margin-bottom: 0.8rem; }
+    .three p { font-size: 1rem; line-height: 1.65; color: var(--quiet); }
+    .contact { margin-top: clamp(3.5rem, 8vw, 6rem); border-top: 1px solid var(--rule); padding-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 1rem 3rem; align-items: baseline; }
+    .contact .label { margin: 0; }
+    .contact a { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.1rem); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 0.1rem; }
+    footer { padding: 0 var(--gutter) 2.5rem; max-width: 74rem; margin: 0 auto; font-size: 0.8rem; color: var(--quiet); }
+
+    @media (max-width: 34rem) { .hero-hint { margin-left: 0; width: 100%; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+
+<section class="hero" id="home" aria-label="Mangrove Research">
+  <canvas id="flock" aria-hidden="true"></canvas>
+  <div class="hero-content">
+    <div class="wordmark">Mangrove Research</div>
+    <div>
+      <h1 class="hero-headline">A new kind of system. For <em>every</em> kind of mind.</h1>
+      <p class="hero-sub">A speculative design studio and independent research lab: human, AI, and the space between.</p>
+    </div>
+    <div class="hero-foot">
+      <a href="#studio">What we do</a>
+      <a href="#contact">Contact</a>
+      <span class="hero-hint" id="hint">Move through the flock. You are the falcon.</span>
+    </div>
+  </div>
+</section>
+
+<main id="studio">
+  <p class="lede">We design and test new ways for people and AI to think together, in systems that adapt to the person rather than the other way round.</p>
+
+  <div class="three">
+    <article>
+      <div class="label">Studio</div>
+      <h2>Speculative design</h2>
+      <p>Working prototypes of how people and AI could think together, built to be used and argued with, not only imagined.</p>
+    </article>
+    <article>
+      <div class="label">Research</div>
+      <h2>The human–AI pair as the unit of study</h2>
+      <p>Independent research on human–AI dialogue, second-order cybernetics, neurodiversity and knowledge graphs. Essays and papers will appear here as they are ready.</p>
+    </article>
+    <article>
+      <div class="label">Services</div>
+      <h2>Consulting and one-to-one work</h2>
+      <p>Consulting, one-to-one practice, writing and the tools we build fund the independent work. If you have a problem that fits, say hello.</p>
+    </article>
+  </div>
+
+  <div class="contact" id="contact">
+    <div class="label">Contact</div>
+    <a href="mailto:info@mangrove.org.uk">info@mangrove.org.uk</a>
+  </div>
+</main>
+
+<footer>© Mangrove Research. A fuller site is on its way.</footer>
+
+<script>
+  // Boids flocking simulation, Craig Reynolds (1987): separation, alignment, cohesion.
+  // The visitor's mouse or finger is a falcon the flock scatters from. Touch listeners are passive,
+  // so a finger on the hero still scrolls the page.
+
+  const hero   = document.getElementById('home');
+  const canvas = document.getElementById('flock');
+  const ctx    = canvas.getContext('2d');
+  const hint   = document.getElementById('hint');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (hint && window.matchMedia('(hover: none)').matches) hint.textContent = 'Touch the flock. You are the falcon.';
+  let W = 0, H = 0, N = 0;
+
+  const SPD = 1.8, PERCEPTION = 62, CONN_RADIUS = 55, SEP_DIST = 22;
+  const FALCON_RADIUS = 130, FALCON_FORCE = 0.42, FALCON_EASE = 0.16;
+  const R = 30, G = 34, B = 53;
+
+  const pointer = { x: 0, y: 0, active: false };
+  const falcon  = { x: 0, y: 0, vx: 0, vy: 0, alpha: 0 };
+  let boids = [];
+
+  function place(clientX, clientY) {
+    const r = hero.getBoundingClientRect();
+    pointer.x = clientX - r.left; pointer.y = clientY - r.top;
+    if (!pointer.active) { falcon.x = pointer.x; falcon.y = pointer.y; }
+    pointer.active = true;
+    if (hint) hint.style.opacity = '0';
+  }
+  function lift() { pointer.active = false; }
+
+  hero.addEventListener('mousemove',  e => place(e.clientX, e.clientY));
+  hero.addEventListener('mouseleave', lift);
+  hero.addEventListener('touchstart', e => place(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+  hero.addEventListener('touchmove',  e => place(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+  hero.addEventListener('touchend',   lift);
+  hero.addEventListener('touchcancel', lift);
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.offsetWidth; H = canvas.offsetHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    N = Math.max(60, Math.min(150, Math.round(W * H / 9000)));
+    while (boids.length < N) {
+      const a = Math.random() * Math.PI * 2, sp = SPD * (0.8 + Math.random() * 0.4);
+      boids.push({ x: Math.random() * W, y: Math.random() * H, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp });
+    }
+    boids.length = N;
+    ctx.fillStyle = '#EDE9E3'; ctx.fillRect(0, 0, W, H);
+  }
+
+  function tick() {
+    // The falcon follows the pointer with a little lag, so it feels like something that hunts.
+    const px = falcon.x, py = falcon.y;
+    if (pointer.active) { falcon.x += (pointer.x - falcon.x) * FALCON_EASE; falcon.y += (pointer.y - falcon.y) * FALCON_EASE; }
+    falcon.vx = falcon.x - px; falcon.vy = falcon.y - py;
+    falcon.alpha += ((pointer.active ? 1 : 0) - falcon.alpha) * 0.08;
+
+    for (const b of boids) {
+      let sx=0,sy=0,sc=0,ax=0,ay=0,cx=0,cy=0,nc=0;
+      for (const o of boids) {
+        if (o===b) continue;
+        let dx=o.x-b.x, dy=o.y-b.y;
+        if (dx>W/2) dx-=W; if (dx<-W/2) dx+=W;
+        if (dy>H/2) dy-=H; if (dy<-H/2) dy+=H;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if (d>0&&d<SEP_DIST) { sx-=dx/d; sy-=dy/d; sc++; }
+        if (d<PERCEPTION)    { ax+=o.vx; ay+=o.vy; cx+=o.x; cy+=o.y; nc++; }
+      }
+      if (sc) { b.vx+=(sx/sc)*0.12; b.vy+=(sy/sc)*0.12; }
+      if (nc) { b.vx+=(ax/nc-b.vx)*0.055; b.vy+=(ay/nc-b.vy)*0.055; b.vx+=(cx/nc-b.x)*0.005; b.vy+=(cy/nc-b.y)*0.005; }
+      let cap = SPD * 1.6;
+      if (pointer.active) {
+        const fx=b.x-falcon.x, fy=b.y-falcon.y, fd=Math.sqrt(fx*fx+fy*fy);
+        if (fd>0&&fd<FALCON_RADIUS) {
+          const s=FALCON_FORCE*(1-fd/FALCON_RADIUS);
+          b.vx+=(fx/fd)*s; b.vy+=(fy/fd)*s;
+          cap = SPD * 2.3;                      // panic: scattering birds fly faster than the flock
+        }
+      }
+      const sp=Math.sqrt(b.vx*b.vx+b.vy*b.vy)||1, mn=SPD*0.45;
+      if (sp>cap){b.vx=b.vx/sp*cap;b.vy=b.vy/sp*cap;} if (sp<mn){b.vx=b.vx/sp*mn;b.vy=b.vy/sp*mn;}
+      b.x=(b.x+b.vx+W)%W; b.y=(b.y+b.vy+H)%H;
+    }
+  }
+
+  function drawFalcon() {
+    if (falcon.alpha < 0.02) return;
+    const sp = Math.sqrt(falcon.vx*falcon.vx + falcon.vy*falcon.vy);
+    const ang = sp > 0.3 ? Math.atan2(falcon.vy, falcon.vx) : -Math.PI / 2;
+    ctx.save();
+    ctx.translate(falcon.x, falcon.y); ctx.rotate(ang);
+    ctx.fillStyle = `rgba(${R},${G},${B},${(0.9*falcon.alpha).toFixed(3)})`;
+    ctx.beginPath();                              // a swept-wing silhouette, nose along +x
+    ctx.moveTo(13, 0); ctx.lineTo(-9, -11); ctx.lineTo(-4, 0); ctx.lineTo(-9, 11); ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function frame() {
+    ctx.fillStyle='rgba(237,233,227,0.18)'; ctx.fillRect(0,0,W,H);
+    for (let i=0;i<N;i++) for (let j=i+1;j<N;j++) {
+      const dx=boids[j].x-boids[i].x, dy=boids[j].y-boids[i].y, d=Math.sqrt(dx*dx+dy*dy);
+      if (d<CONN_RADIUS) {
+        ctx.beginPath(); ctx.moveTo(boids[i].x,boids[i].y); ctx.lineTo(boids[j].x,boids[j].y);
+        ctx.strokeStyle=`rgba(${R},${G},${B},${((1-d/CONN_RADIUS)*0.13).toFixed(3)})`; ctx.lineWidth=0.35; ctx.stroke();
+      }
+    }
+    for (const b of boids) {
+      const sp=Math.sqrt(b.vx*b.vx+b.vy*b.vy)||1, nx=b.vx/sp, ny=b.vy/sp, len=4+sp*2;
+      ctx.beginPath(); ctx.moveTo(b.x,b.y); ctx.lineTo(b.x-nx*len,b.y-ny*len);
+      ctx.strokeStyle=`rgba(${R},${G},${B},0.78)`; ctx.lineWidth=0.75; ctx.stroke();
+    }
+    drawFalcon();
+    tick();
+    requestAnimationFrame(frame);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  if (reduced) {
+    // No motion: settle the flock off-screen, draw one still frame, hide the hint.
+    for (let i = 0; i < 240; i++) tick();
+    ctx.fillStyle = '#EDE9E3'; ctx.fillRect(0, 0, W, H);
+    for (const b of boids) {
+      const sp=Math.sqrt(b.vx*b.vx+b.vy*b.vy)||1, nx=b.vx/sp, ny=b.vy/sp, len=4+sp*2;
+      ctx.beginPath(); ctx.moveTo(b.x,b.y); ctx.lineTo(b.x-nx*len,b.y-ny*len);
+      ctx.strokeStyle=`rgba(${R},${G},${B},0.78)`; ctx.lineWidth=0.75; ctx.stroke();
+    }
+    if (hint) hint.style.display = 'none';
+  } else {
+    frame();
+  }
+</script>
+</body>
+</html>
