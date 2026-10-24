@@ -150,15 +150,17 @@ let N = clamp(Math.round(area / 1900), 240, 630);
 if (coarse) N = Math.min(N, innerWidth >= 700 ? 420 : 280);
 if ((navigator.hardwareConcurrency || 8) <= 4) N = Math.round(N * .8);
 
-/* Two large, slow flocks (Rosie, 24 Oct 2026: fewer, bigger, calmer). v3 had seven; speeds here are about
-   half of v3's slowest, and ink is softer. */
+/* v3's seven flocks: proportions, speed, size and depth, reordered front to back. */
 const STEMS = [
-  { n: 56, speed: .6, size: 1.9, alpha: .58 }, { n: 44, speed: .7, size: 1.55, alpha: .5 },
+  { n: 82, speed: 1.25, size: 1.40, alpha: .74 }, { n: 78, speed: 1.60, size: 1.20, alpha: .70 },
+  { n: 72, speed: 2.10, size: .88, alpha: .65 },  { n: 72, speed: 1.90, size: .85, alpha: .62 },
+  { n: 68, speed: 2.25, size: .78, alpha: .66 },  { n: 76, speed: 1.65, size: 1.00, alpha: .70 },
+  { n: 58, speed: 3.50, size: .52, alpha: .48 },
 ];
-const Z_HOME = [60, -110];
+const Z_HOME = [150, 40, -80, -210, -340, -470, -600];
 const totalN = STEMS.reduce((a, s) => a + s.n, 0);
 const flockOf = new Uint8Array(N);
-{ let i = 0; STEMS.forEach((s, k) => { const c = k === STEMS.length - 1 ? N - i : Math.round(N * s.n / totalN); for (let j = 0; j < c && i < N; j++) flockOf[i++] = k; }); }
+{ let i = 0; STEMS.forEach((s, k) => { const c = k === 6 ? N - i : Math.round(N * s.n / totalN); for (let j = 0; j < c && i < N; j++) flockOf[i++] = k; }); }
 
 const FOV = 50, CAM0 = 430, DIVE = 660, FAL_D = 300;
 const camera = new THREE.PerspectiveCamera(FOV, innerWidth / innerHeight, 1, 2000);
@@ -167,37 +169,16 @@ const halfTan = Math.tan(THREE.MathUtils.degToRad(FOV / 2));
 
 const P = new Float32Array(N * 3), V = new Float32Array(N * 3), PH = new Float32Array(N), HEAT = new Float32Array(N);
 const NB = new Int32Array(N * 7).fill(-1), NBD = new Float32Array(N * 7);
-const anchors = STEMS.map((s, k) => ({ z: Z_HOME[k], hh: 1, hw: 1 }));
+const anchors = STEMS.map((s, k) => ({ w: (0.045 + rand() * .05) * (k % 2 ? -1 : 1), phi: rand() * 6.28, ax: 0, ay: 0, z: Z_HOME[k] }));
 function anchorAmp() {
   const asp = innerWidth / innerHeight;
   anchors.forEach((a) => { const d = CAM0 - a.z; a.hh = d * halfTan; a.hw = a.hh * asp; });
 }
 anchorAmp();
-
-/* Each flock is a long ribbon: every bird follows the same slow looping path, a little further back along it
-   than the bird ahead. The ribbon lengthens and shortens (span), breathes wider and thinner (wid), and the path
-   reaches past the edges of the page, so the flock sweeps in and out of view (Rosie, 24 Oct 2026). */
-const RIB = STEMS.map((s, k) => ({ rate: (.045 + rand() * .015) * (k % 2 ? -1 : 1), ph: [rand() * 6.28, rand() * 6.28, rand() * 6.28, rand() * 6.28], span: 1.7, wid: 22, p0: 0 }));
-const LAGF = new Float32Array(N), OFF = new Float32Array(N * 3);
 for (let i = 0; i < N; i++) {
-  LAGF[i] = rand();
-  OFF[i * 3] = rand() + rand() + rand() - 1.5; OFF[i * 3 + 1] = rand() + rand() + rand() - 1.5; OFF[i * 3 + 2] = rand() + rand() + rand() - 1.5;
-}
-function ribbonUpdate(t) {
-  RIB.forEach((r) => { r.span = 1.7 + .8 * Math.sin(t * .21 + r.ph[3]); r.wid = 22 + 14 * Math.sin(t * .16 + r.ph[2]); r.p0 = t * r.rate; });
-}
-const tgt = [0, 0, 0];
-function ribbonTarget(i) {
-  const k = flockOf[i], r = RIB[k], a = anchors[k], dir = r.rate < 0 ? -1 : 1;
-  const p = r.p0 - LAGF[i] * r.span * dir, i3 = i * 3;
-  tgt[0] = a.hw * (1.1 * Math.sin(p + r.ph[0]) + .28 * Math.sin(2.1 * p + r.ph[1])) + OFF[i3] * r.wid;
-  tgt[1] = a.hh * (.5 * Math.sin(1.3 * p + r.ph[2]) + .18 * Math.sin(2.7 * p + r.ph[0]) + .12) + OFF[i3 + 1] * r.wid * .7;
-  tgt[2] = a.z + 80 * Math.sin(.8 * p + r.ph[1]) + OFF[i3 + 2] * r.wid * .8;
-}
-ribbonUpdate(0);
-for (let i = 0; i < N; i++) {
-  ribbonTarget(i);
-  P[i * 3] = tgt[0]; P[i * 3 + 1] = tgt[1]; P[i * 3 + 2] = tgt[2];
+  const a = anchors[flockOf[i]];
+  const g = () => (rand() + rand() + rand() - 1.5) * 70;
+  P[i * 3] = g() + (rand() - .5) * a.hw * .6; P[i * 3 + 1] = g() * .7 + a.hh * .15; P[i * 3 + 2] = a.z + g() * .5;
   const th = rand() * 6.28; V[i * 3] = Math.cos(th); V[i * 3 + 1] = Math.sin(th) * .3; V[i * 3 + 2] = (rand() - .5) * .4;
   PH[i] = rand() * 6.28;
 }
@@ -361,9 +342,13 @@ function step(dt, t, fal, stoop) {
   const ws = word.t >= 0 ? word.s : 0;
   const wi = word.t >= 0 ? new Map() : null;
   if (wi) word.birds.forEach((b, m) => wi.set(b, m));
-  ribbonUpdate(t);
+  anchors.forEach((a) => {
+    a.x = Math.cos(t * a.w + a.phi) * a.hw * .42;
+    a.y = Math.sin(t * a.w * 1.27 + a.phi) * a.hh * .26 + a.hh * .2;
+    a.zz = a.z + Math.sin(t * a.w * .8 + a.phi) * 50;
+  });
   for (let i = 0; i < N; i++) {
-    const i3 = i * 3, st = STEMS[flockOf[i]];
+    const i3 = i * 3, st = STEMS[flockOf[i]], a = anchors[flockOf[i]];
     let px = P[i3], py = P[i3 + 1], pz = P[i3 + 2], vx = V[i3], vy = V[i3 + 1], vz = V[i3 + 2];
     let ax = 0, ay = 0, az = 0, cx = 0, cy = 0, cz = 0, sx = 0, sy = 0, sz = 0, n = 0;
     for (let k = 0; k < 7; k++) {
@@ -375,11 +360,10 @@ function step(dt, t, fal, stoop) {
     const m = wi && wi.has(i) ? wi.get(i) : -1, own = m >= 0 ? 1 - .85 * ws : 1;
     let fx = 0, fy = 0, fz = 0;
     if (n) {
-      fx += ((ax / n) - vx) * .055 + ((cx / n) - px) * .0004; fy += ((ay / n) - vy) * .055 + ((cy / n) - py) * .0004; fz += ((az / n) - vz) * .055 + ((cz / n) - pz) * .0004;
+      fx += ((ax / n) - vx) * .055 + ((cx / n) - px) * .0016; fy += ((ay / n) - vy) * .055 + ((cy / n) - py) * .0016; fz += ((az / n) - vz) * .055 + ((cz / n) - pz) * .0016;
     }
     fx += sx * .14; fy += sy * .14; fz += sz * .14;
-    ribbonTarget(i);
-    fx += (tgt[0] - px) * .004; fy += (tgt[1] - py) * .004; fz += (tgt[2] - pz) * .003;
+    fx += (a.x - px) * .0007; fy += (a.y - py) * .0009; fz += (a.zz - pz) * .0005;
     fx *= own; fy *= own; fz *= own;
     if (m >= 0) {
       const T = word.T, m3 = m * 3;
@@ -443,7 +427,7 @@ function draw() {
       const j3 = j * 3, len = Math.sqrt(NBD[i * 7 + k]);
       const fade = (1 - len / 95) * df, wh = (HEAT[i] + HEAT[j]) * .5 * df;
       webPos[w] = px; webPos[w + 1] = py; webPos[w + 2] = pz; webPos[w + 3] = P[j3]; webPos[w + 4] = P[j3 + 1]; webPos[w + 5] = P[j3 + 2];
-      webCol[w] = webCol[w + 3] = .1 * fade; webCol[w + 1] = webCol[w + 4] = wh * .85; webCol[w + 2] = webCol[w + 5] = 0;
+      webCol[w] = webCol[w + 3] = .16 * fade; webCol[w + 1] = webCol[w + 4] = wh * .85; webCol[w + 2] = webCol[w + 5] = 0;
       w += 6;
     }
   }
