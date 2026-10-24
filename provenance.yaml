@@ -1,0 +1,85 @@
+# Provenance for the mangrove.org.uk draft "direction D2" (sketchbook draft; not live, not deployed).
+page: drafts/2026-10-23-direction-d2/index.html
+status: draft, waiting for Rosie
+date: 2026-10-23
+made_by:
+  agent: Cooper (design lead, agent)
+  model: Opus (claude-opus-5-5), run as a subagent of the coordinating Claude Code session
+  for: Rosie
+design_record: MangroveFutures/epoch design/records/2026-10-23-mangrove-site-direction-d2.md
+
+assets:
+  - index.html            # page: real text in HTML, CSS, two atmospheres, accessibility kit v1 (home design/library/components/a11y-kit.html)
+  - flock.js              # the 3D flock, falcon, parallax, dive, word formation (our code, written for this page)
+  - vendor/three/three.module.min.js   # three.js r170, MIT, pinned; see intake note
+  - vendor/three/LICENSE
+  - fonts/newsreader-var.woff2         # Newsreader, SIL OFL 1.1
+  - fonts/OFL-newsreader.txt
+  - fonts/bricolage-grotesque-var.woff2  # Bricolage Grotesque, SIL OFL 1.1
+  - fonts/OFL-bricolage-grotesque.txt
+  - shots/*.jpg           # Playwright renders at 390, 768 and 1440 px; falcon (mouse, held touch); stoop; scroll positions; Silt; reduced motion; no JavaScript
+  - provenance.yaml       # this file
+textures_and_images: none from outside. The sky, light, grain and shadows are generated in a shader (flock.js) and an SVG feTurbulence filter (index.html). No photographs, no stock, no unlicensed images.
+
+tools_and_versions:
+  - three.js 0.170.0 (r170), from the npm registry, fetched with `npm pack --ignore-scripts`; SHA-256 in the intake note
+  - "@fontsource-variable/newsreader 5.3.0 and @fontsource-variable/bricolage-grotesque 5.3.0 (fonts only)"
+  - Playwright (Node, /opt/node-tools) with Chromium 1243, launched with --use-gl=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist
+  - ffmpeg (video speed-up and frames); Pillow (JPEG conversion; contrast sampling)
+  - skills: design-job v1.7, impeccable 4.5.2 (context, detect, craft floor), frontend-design, accessibility v1 (a11y_check.py, a11y_render.js, a11y_install.py), artifact-standard 1.2, intake-review v0.1
+intake_note: MangroveFutures/home handbook/reference/intake-threejs-2026-10-23.md
+
+brief: |
+  Rosie, 23 Oct 2026, relayed by the coordinating session: "Go with option D, I think, for the design.
+  Although I like the one with the wonky lettering. I like the simplicity of the tagline on the front
+  page, but then the text that is in option B under each heading is nice and clear and simple. So keep
+  that for now. It would just be nice if we could do something more interesting than just white on
+  black: something with some texture and depth and a little softness and 3D coming in and out, forwards
+  and backwards, like we had played with scale, so it's not just flat on the page. Something that uses
+  some parallax and will feel a little bit sexier, maybe with some light effects. See what we could do
+  in three.js if that's what she can work with. Let her make it a little more like a real designer has
+  touched it. Find a way to make it have some wow moments."
+  Also: "at the moment it's still very clean ... I'd like options that are more textural, more dynamic,
+  clean and natural." On the flock: the interim page's 2D Boids is "a messier version"; the one she
+  likes is the Choreotope murmurations, a three.js flock with a web to each creature's 7 nearest
+  neighbours. The visitor's mouse or finger is a falcon; a finger must still scroll the page.
+
+inputs_and_references:
+  - home handbook/explanation/cooper-figma-design-night-2026-10-23.md and img/cooper-figma-2026-10-23/ (directions A to F; D chosen; B's section text; E's wonky lettering)
+  - epoch design/records/2026-10-23-mangrove-site-figma-design-night.md (the Figma night's record)
+  - mangrove-main surfaces/csm_murmurations_v3.html (read only; frozen) - the flock this page rebuilds: seven flocks, seven depths, v3's bird glyph and proportions
+  - mangrove-main surfaces/csm_murmurations_v5.html (read only) - run and looked at; rejected (see below)
+  - mangrove-main surfaces/csm_murmurations_v4.html, _v6.html, _v9_3d.html, murmurations.html, the_flock_is_the_graph.html (scanned: none draws the 7-nearest web)
+  - corpus turn claude_code:485e2e41-e9d2-4521-9361-73c7f1e6b3d5 (Rosie, 30 Jun 2026, "v3 is most impactful for me right now")
+  - corpus turn claude_code:f6de0b12-d216-49ac-95b3-cf574f666f72 (5 Aug 2026; her spoken version numbers run two behind the files; file v5 is the curl-noise ink she rejected twice)
+  - corpus turn claude_code_cloud:9ea1a954-b49f-4a16-8358-a6de1ac9c1d4 (Rosie, 1 Oct 2026, "the network between the 7 closest creatures")
+  - home agents/cooper/memory.md and reference-library.md (1.5, 1.6, the Choreotope entry, section 3 rejections)
+  - Ballerini et al. (2008), "Interaction ruling animal collective behavior depends on topological rather than metric distance", PNAS 105(4) - starlings track about 6 to 7 neighbours by rank. Limit - a field study of real starlings; our flock is a graphics model that borrows the rule, not evidence about birds or organisations.
+  - Reynolds (1987), Boids - separation, alignment, cohesion. Same limit.
+  - Marey's chronophotographs (direction D's long exposure) - the trails that lengthen as you scroll.
+
+rejected:
+  - "csm_murmurations_v5.html as the flock: it is a curl-noise dot field, not a flock; the corpus records Rosie rejecting it twice; her 'v5' in speech is file v3."
+  - "Copying v3's code: it is a 2D canvas with fake depth and audio stems; rebuilt in true 3D instead, keeping its look and numbers."
+  - "Google Fonts and CDN script tags: they send visitors' IP addresses to third parties; everything is self-hosted."
+  - "Flat white-on-black: replaced by a shader sky (gradient, horizon glow, two parallax cloud layers, grain, vignette)."
+  - "A coloured CSS glow on the axis dot (impeccable detect, dark-glow): removed; the falcon's light lives in the shader."
+  - "Random birds for the word formation, and filled letter shapes: the word never resolved; now the nearest birds trace lighter letters."
+  - "Flock over body text: the shader dims the flock's light behind each block of text instead."
+  - "A third font for body text (D used Instrument Sans): Bricolage Grotesque at a small optical size does both jobs; two families, not three."
+
+reviewer: none yet. Ask the coordinator for Feynman's design review (red-team skill, section 7).
+rosie_verdict: ""
+
+removed_from_repo:
+  - file: shots/2026-10-23-direction-d2-interaction-15s.webm
+    why: 3.4 MB; it would publish with the page and into a public repo's history (design review F3, 23 Oct 2026)
+    where_it_went: not kept. It is regenerable - Playwright recordVideo at 1440 px over the falcon, stoop, scroll and Silt switch, about 52 s under software WebGL, sped up x3.5 with ffmpeg. The PNG/JPEG screenshots in shots/ stay.
+
+figures:
+  - claim: "about 19 million words (index.html, intro to Research)"
+    computed: 2026-10-23
+    source: Supabase project epoch, table turn
+    query: "select sum(array_length(regexp_split_to_array(trim(coalesce(body,'')), '\\s+'),1)) from turn where role in ('user','assistant')"
+    result: "19,407,773 words over 96,438 turns (whitespace split; user and assistant turns; counts move)"
+    note: replaces the typed 'some 15 million words'. Re-run before publishing; the figure is computed, never typed.
