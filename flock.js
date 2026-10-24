@@ -153,7 +153,7 @@ if ((navigator.hardwareConcurrency || 8) <= 4) N = Math.round(N * .8);
 /* Two large, slow flocks (Rosie, 24 Oct 2026: fewer, bigger, calmer). v3 had seven; speeds here are about
    half of v3's slowest, and ink is softer. */
 const STEMS = [
-  { n: 56, speed: .85, size: 1.5, alpha: .58 }, { n: 44, speed: 1.0, size: 1.25, alpha: .5 },
+  { n: 56, speed: .6, size: 1.9, alpha: .58 }, { n: 44, speed: .7, size: 1.55, alpha: .5 },
 ];
 const Z_HOME = [60, -110];
 const totalN = STEMS.reduce((a, s) => a + s.n, 0);
@@ -167,16 +167,37 @@ const halfTan = Math.tan(THREE.MathUtils.degToRad(FOV / 2));
 
 const P = new Float32Array(N * 3), V = new Float32Array(N * 3), PH = new Float32Array(N), HEAT = new Float32Array(N);
 const NB = new Int32Array(N * 7).fill(-1), NBD = new Float32Array(N * 7);
-const anchors = STEMS.map((s, k) => ({ w: (0.045 + rand() * .05) * .45 * (k % 2 ? -1 : 1), phi: rand() * 6.28, ax: 0, ay: 0, z: Z_HOME[k] }));
+const anchors = STEMS.map((s, k) => ({ z: Z_HOME[k], hh: 1, hw: 1 }));
 function anchorAmp() {
   const asp = innerWidth / innerHeight;
   anchors.forEach((a) => { const d = CAM0 - a.z; a.hh = d * halfTan; a.hw = a.hh * asp; });
 }
 anchorAmp();
+
+/* Each flock is a long ribbon: every bird follows the same slow looping path, a little further back along it
+   than the bird ahead. The ribbon lengthens and shortens (span), breathes wider and thinner (wid), and the path
+   reaches past the edges of the page, so the flock sweeps in and out of view (Rosie, 24 Oct 2026). */
+const RIB = STEMS.map((s, k) => ({ rate: (.045 + rand() * .015) * (k % 2 ? -1 : 1), ph: [rand() * 6.28, rand() * 6.28, rand() * 6.28, rand() * 6.28], span: 1.7, wid: 22, p0: 0 }));
+const LAGF = new Float32Array(N), OFF = new Float32Array(N * 3);
 for (let i = 0; i < N; i++) {
-  const a = anchors[flockOf[i]];
-  const g = () => (rand() + rand() + rand() - 1.5) * 70;
-  P[i * 3] = g() + (rand() - .5) * a.hw * .6; P[i * 3 + 1] = g() * .7 + a.hh * .15; P[i * 3 + 2] = a.z + g() * .5;
+  LAGF[i] = rand();
+  OFF[i * 3] = rand() + rand() + rand() - 1.5; OFF[i * 3 + 1] = rand() + rand() + rand() - 1.5; OFF[i * 3 + 2] = rand() + rand() + rand() - 1.5;
+}
+function ribbonUpdate(t) {
+  RIB.forEach((r) => { r.span = 1.7 + .8 * Math.sin(t * .21 + r.ph[3]); r.wid = 22 + 14 * Math.sin(t * .16 + r.ph[2]); r.p0 = t * r.rate; });
+}
+const tgt = [0, 0, 0];
+function ribbonTarget(i) {
+  const k = flockOf[i], r = RIB[k], a = anchors[k], dir = r.rate < 0 ? -1 : 1;
+  const p = r.p0 - LAGF[i] * r.span * dir, i3 = i * 3;
+  tgt[0] = a.hw * (1.1 * Math.sin(p + r.ph[0]) + .28 * Math.sin(2.1 * p + r.ph[1])) + OFF[i3] * r.wid;
+  tgt[1] = a.hh * (.5 * Math.sin(1.3 * p + r.ph[2]) + .18 * Math.sin(2.7 * p + r.ph[0]) + .12) + OFF[i3 + 1] * r.wid * .7;
+  tgt[2] = a.z + 80 * Math.sin(.8 * p + r.ph[1]) + OFF[i3 + 2] * r.wid * .8;
+}
+ribbonUpdate(0);
+for (let i = 0; i < N; i++) {
+  ribbonTarget(i);
+  P[i * 3] = tgt[0]; P[i * 3 + 1] = tgt[1]; P[i * 3 + 2] = tgt[2];
   const th = rand() * 6.28; V[i * 3] = Math.cos(th); V[i * 3 + 1] = Math.sin(th) * .3; V[i * 3 + 2] = (rand() - .5) * .4;
   PH[i] = rand() * 6.28;
 }
@@ -340,13 +361,9 @@ function step(dt, t, fal, stoop) {
   const ws = word.t >= 0 ? word.s : 0;
   const wi = word.t >= 0 ? new Map() : null;
   if (wi) word.birds.forEach((b, m) => wi.set(b, m));
-  anchors.forEach((a) => {
-    a.x = Math.cos(t * a.w + a.phi) * a.hw * .42;
-    a.y = Math.sin(t * a.w * 1.27 + a.phi) * a.hh * .26 + a.hh * .2;
-    a.zz = a.z + Math.sin(t * a.w * .8 + a.phi) * 50;
-  });
+  ribbonUpdate(t);
   for (let i = 0; i < N; i++) {
-    const i3 = i * 3, st = STEMS[flockOf[i]], a = anchors[flockOf[i]];
+    const i3 = i * 3, st = STEMS[flockOf[i]];
     let px = P[i3], py = P[i3 + 1], pz = P[i3 + 2], vx = V[i3], vy = V[i3 + 1], vz = V[i3 + 2];
     let ax = 0, ay = 0, az = 0, cx = 0, cy = 0, cz = 0, sx = 0, sy = 0, sz = 0, n = 0;
     for (let k = 0; k < 7; k++) {
@@ -358,10 +375,11 @@ function step(dt, t, fal, stoop) {
     const m = wi && wi.has(i) ? wi.get(i) : -1, own = m >= 0 ? 1 - .85 * ws : 1;
     let fx = 0, fy = 0, fz = 0;
     if (n) {
-      fx += ((ax / n) - vx) * .055 + ((cx / n) - px) * .0016; fy += ((ay / n) - vy) * .055 + ((cy / n) - py) * .0016; fz += ((az / n) - vz) * .055 + ((cz / n) - pz) * .0016;
+      fx += ((ax / n) - vx) * .055 + ((cx / n) - px) * .0004; fy += ((ay / n) - vy) * .055 + ((cy / n) - py) * .0004; fz += ((az / n) - vz) * .055 + ((cz / n) - pz) * .0004;
     }
     fx += sx * .14; fy += sy * .14; fz += sz * .14;
-    fx += (a.x - px) * .0007; fy += (a.y - py) * .0009; fz += (a.zz - pz) * .0005;
+    ribbonTarget(i);
+    fx += (tgt[0] - px) * .004; fy += (tgt[1] - py) * .004; fz += (tgt[2] - pz) * .003;
     fx *= own; fy *= own; fz *= own;
     if (m >= 0) {
       const T = word.T, m3 = m * 3;
