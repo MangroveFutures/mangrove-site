@@ -7,7 +7,6 @@
 <meta name="description" content="Mangrove is a speculative design studio and research lab. Write to info@mangrove.org.uk.">
 <meta name="design-record" content="design/records/2026-10-23-mangrove-site-direction-d2.md">
 <meta name="provenance" content="provenance.yaml">
-<meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark light">
 <script>
   document.documentElement.classList.replace('no-js', 'js');
@@ -129,18 +128,19 @@ html.no-js .axis .dot{display:none;}
 .room:nth-of-type(3) .room-in{margin-left:clamp(0rem,36vw,40rem);}
 @media (max-width:48rem){.room:nth-of-type(2) .room-in,.room:nth-of-type(3) .room-in{margin-left:0;}.room:nth-of-type(2){align-items:stretch;}}
 .room-in{max-width:34rem;}
-.wonky{font-family:"Bricolage Grotesque",ui-sans-serif,sans-serif;font-weight:760;font-stretch:88%;
-  font-variation-settings:"opsz" 96;letter-spacing:-.035em;line-height:.95;margin:0 0 1.4rem;
-  font-size:clamp(3.2rem,11vw,8.5rem);transform-origin:0 60%;will-change:transform,filter;}
-.wonky .l{display:inline-block;will-change:transform;}
+/* Headings: the same serif as the tagline, upright and plain (Rosie, 24 Oct 2026: cleaner, less playful). The letters are still split by flock.js; their wobble is switched off here. */
+.wonky{font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 72;
+  letter-spacing:-.02em;line-height:1;margin:0 0 1.4rem;
+  font-size:clamp(2.8rem,8vw,6rem);transform-origin:0 60%;will-change:transform,filter;}
+.wonky .l,.wonky-mail .l{display:inline-block;transform:none!important;}
 .room p{margin:0;max-width:34ch;font-size:clamp(1.08rem,1.6vw,1.28rem);line-height:1.55;color:var(--ink);}
 
 /* Write */
 .write{min-height:92vh;min-height:92svh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:6.5rem;}
 .write .lead{font-size:1.05rem;color:var(--ink-soft);margin:0 0 .6rem;}
-.email{font-family:"Bricolage Grotesque",ui-sans-serif,sans-serif;font-weight:700;font-stretch:90%;
-  font-variation-settings:"opsz" 96;letter-spacing:-.03em;line-height:1;text-decoration:none;
-  font-size:clamp(2rem,8.4vw,7.6rem);display:inline-block;overflow-wrap:anywhere;
+.email{font-family:"Newsreader",Georgia,serif;font-weight:300;
+  font-variation-settings:"opsz" 72;letter-spacing:-.015em;line-height:1;text-decoration:none;
+  font-size:clamp(1.8rem,6vw,4.5rem);display:inline-block;overflow-wrap:anywhere;
   border-bottom:2px solid color-mix(in srgb,var(--ink) 40%,transparent);padding-bottom:.08em;}
 .email:hover{border-bottom-color:var(--falcon);}
 .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.75rem 1.5rem;margin-top:4.5rem;
