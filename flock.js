@@ -37,18 +37,16 @@ function placeWonkyBase() {
 }
 placeWonkyBase();
 
-/* ── Atmosphere switch: Dusk (dark) and Silt (light) ── */
+/* ── Light and dark toggle (a plain switch: on = dark) ── */
 const atmosBtn = document.getElementById('atmos');
 function labelAtmos() {
-  const dark = root.getAttribute('data-theme') !== 'light';
-  // One fixed name; the state is exposed with role=switch + aria-checked (on = Silt, the lighter sky).
-  atmosBtn.setAttribute('aria-checked', dark ? 'false' : 'true');
+  atmosBtn.setAttribute('aria-checked', root.getAttribute('data-theme') === 'light' ? 'false' : 'true');
 }
 atmosBtn.addEventListener('click', () => {
   root.setAttribute('data-theme', root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
   labelAtmos();
 });
-try { const q = new URLSearchParams(location.search).get('sky'); if (q === 'silt') root.setAttribute('data-theme', 'light'); } catch (e) {}
+try { const q = new URLSearchParams(location.search).get('sky'); if (q === 'silt' || q === 'light') root.setAttribute('data-theme', 'light'); } catch (e) {}
 labelAtmos();
 
 /* ── Input: the falcon (pointer, finger) and the parallax (pointer, tilt) ── */
@@ -152,17 +150,15 @@ let N = clamp(Math.round(area / 1900), 240, 630);
 if (coarse) N = Math.min(N, innerWidth >= 700 ? 420 : 280);
 if ((navigator.hardwareConcurrency || 8) <= 4) N = Math.round(N * .8);
 
-/* v3's seven flocks: proportions, speed, size and depth, reordered front to back. */
+/* Two large, slow flocks (Rosie, 24 Oct 2026: fewer, bigger, calmer). v3 had seven; speeds here are about
+   half of v3's slowest, and ink is softer. */
 const STEMS = [
-  { n: 82, speed: 1.25, size: 1.40, alpha: .74 }, { n: 78, speed: 1.60, size: 1.20, alpha: .70 },
-  { n: 72, speed: 2.10, size: .88, alpha: .65 },  { n: 72, speed: 1.90, size: .85, alpha: .62 },
-  { n: 68, speed: 2.25, size: .78, alpha: .66 },  { n: 76, speed: 1.65, size: 1.00, alpha: .70 },
-  { n: 58, speed: 3.50, size: .52, alpha: .48 },
+  { n: 56, speed: .85, size: 1.5, alpha: .58 }, { n: 44, speed: 1.0, size: 1.25, alpha: .5 },
 ];
-const Z_HOME = [150, 40, -80, -210, -340, -470, -600];
+const Z_HOME = [60, -110];
 const totalN = STEMS.reduce((a, s) => a + s.n, 0);
 const flockOf = new Uint8Array(N);
-{ let i = 0; STEMS.forEach((s, k) => { const c = k === 6 ? N - i : Math.round(N * s.n / totalN); for (let j = 0; j < c && i < N; j++) flockOf[i++] = k; }); }
+{ let i = 0; STEMS.forEach((s, k) => { const c = k === STEMS.length - 1 ? N - i : Math.round(N * s.n / totalN); for (let j = 0; j < c && i < N; j++) flockOf[i++] = k; }); }
 
 const FOV = 50, CAM0 = 430, DIVE = 660, FAL_D = 300;
 const camera = new THREE.PerspectiveCamera(FOV, innerWidth / innerHeight, 1, 2000);
@@ -171,7 +167,7 @@ const halfTan = Math.tan(THREE.MathUtils.degToRad(FOV / 2));
 
 const P = new Float32Array(N * 3), V = new Float32Array(N * 3), PH = new Float32Array(N), HEAT = new Float32Array(N);
 const NB = new Int32Array(N * 7).fill(-1), NBD = new Float32Array(N * 7);
-const anchors = STEMS.map((s, k) => ({ w: (0.045 + rand() * .05) * (k % 2 ? -1 : 1), phi: rand() * 6.28, ax: 0, ay: 0, z: Z_HOME[k] }));
+const anchors = STEMS.map((s, k) => ({ w: (0.045 + rand() * .05) * .45 * (k % 2 ? -1 : 1), phi: rand() * 6.28, ax: 0, ay: 0, z: Z_HOME[k] }));
 function anchorAmp() {
   const asp = innerWidth / innerHeight;
   anchors.forEach((a) => { const d = CAM0 - a.z; a.hh = d * halfTan; a.hw = a.hh * asp; });
@@ -429,7 +425,7 @@ function draw() {
       const j3 = j * 3, len = Math.sqrt(NBD[i * 7 + k]);
       const fade = (1 - len / 95) * df, wh = (HEAT[i] + HEAT[j]) * .5 * df;
       webPos[w] = px; webPos[w + 1] = py; webPos[w + 2] = pz; webPos[w + 3] = P[j3]; webPos[w + 4] = P[j3 + 1]; webPos[w + 5] = P[j3 + 2];
-      webCol[w] = webCol[w + 3] = .16 * fade; webCol[w + 1] = webCol[w + 4] = wh * .85; webCol[w + 2] = webCol[w + 5] = 0;
+      webCol[w] = webCol[w + 3] = .1 * fade; webCol[w + 1] = webCol[w + 4] = wh * .85; webCol[w + 2] = webCol[w + 5] = 0;
       w += 6;
     }
   }
