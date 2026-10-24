@@ -4,6 +4,8 @@
    joins each bird to its 7 nearest neighbours (topological interaction, Ballerini et al. 2008, PNAS).
    The visitor's pointer or finger is a falcon. Plain JavaScript, no build step. */
 import * as THREE from './vendor/three/three.module.min.js';
+import { Flock3D } from './vendor/choreotope/flock3d.js';                       // Rosie's Choreotope flock, unchanged
+import { STEPS, parsePhrase, poseAt, skeletonLocal } from './vendor/choreotope/steps.js';   // and her dance vocabulary
 
 const root = document.documentElement;
 const canvas = document.getElementById('sky');
@@ -15,7 +17,77 @@ const reducedMotion = () => {
 };
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const smooth = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
-let seed = 20261023;
+
+/* ══ FLOW: every flocking choice in one block, with its reason (flow-lab candidate, Cooper, 24 Oct 2026) ══
+   Where each part comes from (flow-lab REPORT.md has the table):
+   - The flock is Rosie's Choreotope engine, imported unchanged: Flock3D (MangroveFutures/studio,
+     packages/choreotope/app/src/lib/flock/flock3d.ts): 7 nearest neighbours, separation, alignment, cohesion,
+     pull to targets, a swirl, a cruise-speed band.
+   - What each flock follows: an invisible dancer performing the Atlas phrase (atlas/main.ts, lib/pose/steps.ts),
+     placed as the Atlas places its sculpted dancer (lib/stage3d/sculpt.ts).
+   - What carries each dancer across the sky: v3's steering (Mangrove-main surfaces/csm_murmurations_v3.html):
+     a random-walk turn rate, gravity towards the centre only when far out, wander, and a soft edge.
+   - The look on top is D2's: v3's stroked birds in 3D, the web to the 7 nearest, the falcon, the dive, the word.
+   Change a number here, never in the code below. Test overrides: ?flocks=2|3 ?seed=<n> ?f.<key>=<number>. */
+const Q = new URLSearchParams(location.search);
+const FLOW = {
+  seed: +Q.get('seed') || 20261023,  // fixed random seed: the same seed and preset give the same frames (stills, video)
+  hz: 60,                            // fixed simulation step, as the Atlas and v3 both stepped at 60 Hz
+  maxSteps: 4,                       // a slow device catches up at most 4 steps a frame, then slows down rather than jumps
+  // Flocks, front to back: D2's depths and bird sizes; each has its own dancer. Two by default (Rosie, 24 Oct 2026:
+  // fewer, larger flocks), one on a phone; ?flocks=1|2|3 to choose. canon: beats behind the first dancer (Choreotope's canon, steps.ts
+  // movementScore). turn: v3's turnDir, the way the dancer first tends to turn.
+  flocks: (Q.get('flocks') === '1' || (!Q.get('flocks') && Math.min(innerWidth, innerHeight) < 600))
+    ? [{ share: 1, size: 1.8, alpha: .74, z: 150, canon: 0, turn: 1 }]   // a phone: one flock (fewer than about 150 birds a flock break into knots; measured)
+    : Q.get('flocks') !== '3'
+    ? [{ share: .55, size: 1.8, alpha: .74, z: 150, canon: 0, turn: 1 },
+       { share: .45, size: 1.5, alpha: .70, z: 40, canon: 6, turn: -1 }]
+    : [{ share: .40, size: 1.8, alpha: .74, z: 150, canon: 0, turn: 1 },
+       { share: .33, size: 1.5, alpha: .70, z: 40, canon: 6, turn: -1 },
+       { share: .27, size: 1.25, alpha: .66, z: -80, canon: 12, turn: 1 }],
+  // Flock3D settings. From the Atlas duet: speed 1.6 m/s, bounds 2.6 m, swirl 0.4. From Flock3D's own defaults: cohesion 1,
+  // alignment 1 (the Atlas's 2.2 cohesion hugs a body). From the app registry's default: separation 1.3. attract 1.2 sits
+  // between Flock3D's default (1) and the Atlas (2.6): one target, so a softer pull keeps the mass large (measured).
+  speed: 1.6, bounds: 2.6, cohesion: 1, alignment: 1, separation: 1.3, attract: 1.2, swirl: .4,
+  phrase: 'two pliés, relevé, tendu, port de bras, arabesque, pirouette, sauté, attitude, révérence',  // the Atlas phrase
+  bps: 72 / 60 * .85,                // the Atlas tempo: 72 beats a minute, played at 0.85
+  follow: 1,                         // joints the flock follows: 1 (right hand), 2 (hands) or 5 (hands, feet, head, as the Atlas).
+                                     // 5 splits a sky flock into five knots; 1 keeps it one mass (measured)
+  skyMetres: 2,                      // half the screen's SHORTER side, in the dancers' metres: sets how large a flock looks on any screen
+  time: .33,                         // playback speed of the dance and the flock (1 = the Atlas). Slower keeps every shape; only the
+                                     // pace changes. .33: median bird speed about 125 px/s on a 900 px screen, between D2 (112) and v3 (134)
+  floorPx: 300,                      // the Atlas floor sits this far below the screen's bottom edge, so flocks are not pinned to it
+  startSpread: .35,                  // Flock3D starts birds in a ring 1.2 to 3.4 m out; a tighter start forms one mass sooner
+  prewarm: 3,                        // seconds simulated before the first frame, so the page opens on a formed flock
+  // The dancer's travel: one v3 bird at a steady pace, turning by v3's rules.
+  travel: .34,                       // metres a second: about 75 px/s on a 900 px screen; a flock crosses a laptop screen in about 20 s
+  turn: { start: .0018, step: .000022, max: .007, decay: .9988 },  // v3 steering drift
+  spread: .32, gravity: .000024,     // v3 centre gravity (v3 starts at 40% of the shorter side; 32% here, as a whole flock rides on it)
+  edge: -.32, boundPush: .12,        // v3 soft edge, moved inside the screen by 32% of the shorter side (v3: 100 px outside, for single
+                                     // birds). The dancer turns there; the flock's far side still sweeps off the edge and back
+  skyOne: 2.8, timeOne: .45,         // with one flock (a phone): a smaller flock on the narrow screen, at the same pace across it (measured)
+  edgeOne: -.32,                     // with one flock (a phone) the flock is the whole sky, so its dancer turns further in (measured: at -.32
+                                     // one seed left the phone nearly empty 11% of the time)
+  wander: .012,                      // v3 wander
+  falcon: 1,                         // strength of the pointer-falcon scatter (D2's)
+};
+/* The word moment: the flock briefly writes "mangrove". D2's timing and wobble, changed only where it hurt reading. */
+const WORD = {
+  weight: 800,      // Bricolage Grotesque weight. D2 used 520: its strokes were thinner than a bird
+  outline: 10,      // canvas px of outline drawn round each letter, which thickens thin joins (the arch of the m)
+  spacing: 1.0,     // letter advance, in letter widths. D2 used .93, so neighbouring letters touched ("rn" for "m")
+  jitterPx: 3,      // each letter's playful up-down shift, in canvas px (D2: 13). Kept small: more hurt reading on the iPad
+  tilt: .02,        // each letter's playful tilt, radians either way (D2: .1). Kept small for the same reason
+  share: .82,       // share of all birds that write the word (D2's)
+  shrink: .4,       // birds draw this much smaller while they hold a letter, so strokes stay crisp
+  brighten: .5,     // letter birds draw this much brighter while they hold (smaller birds would otherwise read dimmer)
+  width: .68,       // the word's width as a share of the screen on a wide screen (D2: .56)
+  widthPhone: .84,  // and on a tall screen (D2: .78)
+  webFade: .95,     // the web fades this much between letter birds while the word holds (the lines bridged the gaps)
+};
+for (const [k, v] of Q) if (k.startsWith('w.') && k.slice(2) in WORD) WORD[k.slice(2)] = +v;   // lab sweeps only
+for (const [k, v] of Q) if (k.startsWith('f.') && k.slice(2) in FLOW) FLOW[k.slice(2)] = +v;   // lab sweeps only, e.g. ?f.travel=1.2
+let seed = FLOW.seed;
 const rand = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
 
 /* ── Words: split the wonky headings into letters (the spirit of direction E) ── */
@@ -150,18 +222,12 @@ let N = clamp(Math.round(area / 1900), 240, 630);
 if (coarse) N = Math.min(N, innerWidth >= 700 ? 420 : 280);
 if ((navigator.hardwareConcurrency || 8) <= 4) N = Math.round(N * .8);
 
-/* ── Flock parameters. The maths below is v3's, untouched; only these numbers are chosen. ──
-   One row per flock, front to back. n: this flock's share of the birds. speed: v3 ran 1.25 to 3.5 (the "stems"). size: bird wingspan.
-   alpha: ink. Z_HOME: how far from the camera the flock's home is (bigger = nearer = looks larger).
-   v3 had seven flocks on seven depths. Rosie, 24 Oct 2026: one or two larger, calmer flocks. */
-const STEMS = [
-  { n: 60, speed: 1.0, size: 1.8, alpha: .74 },
-  { n: 40, speed: 1.15, size: 1.5, alpha: .68 },
-];
-const Z_HOME = [170, 40];
-const totalN = STEMS.reduce((a, s) => a + s.n, 0);
+/* Flocks: contiguous blocks of birds, one Flock3D per row of FLOW.flocks. */
+const STEMS = FLOW.flocks;
+if (STEMS.length === 1) { FLOW.skyMetres = FLOW.skyOne; FLOW.time = FLOW.timeOne; }   // a phone
+const totalN = STEMS.reduce((a, s) => a + s.share, 0);
 const flockOf = new Uint8Array(N);
-{ let i = 0; STEMS.forEach((s, k) => { const c = k === STEMS.length - 1 ? N - i : Math.round(N * s.n / totalN); for (let j = 0; j < c && i < N; j++) flockOf[i++] = k; }); }
+{ let i = 0; STEMS.forEach((s, k) => { const c = k === STEMS.length - 1 ? N - i : Math.round(N * s.share / totalN); s.i0 = i; for (let j = 0; j < c && i < N; j++) flockOf[i++] = k; s.i1 = i; }); }
 
 const FOV = 50, CAM0 = 430, DIVE = 660, FAL_D = 300;
 const camera = new THREE.PerspectiveCamera(FOV, innerWidth / innerHeight, 1, 2000);
@@ -169,37 +235,85 @@ camera.position.set(0, 0, CAM0);
 const halfTan = Math.tan(THREE.MathUtils.degToRad(FOV / 2));
 
 const P = new Float32Array(N * 3), V = new Float32Array(N * 3), PH = new Float32Array(N), HEAT = new Float32Array(N);
-const NB = new Int32Array(N * 7).fill(-1), NBD = new Float32Array(N * 7);
-const anchors = STEMS.map((s, k) => ({ w: (0.045 + rand() * .05) * (k % 2 ? -1 : 1), phi: rand() * 6.28, ax: 0, ay: 0, z: Z_HOME[k] }));
+const KNN = 7, NB = new Int32Array(N * KNN).fill(-1), NBD = new Float32Array(N * KNN);
+/* The sky in the dancers' metres. Screen height = 2 x skyMetres; the Atlas floor (y = 0.15 m) sits 100 px below the
+   bottom edge. pxm: v3 pixels per metre (v3's constants are in pixels on a 900 px-tall screen). */
+const SKY = { pxm: 1, yMid: 0, hwM: 1, hhM: 1 };
+/* Per flock: the view's half-size at its depth (hw, hh, world units), world units per metre (S), its Flock3D, its dancer. */
+const anchors = STEMS.map((s, k) => ({ z: s.z, hh: 1, hw: 1, S: 1 }));
 function anchorAmp() {
-  const asp = innerWidth / innerHeight;
-  anchors.forEach((a) => { const d = CAM0 - a.z; a.hh = d * halfTan; a.hw = a.hh * asp; });
+  const asp = innerWidth / innerHeight, sh = Math.min(innerWidth, innerHeight);
+  SKY.pxm = sh / 2 / FLOW.skyMetres;                       // screen pixels per metre (v3's constants are in screen pixels)
+  SKY.hwM = innerWidth / 2 / SKY.pxm; SKY.hhM = innerHeight / 2 / SKY.pxm;
+  anchors.forEach((a) => { const d = CAM0 - a.z; a.hh = d * halfTan; a.hw = a.hh * asp; a.S = Math.min(a.hw, a.hh) / FLOW.skyMetres; });
 }
 anchorAmp();
-for (let i = 0; i < N; i++) {
-  const a = anchors[flockOf[i]];
-  const g = () => (rand() + rand() + rand() - 1.5) * 70;
-  P[i * 3] = g() + (rand() - .5) * a.hw * .6; P[i * 3 + 1] = g() * .7 + a.hh * .15; P[i * 3 + 2] = a.z + g() * .5;
-  const th = rand() * 6.28; V[i * 3] = Math.cos(th); V[i * 3 + 1] = Math.sin(th) * .3; V[i * 3 + 2] = (rand() - .5) * .4;
-  PH[i] = rand() * 6.28;
+SKY.yMid = .15 + SKY.hhM + FLOW.floorPx * Math.min(innerWidth, innerHeight) / 900 / SKY.pxm;   // fixed at load, so a resize never moves the sky
+const PHRASE = (() => {
+  const steps = parsePhrase(FLOW.phrase, false), starts = []; let len = 0;
+  for (const s of steps) { starts.push(len); len += STEPS[s].beats; }
+  return { len, at(beat) { const b = ((beat % len) + len) % len; let i = steps.length - 1; while (i > 0 && b < starts[i]) i--; return poseAt(steps[i], Math.min(.9999, (b - starts[i]) / STEPS[steps[i]].beats)); } };
+})();
+const M_PER_UNIT = 1.75;                 // Choreotope lib/stage3d/sculpt.ts: body units to metres
+const JOINTS = FLOW.follow === 1 ? ['rh'] : FLOW.follow === 2 ? ['lh', 'rh'] : ['lh', 'rh', 'lf', 'rf', 'head'];
+/* The dancer's hands, feet and head in metres, as SculptedDancer.update() places them, moved to the dancer's place. */
+function dancerTargets(pose, X, Y) {
+  const spin = pose.spin * Math.PI * 2, L = skeletonLocal(pose), lowest = Math.max(L.lf[1], L.rf[1]), lift = lowest + pose.rise * .04 + pose.lift;
+  const cs = Math.cos(spin), sn = Math.sin(spin);
+  return JOINTS.map((k) => { const x = -L[k][0] * M_PER_UNIT, y = (lift - L[k][1]) * M_PER_UNIT, z = L[k][2] * M_PER_UNIT; return [X + x * cs + z * sn, Y - 1.2 + y, -x * sn + z * cs]; });
 }
+const flocks = STEMS.map((s, k) => {
+  const f = new Flock3D({ count: s.i1 - s.i0, speed: FLOW.speed, bounds: FLOW.bounds }, FLOW.seed + k);
+  f.cohesion = FLOW.cohesion; f.alignment = FLOW.alignment; f.separation = FLOW.separation; f.attract = FLOW.attract; f.swirl = FLOW.swirl;
+  // The dancer starts in its own part of the sky, heading a random way.
+  const X = (k - (STEMS.length - 1) / 2) * SKY.hwM * .7 + (rand() - .5) * SKY.hwM * .3, Y = SKY.yMid + (rand() - .5) * FLOW.skyMetres * .8;
+  const h = rand() * 6.28;
+  const d = { X, Y, vx: Math.cos(h) * FLOW.travel / FLOW.hz, vy: Math.sin(h) * FLOW.travel / FLOW.hz, turnRate: FLOW.turn.start * s.turn, wa: rand() * 6.28 };
+  const sp0 = FLOW.startSpread;
+  for (let i = 0; i < f.n; i++) { f.pos[i * 3] = X + f.pos[i * 3] * sp0; f.pos[i * 3 + 1] = Y + (f.pos[i * 3 + 1] - 1.7) * sp0; f.pos[i * 3 + 2] *= sp0; }
+  return { f, d };
+});
+/* Metres to world units, per flock. */
+function toWorld(k) {
+  const s = STEMS[k], a = anchors[k], f = flocks[k].f, S = a.S, vS = S / FLOW.hz * FLOW.time;
+  for (let i = 0; i < f.n; i++) {
+    const g = (s.i0 + i) * 3;
+    P[g] = f.pos[i * 3] * S; P[g + 1] = (f.pos[i * 3 + 1] - SKY.yMid) * S; P[g + 2] = a.z + f.pos[i * 3 + 2] * S;
+    V[g] = f.vel[i * 3] * vS; V[g + 1] = f.vel[i * 3 + 1] * vS; V[g + 2] = f.vel[i * 3 + 2] * vS;
+  }
+}
+STEMS.forEach((s, k) => toWorld(k));
+for (let i = 0; i < N; i++) PH[i] = rand() * 6.28;
 
 /* Word targets: the flock briefly writes "mangrove" in wonky letters. */
 let wordPts = null;
 async function buildWord() {
-  try { await document.fonts.load('520 200px "Bricolage Grotesque"'); } catch (e) {}
-  const c = document.createElement('canvas'); c.width = 1100; c.height = 300;
+  // Its own seeded random numbers: this runs after the font loads, so sharing the flock's generator would make frames
+  // depend on load timing (found in flow-lab; the live page has this fault).
+  let ws = FLOW.seed ^ 0x9e3779b9; const wr = () => { ws = (ws * 1664525 + 1013904223) >>> 0; return ws / 4294967296; };
+  const Wd = WORD;
+  try { await document.fonts.load(`${Wd.weight} 200px "Bricolage Grotesque"`); } catch (e) {}
+  const c = document.createElement('canvas'); c.width = 1300; c.height = 300;
   const x = c.getContext('2d');
-  x.font = '520 210px "Bricolage Grotesque", sans-serif'; x.fillStyle = '#fff'; x.textBaseline = 'alphabetic';
+  x.font = `${Wd.weight} 210px "Bricolage Grotesque", sans-serif`; x.fillStyle = '#fff'; x.textBaseline = 'alphabetic';
   let cx = 30; const s = 'mangrove';
   for (let i = 0; i < s.length; i++) {
     const w = x.measureText(s[i]).width;
-    x.save(); x.translate(cx + w / 2, 205 + (rand() - .5) * 26); x.rotate((rand() - .5) * .2);
-    x.fillText(s[i], -w / 2, 0); x.restore(); cx += w * .93;
+    x.save(); x.translate(cx + w / 2, 205 + (wr() - .5) * 2 * Wd.jitterPx); x.rotate((wr() - .5) * 2 * Wd.tilt);
+    x.fillText(s[i], -w / 2, 0); if (Wd.outline) { x.lineWidth = Wd.outline; x.lineJoin = 'round'; x.strokeStyle = '#fff'; x.strokeText(s[i], -w / 2, 0); }
+    x.restore(); cx += w * Wd.spacing + Wd.outline;
   }
-  const W = Math.min(1100, cx + 30), img = x.getImageData(0, 0, c.width, c.height).data, pts = [];
-  for (let y = 0; y < 300; y += 7) for (let xx = 0; xx < W; xx += 7) if (img[(y * c.width + xx) * 4 + 3] > 140) pts.push([(xx / W) - .5, (.5 - y / 300) * (300 / W)]);
-  for (let i = pts.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [pts[i], pts[j]] = [pts[j], pts[i]]; }
+  const W = Math.min(c.width, cx + 30), img = x.getImageData(0, 0, c.width, c.height).data;
+  // Sample the letters on an even grid, as fine as the birds allow, so every stroke is covered (D2 took a random third
+  // of a 7 px grid, which left strokes patchy).
+  const M = Math.round(N * Wd.share), ink = (xx, y) => img[(Math.round(y) * c.width + Math.round(xx)) * 4 + 3] > 140;
+  let st = 3, pts = [];
+  for (;; st += .25) {
+    pts = [];
+    for (let y = st / 2; y < 300; y += st) for (let xx = st / 2; xx < W; xx += st) if (ink(xx, y)) pts.push([(xx / W) - .5, (.5 - y / 300) * (300 / W)]);
+    if (pts.length <= M) break;
+  }
+  for (let i = pts.length - 1; i > 0; i--) { const j = Math.floor(wr() * (i + 1)); [pts[i], pts[j]] = [pts[j], pts[i]]; }
   wordPts = pts;
 }
 buildWord();
@@ -207,12 +321,13 @@ const word = { t: -1, birds: null, T: null };
 let lastWordAt = -1e9;
 function formWord(now) {
   if (!wordPts || word.t >= 0 || now - lastWordAt < 15000) return;
-  const M = Math.min(wordPts.length, Math.round(N * .82));
+  const M = Math.min(wordPts.length, Math.round(N * WORD.share));
   const dir = new THREE.Vector3(); camera.getWorldDirection(dir);
   const c = camera.position.clone().addScaledVector(dir, 340);
-  const vw = 340 * halfTan * camera.aspect * 2 * (camera.aspect < 1 ? .78 : .56);
+  const vw = 340 * halfTan * camera.aspect * 2 * (camera.aspect < 1 ? WORD.widthPhone : WORD.width);
   const pick = [...Array(N).keys()].sort((a, b) => Math.abs(P[a * 3 + 2] - c.z) - Math.abs(P[b * 3 + 2] - c.z)).slice(0, M).sort(() => rand() - .5);
   word.birds = new Int32Array(pick); word.T = new Float32Array(M * 3);
+  word.map = new Map(); pick.forEach((b, m) => word.map.set(b, m));
   for (let m = 0; m < M; m++) {
     const [u, v] = wordPts[m]; word.T[m * 3] = c.x + u * vw; word.T[m * 3 + 1] = c.y + v * vw + 30; word.T[m * 3 + 2] = c.z + (rand() - .5) * 14;
   }
@@ -221,7 +336,7 @@ function formWord(now) {
 
 /* Buffers */
 const BIRD_SEG = 5, birdPos = new Float32Array(N * BIRD_SEG * 6), birdCol = new Float32Array(N * BIRD_SEG * 6);
-const webPos = new Float32Array(N * 7 * 6), webCol = new Float32Array(N * 7 * 6);
+const webPos = new Float32Array(N * KNN * 6), webCol = new Float32Array(N * KNN * 6);
 const FH = 28, falPos = new Float32Array(FH * 6), falCol = new Float32Array(FH * 6), falHist = [];
 function lines(pos, col) {
   const g = new THREE.BufferGeometry();
@@ -320,82 +435,73 @@ function resize() {
 /* ── Simulation ── */
 const tmp = new THREE.Vector3(), fwd = new THREE.Vector3(), rgt = new THREE.Vector3(), upv = new THREE.Vector3();
 let frame = 0;
-function neighbours(part) {
-  const R2 = 95 * 95;
-  for (let i = part; i < N; i += 3) {
-    const o = i * 7; for (let k = 0; k < 7; k++) { NB[o + k] = -1; NBD[o + k] = R2; }
-    const x = P[i * 3], y = P[i * 3 + 1], z = P[i * 3 + 2];
-    for (let j = 0; j < N; j++) {
-      if (j === i) continue;
-      const dx = P[j * 3] - x; if (dx * dx > NBD[o + 6]) continue;
-      const dy = P[j * 3 + 1] - y, dz = P[j * 3 + 2] - z, d = dx * dx + dy * dy + dz * dz;
-      if (d >= NBD[o + 6]) continue;
-      let k = 6; while (k > 0 && NBD[o + k - 1] > d) { NBD[o + k] = NBD[o + k - 1]; NB[o + k] = NB[o + k - 1]; k--; }
-      NBD[o + k] = d; NB[o + k] = j;
-    }
-  }
+/* The dancer's travel: one v3 bird (v3 loop(), unloaded values), in metres, at a steady pace. */
+function travel(d, k) {
+  const F = FLOW, T = F.turn, pxm = SKY.pxm;
+  d.turnRate += (rand() - .5) * T.step;                       // v3: slow random walk of the turn rate
+  d.turnRate = clamp(d.turnRate, -T.max, T.max) * T.decay;    // v3: capped, gently pulled back to zero
+  const ct = Math.cos(d.turnRate), st = Math.sin(d.turnRate);
+  let vx = d.vx * ct - d.vy * st, vy = d.vx * st + d.vy * ct; // v3: steer by rotating the velocity
+  // v3: centre gravity, only far out. v3's zone is a circle on the shorter side; here it is stretched to the screen's shape
+  // (an ellipse), so on a tall phone a flock reaches the top and bottom too (ours, not v3's).
+  const dx = -d.X, dy = SKY.yMid - d.Y, sm = Math.min(SKY.hwM, SKY.hhM), dC = Math.hypot(dx * sm / SKY.hwM, dy * sm / SKY.hhM), thr = sm * 2 * F.spread;
+  if (dC > thr) { const g = (dC - thr) * pxm * F.gravity; vx += dx * sm / SKY.hwM * g; vy += dy * sm / SKY.hhM * g; }
+  d.wa += (rand() - .5) * F.wander * 3.8; vx += Math.cos(d.wa) * F.wander / pxm; vy += Math.sin(d.wa) * F.wander / pxm;   // v3: wander
+  const e = (STEMS.length === 1 ? F.edgeOne : F.edge) * Math.min(SKY.hwM, SKY.hhM) * 2, bx = SKY.hwM + e, by = SKY.hhM + e, bp = F.boundPush / pxm;   // v3: soft edge
+  if (d.X < -bx) vx += bp; else if (d.X > bx) vx -= bp;
+  if (d.Y - SKY.yMid < -by) vy += bp; else if (d.Y - SKY.yMid > by) vy -= bp;
+  const sp = Math.hypot(vx, vy) + 1e-9, cruise = F.travel / F.hz;   // a dancer keeps a steady pace (v3's birds varied)
+  d.vx = vx / sp * cruise; d.vy = vy / sp * cruise; d.X += d.vx; d.Y += d.vy;
 }
 function step(dt, t, fal, stoop) {
   frame++;
-  neighbours(frame % 3);
   const W2 = innerWidth / 2, H2 = innerHeight / 2;
   const Rpx = (coarse ? 95 : 120) * (1 + stoop * 1.1);
-  const ws = word.t >= 0 ? word.s : 0;
-  const wi = word.t >= 0 ? new Map() : null;
-  if (wi) word.birds.forEach((b, m) => wi.set(b, m));
-  anchors.forEach((a) => {
-    a.x = Math.cos(t * a.w + a.phi) * a.hw * .42;
-    a.y = Math.sin(t * a.w * 1.27 + a.phi) * a.hh * .26 + a.hh * .2;
-    a.zz = a.z + Math.sin(t * a.w * .8 + a.phi) * 50;
-  });
-  for (let i = 0; i < N; i++) {
-    const i3 = i * 3, st = STEMS[flockOf[i]], a = anchors[flockOf[i]];
-    let px = P[i3], py = P[i3 + 1], pz = P[i3 + 2], vx = V[i3], vy = V[i3 + 1], vz = V[i3 + 2];
-    let ax = 0, ay = 0, az = 0, cx = 0, cy = 0, cz = 0, sx = 0, sy = 0, sz = 0, n = 0;
-    for (let k = 0; k < 7; k++) {
-      const j = NB[i * 7 + k]; if (j < 0) break;
-      const j3 = j * 3; ax += V[j3]; ay += V[j3 + 1]; az += V[j3 + 2]; cx += P[j3]; cy += P[j3 + 1]; cz += P[j3 + 2]; n++;
-      const d = Math.sqrt(NBD[i * 7 + k]) + 1e-3;
-      if (d < 15) { const f = (15 - d) / (15 * d); sx += (px - P[j3]) * f; sy += (py - P[j3 + 1]) * f; sz += (pz - P[j3 + 2]) * f; }
-    }
-    const m = wi && wi.has(i) ? wi.get(i) : -1, own = m >= 0 ? 1 - .85 * ws : 1;
-    let fx = 0, fy = 0, fz = 0;
-    if (n) {
-      fx += ((ax / n) - vx) * .055 + ((cx / n) - px) * .0016; fy += ((ay / n) - vy) * .055 + ((cy / n) - py) * .0016; fz += ((az / n) - vz) * .055 + ((cz / n) - pz) * .0016;
-    }
-    fx += sx * .14; fy += sy * .14; fz += sz * .14;
-    fx += (a.x - px) * .0007; fy += (a.y - py) * .0009; fz += (a.zz - pz) * .0005;
-    fx *= own; fy *= own; fz *= own;
-    if (m >= 0) {
-      const T = word.T, m3 = m * 3;
-      fx += ((T[m3] - px) * .014 - vx * .07) * ws; fy += ((T[m3 + 1] - py) * .014 - vy * .07) * ws; fz += ((T[m3 + 2] - pz) * .014 - vz * .07) * ws;
-      HEAT[i] = Math.max(HEAT[i], .32 * ws);
-    }
-    // The falcon: flee in screen space, so every bird under the pointer scatters, near or far.
+  const ws = word.t >= 0 ? word.s : 0, wi = word.t >= 0 ? word.map : null, h = 1 / FLOW.hz;
+  STEMS.forEach((s, k) => {
+    const { f, d } = flocks[k], a = anchors[k], S = a.S;
+    travel(d, k);
+    f.centre[0] = d.X; f.centre[1] = d.Y; f.centre[2] = 0;
+    const targets = dancerTargets(PHRASE.at(t * FLOW.time * FLOW.bps - s.canon), d.X, d.Y);
+    // The falcon (D2's): flee in screen space, so every bird under the pointer scatters, near or far.
     if (fal > .02) {
-      tmp.set(px, py, pz).project(camera);
-      if (tmp.z < 1) {
-        const dx = (tmp.x - (falcon.x * 2 - 1)) * W2, dy = (tmp.y - (falcon.y * 2 - 1)) * H2, d = Math.hypot(dx, dy) + 1e-3;
-        if (d < Rpx) {
-          const s = (1 - d / Rpx); const f = s * s * (1.0 + stoop * 2.4) * fal;
-          fx += dx / d * f; fy += dy / d * f; fz += (rand() - .5) * f * .6;
-          HEAT[i] = Math.max(HEAT[i], s * (.5 + stoop * .5) * fal);
+      for (let i = 0; i < f.n; i++) {
+        const g = s.i0 + i;
+        tmp.set(P[g * 3], P[g * 3 + 1], P[g * 3 + 2]).project(camera); if (tmp.z >= 1) continue;
+        const dx = (tmp.x - (falcon.x * 2 - 1)) * W2, dy = (tmp.y - (falcon.y * 2 - 1)) * H2, dd = Math.hypot(dx, dy) + 1e-3;
+        if (dd < Rpx) {
+          const q = 1 - dd / Rpx, fo = q * q * (1 + stoop * 2.4) * fal * FLOW.falcon * FLOW.hz / (S * FLOW.time);   // D2's push, in m/s
+          f.vel[i * 3] += dx / dd * fo; f.vel[i * 3 + 1] += dy / dd * fo; f.vel[i * 3 + 2] += (rand() - .5) * fo * .6;
+          HEAT[g] = Math.max(HEAT[g], q * (.5 + stoop * .5) * fal);
         }
       }
     }
-    vx += fx * dt; vy += fy * dt; vz += fz * dt;
-    const sp = Math.hypot(vx, vy, vz) + 1e-6, base = st.speed / 2;
-    const lo = .9 * base, hi = (2.3 + stoop * 2.5 + (HEAT[i] > .2 ? 1.2 : 0)) * base + (m >= 0 ? 5 * ws : 0);
-    const k = sp < lo * (m >= 0 ? 1 - .7 * ws : 1) ? lo * (m >= 0 ? 1 - .7 * ws : 1) / sp : sp > hi ? hi / sp : 1; vx *= k; vy *= k; vz *= k;
-    V[i3] = vx; V[i3 + 1] = vy; V[i3 + 2] = vz;
-    P[i3] = px + vx * dt; P[i3 + 1] = py + vy * dt; P[i3 + 2] = pz + vz * dt;
-    if (m >= 0 && ws > 0) {   // ease onto the letter so the word reads, then let go
-      const T = word.T, m3 = m * 3, e = 1 - Math.pow(1 - .085 * ws * ws, dt);
-      P[i3] += (T[m3] - P[i3]) * e; P[i3 + 1] += (T[m3 + 1] - P[i3 + 1]) * e; P[i3 + 2] += (T[m3 + 2] - P[i3 + 2]) * e;
+    f.step(h * FLOW.time, targets);                               // Rosie's Flock3D, unchanged
+    // The word: birds chosen for a letter are drawn onto it and held there, then let go.
+    if (wi && ws > 0) {
+      const e = ws * ws;
+      for (let i = 0; i < f.n; i++) {
+        const m = wi.get(s.i0 + i); if (m === undefined) continue;
+        const T = word.T, m3 = m * 3, tx = T[m3] / S, ty = T[m3 + 1] / S + SKY.yMid, tz = (T[m3 + 2] - a.z) / S;
+        f.pos[i * 3] += (tx - f.pos[i * 3]) * e; f.pos[i * 3 + 1] += (ty - f.pos[i * 3 + 1]) * e; f.pos[i * 3 + 2] += (tz - f.pos[i * 3 + 2]) * e;
+        HEAT[s.i0 + i] = Math.max(HEAT[s.i0 + i], .32 * ws);
+      }
     }
-    PH[i] += dt * (.16 + sp * .06);
-    HEAT[i] *= Math.pow(.955, dt);
-  }
+    toWorld(k);
+    // The web: Flock3D's own 7 nearest neighbours, as global indices with their distances.
+    for (let i = 0; i < f.n; i++) {
+      const g = s.i0 + i;
+      for (let q = 0; q < KNN; q++) {
+        const j = f.nbr[i * KNN + q], o = g * KNN + q;
+        if (j < 0) { NB[o] = -1; continue; }
+        const jg = s.i0 + j, dx = P[jg * 3] - P[g * 3], dy = P[jg * 3 + 1] - P[g * 3 + 1], dz = P[jg * 3 + 2] - P[g * 3 + 2];
+        NB[o] = jg; NBD[o] = dx * dx + dy * dy + dz * dz;
+      }
+      const sp = Math.hypot(V[g * 3], V[g * 3 + 1], V[g * 3 + 2]);
+      PH[g] += dt * (.16 + sp / a.hh * 450 * .02);              // wingbeat quickens with screen speed
+      HEAT[g] *= Math.pow(.955, dt);
+    }
+  });
 }
 
 /* ── Geometry: v3's bird, in 3D ── */
@@ -406,11 +512,13 @@ function draw() {
     const i3 = i * 3, st = STEMS[flockOf[i]];
     const px = P[i3], py = P[i3 + 1], pz = P[i3 + 2], dist = cz - pz;
     const df = smooth(25, 90, dist) * (1 - smooth(720, 1150, dist)) * (1 - .55 * smooth(150, 800, dist));
-    const ink = st.alpha * 1.15 * df, heat = HEAT[i] * df;
+    const inW = word.t >= 0 && word.map && word.map.has(i) ? word.s : 0;   // 1 while this bird holds a letter
+    const ink = st.alpha * 1.15 * df * (1 + WORD.brighten * inW), heat = HEAT[i] * df;
     fwd.set(V[i3], V[i3 + 1], V[i3 + 2]); const spd = fwd.length(); fwd.multiplyScalar(1 / (spd + 1e-6));
+    if (inW > 0) { fwd.lerp(tmp.set(1, 0, 0), inW).normalize(); }   // letter birds face one way while they hold, as one flock
     rgt.set(0, 1, 0).cross(fwd); if (rgt.lengthSq() < 1e-4) rgt.set(1, 0, 0); rgt.normalize();
     upv.copy(fwd).cross(rgt);
-    const fc = (Math.sin(PH[i]) + 1) * .5, sc = st.size * 1.75;
+    const fc = (Math.sin(PH[i]) + 1) * .5, sc = st.size * 1.75 * Math.sqrt(anchors[flockOf[i]].S / (anchors[flockOf[i]].hh / 2)) * (1 - WORD.shrink * inW);   // birds shrink with the flock on a narrow screen (1 on a laptop)
     const hs = (1.5 + spd * .5) * sc * (.56 + .44 * fc), sw = hs * .28, hd = hs * .44, lift = (fc - .5) * hs * .7;
     const pts = [
       [px, py, pz], [px + fwd.x * hd, py + fwd.y * hd, pz + fwd.z * hd],
@@ -422,11 +530,12 @@ function draw() {
     }
     for (const p of pts) { birdPos[b] = p[0]; birdPos[b + 1] = p[1]; birdPos[b + 2] = p[2]; birdCol[b] = ink; birdCol[b + 1] = heat; birdCol[b + 2] = 0; b += 3; }
     // The web: an edge to each of the 7 nearest neighbours.
-    for (let k = 0; k < 7; k++) {
-      const j = NB[i * 7 + k];
+    for (let k = 0; k < KNN; k++) {
+      const j = NB[i * KNN + k];
       if (j < 0) { webCol.fill(0, w, w + 6); w += 6; continue; }
-      const j3 = j * 3, len = Math.sqrt(NBD[i * 7 + k]);
-      const fade = (1 - len / 95) * df, wh = (HEAT[i] + HEAT[j]) * .5 * df;
+      const j3 = j * 3, len = Math.sqrt(NBD[i * KNN + k]);
+      const inJ = Math.max(inW, word.t >= 0 && word.map && word.map.has(j) ? word.s : 0);   // either end holding a letter
+      const fade = (1 - len / 95) * df * (1 - WORD.webFade * inJ), wh = (HEAT[i] + HEAT[j]) * .5 * df * (1 - WORD.webFade * inJ);
       webPos[w] = px; webPos[w + 1] = py; webPos[w + 2] = pz; webPos[w + 3] = P[j3]; webPos[w + 4] = P[j3 + 1]; webPos[w + 5] = P[j3 + 2];
       webCol[w] = webCol[w + 3] = .16 * fade; webCol[w + 1] = webCol[w + 4] = wh * .85; webCol[w + 2] = webCol[w + 5] = 0;
       w += 6;
@@ -476,12 +585,20 @@ function domMotion(now, live) {
   axisLinks.forEach((a, k) => { if (k === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
 }
 
+/* One fixed simulation step (1/60 s). The frame loop runs as many as real time asks for (at most FLOW.maxSteps);
+   the lab harness calls it directly. Time inside the simulation never depends on the frame rate. */
+let simAcc = 0, idleSim = 0;
+function wordEnvelope(t) { return t < 1.8 ? smooth(0, 1.8, t) : t < 5.2 ? 1 : 1 - smooth(5.2, 6.8, t); }
+function simTick(h) {
+  tSim += h; idleSim += h;
+  if (word.t >= 0) { word.t += h; word.s = wordEnvelope(word.t); if (word.t > 6.8) word.t = -1; }
+  step(1, tSim, U.uFalOn.value, falcon.stoop);
+}
 function frameFn(now) {
   rafId = requestAnimationFrame(frameFn);
-  const dtMs = Math.min(50, now - (tPrev || now)); tPrev = now;
-  const dt = clamp(dtMs / 16.667, .25, 2.2);
+  const dtMs = Math.min(100, now - (tPrev || now)); tPrev = now;
   if (dtMs > 0) { fpsAcc += 1000 / dtMs; fpsN++; if (fpsN >= 30) { stats.fps = Math.round(fpsAcc / fpsN); fpsAcc = fpsN = 0; } }
-  tSim += dtMs / 1000;
+  simAcc += dtMs / 1000;
 
   const sy = scrollY, maxS = Math.max(1, layout.docH - layout.vh), sp = clamp(sy / maxS, 0, 1);
   par.x += (par.tx - par.x) * .06; par.y += (par.ty - par.y) * .06;
@@ -494,18 +611,16 @@ function frameFn(now) {
   const want = falcon.target * (idle < 2200 ? 1 : .25);
   U.uFalOn.value += (want - U.uFalOn.value) * .08;
   falcon.stoop = Math.max(0, falcon.stoop - dtMs / 1100);
-  if (falcon.moved) { idleSince = now; falcon.moved = false; }
-  if (sp < .06 && now - idleSince > 5200) formWord(now);
-  if (layout.secs[3] - sy < layout.vh * .55) formWord(now);
-  if (word.t >= 0) {
-    word.t += dtMs / 1000;
-    word.s = word.t < 1.8 ? smooth(0, 1.8, word.t) : word.t < 5.2 ? 1 : 1 - smooth(5.2, 6.8, word.t);
-    if (word.t > 6.8) word.t = -1;
-  }
+  if (falcon.moved) { idleSim = 0; falcon.moved = false; }
+  if (sp < .06 && idleSim > 5.2) formWord(tSim * 1000);
+  if (layout.secs[3] - sy < layout.vh * .55) formWord(tSim * 1000);
 
   readMasks();
-  const t0 = performance.now();
-  step(dt, tSim, U.uFalOn.value, falcon.stoop);
+  const t0 = performance.now(), h = 1 / FLOW.hz;
+  let steps = 0;
+  while (simAcc >= h && steps < FLOW.maxSteps) { simTick(h); simAcc -= h; steps++; }
+  if (steps === FLOW.maxSteps) simAcc = Math.min(simAcc, h);   // too slow: run slower, never jump
+  if (!steps) { domMotion(now, true); return; }                 // a 120 Hz screen: nothing moved, keep the last image
   const t1 = performance.now();
   draw();
   // The visitor's own path: D's red line, drawn into the trail buffer and left to fade.
@@ -581,4 +696,6 @@ new MutationObserver(() => { labelAtmos(); decide(); }).observe(root, { attribut
 try { matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', decide); } catch (e) {}
 document.fonts && document.fonts.ready.then(() => { measure(); });
 resize();
+for (let s = 0, n = Math.round(FLOW.prewarm * FLOW.hz); s < n; s++) { tSim += 1 / FLOW.hz; step(1, tSim, 0, 0); }   // pre-warm
+stats.prewarmed = true;
 decide();
