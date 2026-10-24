@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mangrove · speculative design studio and research lab</title>
 <meta name="description" content="Mangrove is a speculative design studio and research lab. Write to info@mangrove.org.uk.">
-<meta name="design-record" content="design/records/2026-10-23-mangrove-site-direction-d2.md">
+<meta name="design-record" content="design/records/2026-10-24-mangrove-site-flock-round-2.md">
 <meta name="color-scheme" content="dark light">
 <script>
   document.documentElement.classList.replace('no-js', 'js');
@@ -85,7 +85,8 @@ html.gl .grain{opacity:calc(var(--grain-op) * .45);}  /* the shader adds its own
 .lib-a11y-open.lib-a11y-fab{font-size:0;gap:0;min-height:0;padding:3px;border-radius:50%;opacity:.6;box-shadow:none;left:10px;bottom:10px;}
 .lib-a11y-open.lib-a11y-fab:hover,.lib-a11y-open.lib-a11y-fab:focus-visible{opacity:1;}
 .lib-a11y-open.lib-a11y-fab .lib-a11y-aa{width:26px;height:26px;border-radius:50%;font-size:.8rem;}
-.top a.mail{min-height:44px;display:inline-flex;align-items:center;}
+.top a.mail{min-height:44px;display:inline-flex;align-items:center;color:var(--ink-soft);text-decoration-color:color-mix(in srgb,currentColor 45%,transparent);text-underline-offset:.2em;}
+.top a.mail:hover,.top a.mail:focus-visible{color:var(--ink);}   /* softer (Rosie, 24 Oct 2026: not pure white) */
 @media (max-width:30rem){.top a.mail{display:none;}}
 
 /* Hero: the flock is the picture; the tagline sits in it like a caption. */
@@ -93,13 +94,22 @@ html.gl .grain{opacity:calc(var(--grain-op) * .45);}  /* the shader adds its own
   padding-bottom:clamp(5.5rem,14vh,9rem);position:relative;}
 .hero .top{position:absolute;top:0;left:0;right:0;}
 .tagline{font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 72;
-  font-size:clamp(2.5rem,7.2vw,6rem);line-height:1.02;letter-spacing:-.025em;margin:0;max-width:13ch;
+  font-size:clamp(2.1rem,5.4vw,4.5rem);line-height:1.04;letter-spacing:-.02em;margin:0;max-width:13ch;   /* smaller (Rosie, 24 Oct 2026: it overwhelmed) */
   text-wrap:balance;transform-origin:0 100%;will-change:transform,filter;}
 .hint{margin:1.4rem 0 0;max-width:36ch;color:var(--ink-soft);font-size:1rem;}
-.hint .touch{display:none;}
-@media (hover:none) and (pointer:coarse){.hint .mouse{display:none;}.hint .touch{display:inline;}}
 .still-note{display:none;}
-html.still .still-note{display:inline;} html.still .hint .live{display:none;}
+html.still .still-note{display:inline;}
+/* A gentle scroll cue (Rosie, 24 Oct 2026): a word and a hairline that breathes, at the foot of the hero. */
+.scroll-cue{position:absolute;left:50%;bottom:clamp(1.2rem,4vh,2.2rem);transform:translateX(-50%);display:flex;flex-direction:column;
+  align-items:center;gap:.45rem;min-height:44px;min-width:44px;padding:.25rem .5rem;color:var(--ink-soft);text-decoration:none;
+  font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;opacity:.7;transition:opacity .6s;}
+.scroll-cue:hover,.scroll-cue:focus-visible{opacity:1;color:var(--ink);}
+.scroll-cue i{display:block;width:1px;height:34px;background:linear-gradient(currentColor,transparent);transform-origin:top;
+  animation:cue 2.8s ease-in-out infinite;}
+@keyframes cue{0%,100%{transform:scaleY(.45);opacity:.5}50%{transform:scaleY(1);opacity:1}}
+html.scrolled .scroll-cue{opacity:0;pointer-events:none;}
+@media (prefers-reduced-motion:reduce){.scroll-cue i{animation:none;}}
+html[data-lib-motion="reduce"] .scroll-cue i{animation:none;}
 html.no-js .hint,html.no-gl .hint{display:none;}
 
 /* The time axis: D's scrubber, now the page's own navigation. */
@@ -337,8 +347,9 @@ html[data-lib-a11y-layout="card"] .lib-a11y-panel{inset:0;margin:auto;width:min(
     </header>
     <div class="wrap">
       <h1 class="tagline" id="tagline">A speculative design studio and research lab.</h1>
-      <p class="hint"><span class="live"><span class="mouse">Your pointer is a falcon. Chase the flock; press to dive.</span><span class="touch">Your finger is a falcon. Drag through the flock; tap to dive.</span></span><span class="still-note">A still murmuration of starlings, each joined to its seven nearest neighbours.</span></p>
+      <p class="hint"><span class="still-note">A still murmuration of starlings, each joined to its seven nearest neighbours.</span></p>
     </div>
+    <a class="scroll-cue" href="#research"><span>Scroll</span><i aria-hidden="true"></i></a>
   </section>
 
   <nav class="axis" aria-label="On this page">
