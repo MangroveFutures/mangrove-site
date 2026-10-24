@@ -150,17 +150,18 @@ let N = clamp(Math.round(area / 1900), 240, 630);
 if (coarse) N = Math.min(N, innerWidth >= 700 ? 420 : 280);
 if ((navigator.hardwareConcurrency || 8) <= 4) N = Math.round(N * .8);
 
-/* v3's seven flocks: proportions, speed, size and depth, reordered front to back. */
+/* ── Flock parameters. The maths below is v3's, untouched; only these numbers are chosen. ──
+   One row per flock, front to back. n: this flock's share of the birds. speed: v3 ran 1.25 to 3.5 (the "stems"). size: bird wingspan.
+   alpha: ink. Z_HOME: how far from the camera the flock's home is (bigger = nearer = looks larger).
+   v3 had seven flocks on seven depths. Rosie, 24 Oct 2026: one or two larger, calmer flocks. */
 const STEMS = [
-  { n: 82, speed: 1.25, size: 1.40, alpha: .74 }, { n: 78, speed: 1.60, size: 1.20, alpha: .70 },
-  { n: 72, speed: 2.10, size: .88, alpha: .65 },  { n: 72, speed: 1.90, size: .85, alpha: .62 },
-  { n: 68, speed: 2.25, size: .78, alpha: .66 },  { n: 76, speed: 1.65, size: 1.00, alpha: .70 },
-  { n: 58, speed: 3.50, size: .52, alpha: .48 },
+  { n: 60, speed: 1.0, size: 1.8, alpha: .74 },
+  { n: 40, speed: 1.15, size: 1.5, alpha: .68 },
 ];
-const Z_HOME = [150, 40, -80, -210, -340, -470, -600];
+const Z_HOME = [170, 40];
 const totalN = STEMS.reduce((a, s) => a + s.n, 0);
 const flockOf = new Uint8Array(N);
-{ let i = 0; STEMS.forEach((s, k) => { const c = k === 6 ? N - i : Math.round(N * s.n / totalN); for (let j = 0; j < c && i < N; j++) flockOf[i++] = k; }); }
+{ let i = 0; STEMS.forEach((s, k) => { const c = k === STEMS.length - 1 ? N - i : Math.round(N * s.n / totalN); for (let j = 0; j < c && i < N; j++) flockOf[i++] = k; }); }
 
 const FOV = 50, CAM0 = 430, DIVE = 660, FAL_D = 300;
 const camera = new THREE.PerspectiveCamera(FOV, innerWidth / innerHeight, 1, 2000);
