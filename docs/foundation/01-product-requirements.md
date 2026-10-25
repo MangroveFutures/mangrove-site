@@ -73,9 +73,16 @@ Clients and people who are fine being listed: Space Intelligence, TDC PR, Rebecc
 - Success a month from now: enquiry emails, introductions made, and paid work started from the site. Not counted formally: judged by feel for the first month (Rosie, 13 Oct 2026).
 - Sign-off of listings and quotes: not needed again. The people named agreed when they were on the old Squarespace site, which held the details; the quotes are likely also in Google Docs (Rosie, 13 Oct 2026). The Squarespace text is not yet recovered (see [00](00-content-inventory.md) section 9), so the quotes have to come from that export or the Google Docs.
 
+## Answered on 25 Oct 2026 (pop-up Q&A, recorded by the coordinating session)
+- What mangrove.org.uk is for first: mostly the studio front door (research and services), still being worked out through these foundation docs.
+- A design-only site for Rosie as a designer: not decided. Options logged: its own domain; a section of this site (Studio); a subdomain microsite from this repo.
+- The human- and hybrid-general-intelligence domains: no purpose yet. Agents propose uses as they find them in the logs and the work. The domain list and renewal dates live in epoch `docs/ops/stack-and-subscriptions.md` (Domains section).
+- Versions of the site: Rosie wants to talk this through rather than pick an option. Open.
+
 ## Open questions for Rosie
 
-None left on 01 for now.
+- Versions of the site (v0 interim page, v1 five pages, later): how Rosie pictures them. Raised 25 Oct 2026.
+- Designer-only site: separate or part of this one. Raised 25 Oct 2026.
 
 
 ## Out of scope for v1
