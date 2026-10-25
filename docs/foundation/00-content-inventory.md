@@ -2,7 +2,7 @@
 id: foundation-00-content-inventory
 title: Content inventory — mangrove.org.uk
 status: draft, to be reviewed with Rosie (consolidated 13 Oct 2026; rows unchanged since 6 Oct)
-updated: 2026-10-13
+updated: 2026-10-25
 method: Content inventory / audit (standard content-strategy practice; see Kristina Halvorson, "Content Strategy for the Web")
 ---
 
@@ -136,8 +136,8 @@ Project entries should follow the agreed project schema (MEM): title, type, stat
 
 | ID | Item | Detail | Source | Status |
 |---|---|---|---|---|
-| C-95 | Email | the contact address shown in the `index.html` footer — **not confirmed the mailbox exists** | IDX | review |
-| C-96 | Domain | mangrove.org.uk (IONOS), not yet pointed at hosting | MEM | gap |
+| C-95 | Email | the contact address shown in the `index.html` footer — **not confirmed the mailbox exists**. **Update:** Rosie said on 13 Oct that `info@mangrove.org.uk` exists; the live front page uses it. The archived old page and this inventory's source IDX used `hello@` | IDX | review |
+| C-96 | Domain | mangrove.org.uk (IONOS), not yet pointed at hosting. **Update 25 Oct 2026:** `CNAME` added 24 Oct and the epoch domains register records an A record to GitHub Pages; see [04](04-technical-requirements.md), "What is deployed" | MEM | review (state moved, unchecked) |
 | C-97 | Squarespace export | XML exports never downloaded (see section 9 below). The page text itself is recovered from the 11 Jun 2026 scrape, in `sources/old-site/` | MEM | gap (XML only) |
 
 ---
@@ -225,7 +225,7 @@ Notes:
 ## Sources not yet searched
 
 Recorded so nothing is assumed complete:
-- Cooper's design-reference research and sketchbook (D1 asks for this; not located)
+- Cooper's design-reference research and sketchbook (D1 asks for this). **Located 25 Oct 2026:** Cooper's reference library and sketchbooks are in the home repo; see [03](03-design-brief.md), "Working notes"
 - Lovable, Replit and Squarespace dumps (D1, D2 mention app lists there)
 - Other Drive docs and chat history beyond the two dumps above
 - Issues in MangroveFutures/epoch beyond #321 (since 6 Oct, epoch#707 and epoch#710 have added client-portal and services-page asks for this site)
@@ -235,3 +235,14 @@ Recorded so nothing is assumed complete:
 ## Advisor quotes found (13 Oct 2026)
 
 Found for three of the six advisors Rosie confirmed in [01](01-product-requirements.md): Clive Grinyer, Larry Jones and Oli Pocknell. They were published on Mangrove's earlier Jimdo team page (mangrove-2.jimdosite.com/team, no longer reachable) and survive in a ChatGPT relay of that page dated 13 May 2025 (corpus turn `chatgpt:d0b491ec-d953-408f-b344-721bdb409295`). Check each against the original wording before use: it is a relay, not the page. No site quote was found for Kam Chana, Christina Liciaga or Ed Greig, and no client testimonial was found. No advisor headshots were found in Drive; the Jimdo page probably had them.
+
+## Working notes: assets that could feed the site (25 Oct 2026)
+
+Added from the home repo's work of 13 to 24 Oct 2026. Pointers, not copies; the full lists are private.
+
+- **Asset inventory of 16 Oct 2026** (home, branch `claude/2026-10-16-website-asset-manifests`; asked for in home#372): three manifests of Rosie's claude.ai artifacts, 44 in all, with a screenshot, an external-dependency note and a reuse suggestion for each. Groups: films and explainers (the journey film, flow diagrams, launch films, system overview, decks, two explainer films); products and work (Work-section prototype, Clothesline, Would You Rather, Plate Spinning Room, Dog Scarf, Brew Plan, Epoch sketchbook, Corpus Search, Reading Room); Choreotope, Benesh and the 16 Oct shoot lists. Several artifacts are marked "DO NOT USE PUBLICLY" (they name clients or hold internal issue titles, corpus counts or schedules); those must not enter the site. Several films need three.js from a CDN and would need self-hosting, as D2 does ([04](04-technical-requirements.md)). The artifacts themselves are not committed; they can be re-extracted from their claude.ai addresses.
+- **Strongest candidates the inventory named** (no decision): the 3D "growth" film (a mangrove-like branching network that grows, rewinds to a seed and grows again) and the "recognition into growth" cut as hero films; the Allen's interval algebra explainer as a standalone; the Yerkes-Dodson film; the Dance Flock and Tilt Flock phone demos as Studio or hero-background candidates; Choreotope Notation and the Benesh Reader as explainers. Each needs Rosie's check on content and licence.
+- **Product catalogue** (home `design/research/product-portfolio-catalogue.yaml`, 13 Oct 2026, for Cooper): where Rosie's "long lists" of products live (the 27 Aug interim portfolio doc, the 14 Jul commercial brain-dump, the June product slate schema, a 6 Oct chat with a public-portfolio card list), with evidence references. Its market claims are unverified.
+- **Cooper's product inventory of 16 Oct** (home design records): fifteen products, eight with material. See [05](05-content-schema.md), "Options: a product card".
+- **Figures on the live page** are meant to be computed from the database, not typed: "about 19 million words" in the Research text (counted 13 Oct, [04](04-technical-requirements.md)). The old page's "10 million" and "15 million" (C-104, C-13) are superseded for the live page, though C-13 still reads 15 million in this inventory. Conflict: the Lab text in [07](07-copy.md) says "some 15 million words"; Rosie to pick the figure and say whether it is recomputed each time.
+- **Wish list** of 16 Oct (torus, choreotope, Benesh, podcasts, private wiki and the rest): [01](01-product-requirements.md), "Working notes". Each item there needs inventory rows when it is placed.

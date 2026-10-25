@@ -1,8 +1,8 @@
 ---
 id: foundation-01-prd
 title: Product requirements (PRD)
-status: draft, Q&A round 1 answered 13 Oct 2026
-updated: 2026-10-13
+status: draft; Q&A answered 13 and 25 Oct 2026; options and working notes added 25 Oct 2026
+updated: 2026-10-25
 ---
 
 # 1 · Product requirements
@@ -81,8 +81,51 @@ Clients and people who are fine being listed: Space Intelligence, TDC PR, Rebecc
 
 ## Open questions for Rosie
 
-- Versions of the site (v0 interim page, v1 five pages, later): how Rosie pictures them. Raised 25 Oct 2026.
-- Designer-only site: separate or part of this one. Raised 25 Oct 2026.
+- Versions of the site (v0 interim page, v1 five pages, later): how Rosie pictures them. Raised 25 Oct 2026. Options below; she wants to talk it through, not pick from a list.
+- Designer-only site: separate or part of this one. Raised 25 Oct 2026. Options below.
+- The 16 Oct wish list against the five-page v1: which items are v1, which are later, which belong in Lab, Studio or Services. See "Working notes: the 16 Oct wish list" below.
+- **Conflict (wording, for Rosie to confirm):** 13 Oct says the main job this month is services first, with the portfolio as proof. 25 Oct says the site is "mostly the studio front door (research and services)". They may be the same thing said two ways; not resolved here.
+
+## Options: versions of the site
+
+Rosie, 25 Oct 2026: she wants to talk this through. What the record holds, so the talk starts from facts. No option is chosen.
+
+| Version | What it is | State on 25 Oct 2026 |
+|---|---|---|
+| v0 | A simple, lovely interim page so the domain shows something real. Rosie, 23 Oct: a simple page now beats nothing. | Planned as `interim/index.html`; never deployed. It was removed on 24 Oct (PR #12) and Cooper's direction D2 became the front page instead (PR #13). See [06](06-implementation-plan.md), "What actually happened". |
+| v0.5 (what is on `main`) | One scrolling page: wordmark, tagline, Research, Studio, Services, Write to us (the email). Flock hero, light and dark toggle. | On `main` since 24 Oct 2026, with refinements to 24 Oct (PRs #14 to #20). The domain's DNS points at GitHub Pages (epoch domains register, 25 Oct 2026); not checked from this session that it resolves. |
+| v1 | Five pages: Lab, Studio, Services, Writing, About, with a front page of three doors. | Decided 13 Oct 2026 ([02](02-app-flow.md)). Not built. Copy and content gaps in [00](00-content-inventory.md) and [07](07-copy.md). |
+| Later | Clients-only area on the same site; the private wiki section; per-project pages; the rest of the 16 Oct wish list. | Not started. |
+
+Ways the versions could relate (options, not a plan):
+
+1. **Grow the one page.** The front page keeps being one scrolling page; Lab, Studio and Services become sections, then pages when each has enough content. Cheapest; the live look carries on.
+2. **Switch at v1.** Keep v0.5 as it is until the five pages are ready, then replace in one move, with v0.5 kept viewable in `archive/`.
+3. **Several versions viewable at once.** Keep every version reachable (the old page already sits in `archive/2026-10-old-site/`, the drafts in `drafts/`), so Rosie can open any version and compare. Cooper's Epoch app work proposes a "Versions sheet" for this; see [03](03-design-brief.md), "Working notes".
+
+## Options: a design-only site for Rosie as a designer
+
+Rosie, 25 Oct 2026: not decided. The three logged options, with what each implies:
+
+1. **Its own domain.** Cleanest separation from Mangrove. A new domain is a new standing item to hold and renew (the epoch domains register, a draft of 25 Oct 2026, lists "a design-only site" among ideas being weighed, none bought).
+2. **A section of this site (Studio).** No new hosting. Risk: it blurs the Studio's job as the studio front door and may dilute both.
+3. **A subdomain microsite from this repo** (for example a `design.` subdomain). One repo and one design system; needs a DNS record at the registrar and a Pages custom domain. Risk: GitHub Pages serves one custom domain per repo, so a second name would mean a second repo or a different host. Check before choosing.
+
+## Working notes: the 16 Oct wish list
+
+Source: Rosie, 16 Oct 2026, relayed in home#372 (public website and design projects: discovery, inventory and an asset library). Captured in her words, tidied; not groomed. Kept here so it sits next to the v1 decisions it has to be reconciled with.
+
+What she wants on the public website: the torus; the choreotope; a stronger Benesh; a design portfolio; a software catalogue focused on Mangrove and Epoch; early-access contact for Epoch; services pages (training, action research, productised work such as latent intelligence and failure-demand mapping, one-to-one coaching, C-suite packages, founder and entrepreneur packages for systems and AI, workshops on Google and Claude); research with key papers and the book pre-order; podcasts and the way they are made; a Substack link; testimonials and adviser quotes; the design studio as an entry point; 3D interface demos with client details anonymised; a client portal as a separate login.
+
+Also from her: a full-screen "wow" home page animation (options named: the choreotope murmurations with networks, a torus visual, a new generative network piece; interactive in places, not everywhere), and an asset store that grows over time. On 16 Oct she also asked for her working wiki, now on her old laptop, to come back as a login-protected private section of the site.
+
+Where it meets the decisions already made:
+
+- **Conflict: contact.** 13 Oct says contact is email, no form. The wish list adds an early-access contact for Epoch. Same email, or a separate route?
+- **Conflict: client area.** 13 Oct puts the clients-only area on the same site after v1. The wish list adds a second login-protected area (the wiki). One gate or two? Depends on hosting ([04](04-technical-requirements.md)).
+- **To place:** the torus, the choreotope and Benesh (Lab, Studio, or both?), the podcasts, the Substack link (the reading room links to it, per [07](07-copy.md)), and the software catalogue (Studio's "about 20 products", [02](02-app-flow.md)).
+- **Already answered in practice:** the "wow" home page became Cooper's direction D2, a Choreotope-style flock ([03](03-design-brief.md)).
+- Method note from the same issue: the standard names are discovery, content audit and inventory, information architecture, creative brief, moodboard, asset library and design tokens. The foundation docs cover discovery, the inventory, the structure and the brief; the asset library is the open piece ([00](00-content-inventory.md), "Working notes: assets").
 
 
 ## Out of scope for v1
