@@ -1,8 +1,8 @@
 ---
 id: foundation-07-copy
 title: Copy
-status: stub, method and services menu answered 13 Oct 2026
-updated: 2026-10-13
+status: stub, method and services menu answered 13 Oct 2026; live draft wording logged 25 Oct 2026
+updated: 2026-10-25
 depends_on: 00-content-inventory.md, 01-product-requirements.md, 02-app-flow.md
 ---
 
@@ -64,6 +64,21 @@ This is a stub. Each block below lists the inventory rows that already hold word
 - **The Lab shows in v1:** the research question (the human-AI pair studied over about two years and some 15 million words), Kronoscope (C-32), the maths lens (category theory, topology and graphs: what organisations have in common), and the funding model (client work funds the research; everyone benefits from what is learned).
 - **Books in the reading room:** *In Defence of Tangential Thinking* is the main one, offered for **pre-order**. The others are shown as in development: the systems book (the category theory and topology of organisations), and 12,000 Years, which has an essay that can be read. Doc Tomorrow sits as Mangrove's speculative fiction universe rather than a book. Little is readable yet, so the room shows status, not full texts.
 - **Substack:** Rosie has one; the reading room links to it (address to add).
+
+## Working notes: the words on the live page (24 Oct 2026)
+
+The front page on `main` carries draft wording written by Cooper (not Rosie), built from the inventory and the 13 Oct decisions above. It is logged here so Rosie can rewrite or reject it; the copy rule is that agents do not draft copy as her, and this wording is marked draft in Cooper's provenance file.
+
+| Place | Live wording | Compare with |
+|---|---|---|
+| Tagline | "A speculative design studio and research lab." | **Conflict:** the decided hero line is "Independent research lab & studio: human, AI, and the space between." (C-03, [02](02-app-flow.md)). Rosie, 23 Oct: she likes the simplicity of the tagline on the front page. Not resolved. |
+| Research | "Two years of one human–AI working relationship, studied closely: about 19 million words, and the instruments built to read them." | Lab text decided 13 Oct says "some 15 million words" (see below). **Conflict** on the figure. Section is called "Research" on the page, "Lab" in the decisions. |
+| Studio | "Speculative and applied R&D. Tools, prototypes and visual work, made with our own methods." | C-04 and the 13 Oct Studio line ("a speculative and applied R&D studio"). Close. |
+| Services | "Workshops, 1:1 work, systems set-ups and research consulting, for founders, small teams and purpose-led organisations." | The 13 Oct menu and "who for" above. Close. |
+| Write to us | `info@mangrove.org.uk` | 13 Oct: contact is email. |
+| Scroll cue, Display control, still-frame note | Interface text from Cooper's accessibility kit | Not reviewed by Rosie. |
+
+Rosie, 23 and 24 Oct, on tone: clean and natural; headings "cleaner and less playful"; B's text under each heading "nice and clear and simple". The 13 Oct tone per space (Lab curious, Studio playful, Services plain and warm) is not yet tested against these.
 
 ## Later blocks (not for v1)
 Lab and papers (C-10 to C-21), work entries (C-30 to C-37 and inventory 3b), writing (C-50 to C-56). Entry format is in [05](05-content-schema.md).
