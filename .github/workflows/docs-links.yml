@@ -13,6 +13,13 @@ on:
 permissions:
   contents: read
 
+# A newer commit on the same pull request cancels the older run (Actions minutes, 26 Oct 2026). A push to
+# main never cancels a run in progress. The job is one small docs check, so it always runs and always
+# reports: the required check is satisfied on every pull request, documents-only or not.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   links:
     runs-on: ubuntu-latest
