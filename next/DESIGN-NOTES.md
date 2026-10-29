@@ -1,5 +1,5 @@
 ---
-title: Design record, next site preview (one direction)
+title: Design record, next site preview (one direction, now several pages)
 status: proposal for Rosie
 owner: rosie
 created: 2026-10-29
@@ -8,79 +8,101 @@ updated: 2026-10-29
 
 # Next site preview: design record
 
-Cooper (agent, for Rosie), 29 Oct 2026. An unlinked preview at `next/index.html` for the 30 Oct 2026
-meetings. One direction, built, by the coordinator's brief (time short). Live `index.html`, `flock.js`,
-`vendor/` and `fonts/` are untouched. `noindex`; nothing links here.
+Cooper (agent, for Rosie), 29 Oct 2026. An unlinked preview at `next/` for the 30 Oct 2026 meetings. `noindex`; nothing
+links here. The live `index.html`, `flock.js`, `vendor/` and `fonts/` are untouched. Everything is self-hosted: no
+outside request until a film is played.
 
-## Brief (from the coordinator, relaying Rosie)
+## What changed (second round)
 
-One scrolling page, calm sticky nav, the same shape for every section: big picture, one-line claim,
-detail behind "more". Sections: hero (her flock), work with us, advisers, work, software, research, book,
-footer. Keep the live site's look (dusk ground, Newsreader and Bricolage, falcon accent), not the Epoch
-app's black and orange. Rosie's correction mid-build: no caveats, "to confirm" tags or disclaimers on the
-page; the research animation is generative artwork, titled plainly; missing facts are clean slots, listed
-below.
+Rosie's feedback on the first preview: the long scroll "always feels a bit cheap"; she wants click-through to separate
+pages; the word is "Advisors"; the project and research deserve a deeper dive with the papers. So `next/` is now a small
+multi-page site in the same visual language (dusk ground, Newsreader and Bricolage, falcon accent, the time-axis nav).
+
+- **Home** (`index.html`): her flock, the studio line and six doors. One screen, no scroll.
+- **Every page has the same shape:** the same header, a name and one-line claim, a big picture, detail collapsed under "More".
+- **Pages:** `work-with-us`, `advisors`, `work` plus one page each for the four pieces (`work/`), `software` plus one page
+  each for the seven tools (`software/`), `research/` (hero artwork and six doors) with `dyad`, `second-order-cybernetics`,
+  `hgi`, `instruments`, `papers` and `tangential-thinking` (essay and book).
+- **Nav fix:** the top bar is a solid, blurred ground, so section text no longer shows behind it. It is also a `header`
+  landmark now, and the chosen light or dark theme is kept across pages.
+- **Shared files:** `site.css` and `site.js` (the accessibility kit and the page behaviour). Pages are plain HTML, 3 to 9 KB
+  each; no page needs the build step used to write them.
+- **"Advisors"** everywhere; **"Defence"** (British) everywhere.
+- **Research artwork** ("Loops that persist"): now already populated when the page loads (it opens near the end of its
+  two-year timeline, then keeps evolving and fades into a new run); the apology caption is gone.
+- **Instruments** (`research/instruments.html`, tabs): a torus with a line winding five times round and three times through;
+  a sheet that rolls and unrolls with a walker's neighbourhood lit; a Queneau-style poem (six lines, eight versions each,
+  262,144 poems, written for the page). All three are calm, pausable and still when motion is reduced.
+- **The flock's tagline box** moved to the top of the home screen so the flock's own "Mangrove" word forms in the open
+  sky above the doors. `sky.html` (the frame host) was edited for that; `flock.js` was not.
 
 ## Process
 
-- **Mangrove's own material first.** Tokens, fonts, time-axis nav, wordmark, theme switch, grain and the
-  accessibility kit are copied from the live `index.html`. The hero is the live flock: `next/sky.html`
-  loads `../flock.js` unchanged and gives it the hooks it looks for; the preview frames it. The parent
-  page mirrors theme and motion settings into the frame and sets motion to "reduce" when the hero is off
-  screen, so the flock rests (an attribute flock.js already watches; no edit).
-- **Metaphor from the thing:** action research is a figure of eight (client work and research crossing
-  at Epoch); software status is a track from idea to in progress, with status drawn as an empty, half or
-  full circle (never colour alone); the research is loops that persist.
-- **Skills used:** `impeccable` craft floor and `detect`; `accessibility` static check and browser pass
-  (0 fail at 390 and 1280 px); render and look at 390 and 1280 px, dark and light.
-- **Critique:** DEGRADED, single-context (no separate critic in this run). Ask Feynman for the design
-  review before the pick.
+- **Mangrove's own material first.** Tokens, fonts, the time-axis nav, wordmark, theme switch, grain, the action-research
+  loop, the persistence artwork, the Vimeo click-to-load facade and the accessibility kit all come from the first preview
+  and the live `index.html`. Copy for software and research comes from home
+  `websites/drafts/software-and-research-sections-2026-10-30.md`; HGI wording from the old-site manifesto, leaving out the
+  personal and health passages.
+- **Metaphors from the thing:** doors for the home (each with its own glyph); a track from idea to in progress for
+  software; a figure of eight for client work and research; loops that persist for the research; strips of a poem for Oulipo.
+- **Skills used:** `accessibility` static check (0 fail, 0 warn on all 23 pages, run on copies with the kit and CSS
+  inlined, because the checker reads one file) and browser pass (0 fail on home, advisors, research and instruments at 390
+  and 1280 px); `impeccable` craft floor (no stripe or gradient decoration, no card grid of look-alikes).
+- **Critique:** DEGRADED, single-context. Ask Feynman for the design review before a pick.
+- **Does it look like Claude's default?** No cream ground, italic serif, round pills or purple gradient. The nearest risk is
+  the six door tiles on the home page (a grid of six); they differ by glyph and are ruled, not boxed, but a distinct shape per
+  door would go further.
 
 ## Borrowed, and where the borrow stops
 
-- **Persistent homology** (the barcode as the picture of how long a loop lasts): the artwork borrows the
-  picture only. Points, rings and bars are seeded, not computed from the record; no homology is computed.
-  A later version could draw from real data.
-- **WAI-ARIA tabs pattern** for the three research pictures; **click-to-load video facade** (the usual
-  "lite embed" pattern) for Vimeo, with `dnt=1`. Nothing reaches Vimeo until play is pressed.
-- **The live site's time axis** as the nav, extended from four stops to six; on a phone it scrolls
-  sideways.
+- **Persistent homology** (the barcode as the picture of how long a loop lasts): the artwork borrows the picture only.
+  Points, rings and bars are seeded, not computed from the record; no homology is computed.
+- **Torus and manifold:** drawn meshes, not computed from data. The torus line is a (5, 3) winding; the sheet is a Swiss roll.
+- **Queneau, "Cent mille milliards de poèmes" (1961)** and the Oulipo: the method (interchangeable lines) only; the lines are new.
+- **Second-order cybernetics** (von Foerster) and **Ashby's law of requisite variety:** named in the research pages; the page
+  does not claim Mangrove has tested either.
+- **WAI-ARIA tabs pattern** (instruments); **click-to-load video facade** for Vimeo with `dnt=1`.
 
 ## Rejected
 
-- A grid of identical cards for advisers (portraits in a strip instead; a sideways strip on a phone).
-- Re-implementing the flock or editing `flock.js` to fit a long page (it drives a whole-page dive and
-  needs specific elements; framing it keeps Rosie's maths untouched).
-- Decorative stripe hatching on portraits (flagged by `impeccable detect`; removed).
-- A "Live" column on the software track: no tool is marked live in the draft, and an empty column read
-  as an apology.
-- Showing the two client testimonials: the inventory says both need the person's agreement first.
+- One long scrolling page (Rosie, 29 Oct 2026: "always feels a bit cheap").
+- Editing `flock.js`, or re-implementing the flock.
+- Decorative stripe hatching on portraits (flagged by `impeccable detect`).
+- Showing the two client testimonials: each needs the person's agreement first (slot marked in an HTML comment).
+- Any visible "to confirm", draft, preview or illustration label. Gaps are clean empty slots and live here instead.
 
-## Missing, for Rosie (kept off the page)
+## Empty slots, and what Rosie must supply (kept off the pages)
 
-1. Vimeo ids for the two films: replace `data-vimeo-id="REPLACE"` (two places in `next/index.html`).
-2. Adviser photos (all six), bios for Kam Chana, Christina Liciaga, Ed Greig; spelling of Liciaga.
-3. Adviser quotes: Clive, Larry and Oli's come from a ChatGPT relay of the old Jimdo page (corpus turn
-   `chatgpt:d0b491ec-d953-408f-b344-721bdb409295`); check the wording. Larry's full quote talks about
-   Rosie personally, so only one sentence is shown. Bios for the three are short versions of that relay.
-4. Films: titles, dates, one line each; Daphne Selfe's spelling (the record has "Selfe"); Valentino's full
-   name and role.
-5. Testimonials (Rafa; Becky): permission to republish. A slot is marked in an HTML comment.
-6. Draft copy to approve: the studio line, every section claim, the Epoch line ("AI- and systems-native,
-   for every kind of mind"), coaching and commissions lines, the research questions.
-7. Software: which tool is public first; Mindsweeper's public name and Pro offer; SketchIn licensing;
-   Choreotope's public name; whether WYRD and the org graph are shown; one line and links for
-   HealthStory AI and BodyScan AI.
-8. Papers (three titles from Drive) and the Substack link.
-9. Book: "Defence" or "Defense", and the author line on the cover.
+1. **Vimeo ids** for Daphne Selfe and Bolero (and, if wanted, Murmurations and Reclaim): fill `data-vimeo-id=""` in
+   `next/work/*.html`; the play button appears by itself once an id is there. Until then each page shows its drawing.
+2. **Film details:** dates for all four pieces, Valentino's full name and role, Daphne Selfe's spelling ("Selfe" in the record),
+   Rosie's role on Reclaim, who else to name as key people.
+3. **Advisors:** photos for all six (an `img` goes in each `.portrait`), bios for Kam Chana, Christina Liciaga and Ed Greig,
+   quotes for the same three, the spelling of "Liciaga". Clive, Larry and Oli's quotes come from a ChatGPT relay of the old
+   Jimdo page (corpus turn `chatgpt:d0b491ec-d953-408f-b344-721bdb409295`); check the wording. Larry's card shows one sentence
+   because his full quote talks about Rosie personally. Larry's role names CHADD (kept as the existing card text; it points
+   at ADHD, so say if it should go). Clive's and Oli's cards both open a full quote.
+4. **Papers:** three titles, years and links for `research/papers.html` (the three cards are empty on purpose); the Substack link.
+5. **The essay:** the full text of "In Defence of Tangential Thinking" for `research/tangential-thinking.html`; today the
+   page holds a two-paragraph statement of the argument taken from the HGI manifesto. The book cover has the author line
+   "Rosie Collins"; confirm it.
+6. **Copy to approve:** the studio line, every claim line, the Epoch line ("AI- and systems-native, for every kind of mind"),
+   the research pages (written from the draft sections and the manifesto), the three research questions, and the poem lines.
+7. **Software:** which tool is public first; Mindsweeper's public name and Pro offer; SketchIn licensing (left out of its page);
+   Choreotope's public name; whether WYRD and the org graph are shown; one line and a link for HealthStory AI and BodyScan AI.
+8. **Testimonials** (Rafa; Becky): permission to republish.
+9. **The "Book" nav stop** points to the tangential-thinking page, which also sits under Research. Say if it should be its own top-level page.
 
 ## Render and look
 
-`next/shots/preview-1280.jpg`, `next/shots/preview-390.jpg` (full page, dark). Light theme and the
-research artwork checked at both widths. Fixed after looking: tab panels showed all at once (`hidden`
-overridden by `display:grid`), the Pause button wrapped, the loop diagram's small labels were 8 px on a
-phone (hidden there), the kit's Display pill made small as on the live page.
+`next/shots/`: one 1280 px shot each of home, work with us, advisors, work, software, research and instruments (dark; JPEG).
+Every page was also rendered at 390 and 1280 px, dark and light for the main ones; no sideways scroll on any. Fixed after
+looking: the manifold's camera sat inside the sheet (units too large), the research caption bar was narrower than its
+picture, the Epoch labels sat on the loop, the torus caption claimed the line "never crosses itself" (it crosses in
+projection; now "never meets itself on the surface"). The flock needs about 14 seconds in the headless browser to form its
+word (software rendering); that is the browser, not the page.
 
 ## Change log
 
-- 2026-10-29: first version (Cooper, for Rosie).
+- 2026-10-29: first version, one scrolling page (Cooper, for Rosie).
+- 2026-10-29: second round, multi-page site, "Advisors", research deep dive and instruments, nav fix (Cooper, for Rosie).
