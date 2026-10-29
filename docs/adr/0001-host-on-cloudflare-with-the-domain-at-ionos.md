@@ -15,7 +15,7 @@ tracked_in: "MangroveFutures/epoch#667"
 Format: MADR (Markdown Architectural Decision Records, https://adr.github.io/madr/). Limit of the borrow: MADR says how to write a decision down; it does not say the decision is right.
 
 ## Context and problem statement
-The site is plain HTML with no build step (`docs/foundation/04-technical-requirements.md`). Rosie wants something live on `mangrove.org.uk` over the weekend of 24 and 25 Oct 2026, simple and lovely, then a fuller site later. The domain is registered at IONOS and is not yet pointed anywhere. A mailbox `info@mangrove.org.uk` exists at IONOS (Rosie, 13 Oct 2026). A clients-only login is wanted later (epoch#707, #710), which GitHub Pages cannot do.
+The site is plain HTML with no build step (`home/websites/foundation/04-technical-requirements.md`). Rosie wants something live on `mangrove.org.uk` over the weekend of 24 and 25 Oct 2026, simple and lovely, then a fuller site later. The domain is registered at IONOS and is not yet pointed anywhere. A mailbox `info@mangrove.org.uk` exists at IONOS (Rosie, 13 Oct 2026). A clients-only login is wanted later (epoch#707, #710), which GitHub Pages cannot do.
 
 ## Decision drivers
 - Live this weekend, with nothing to maintain by hand.
@@ -48,7 +48,7 @@ Why Pages and not Workers with static assets: Cloudflare's own Pages documentati
 - The agent Cloudflare token expires on 30 Oct 2026 (ORG-0009 trial); deploys after that need a new decision.
 
 ## Where this is recorded
-Stack and costs: `epoch/docs/ops/stack-and-subscriptions.md`. Plan: `docs/foundation/06-implementation-plan.md`.
+Stack and costs: `epoch/docs/ops/stack-and-subscriptions.md`. Plan: `home/websites/foundation/06-implementation-plan.md`.
 
 ## Amendment, 23 Oct 2026 (Rosie's decision; draft by Claude for her to correct)
 Rosie chose **GitHub Pages for now**, to see how it looks next to Cloudflare. Why it fits today: the apex works with four A records at IONOS and a `www` CNAME, so nameservers stay put (the Cloudflare route needed them moved for the bare domain, which Rosie does not want), and merging to `main` already publishes the repo. What it cannot do: a clients-only login (epoch#707, #710). When that is wanted, move to Cloudflare Pages; the switch is a DNS change, so this is reversible. The IONOS steps are in a calendar reminder for 24 Oct 2026. Email records (MX, TXT) stay untouched. The `CNAME` file for the custom domain is added only after the DNS change, because adding it earlier would redirect the preview address to the old site.
