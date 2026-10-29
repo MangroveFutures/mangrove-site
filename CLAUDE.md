@@ -13,8 +13,8 @@ This file holds pointers only. Decisions live in the files below — read them, 
 
 ## Where things are
 - Plans and work tracking: `MangroveFutures/epoch` issues — site epic is epoch#667
-- What the site is, who it's for, how it's built: `docs/foundation/` (start at `docs/foundation/README.md`)
-- Design: `docs/foundation/03-design-brief.md` and `design-system/`
+- What the site is, who it's for, how it's built: private, in `MangroveFutures/home` `websites/foundation/` (moved 29 Oct 2026)
+- Design: `home` `websites/foundation/03-design-brief.md` and `design-system/` here
 - Site itself: `index.html`
 
 ## Working rules
