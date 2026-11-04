@@ -1,0 +1,10 @@
+# GitHub Pages (legacy Jekyll build) serves everything in the repository unless it is excluded here.
+# Working files are listed so they are not published (epoch#1747). Internal documents live in the
+# private repository MangroveFutures/home, under websites/mangrove-site/internal/.
+exclude:
+  - CLAUDE.md
+  - README.md
+  - design-system
+  - .editorconfig
+  - .github
+  - .gitignore
