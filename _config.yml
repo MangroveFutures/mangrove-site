@@ -8,3 +8,10 @@ exclude:
   - .editorconfig
   - .github
   - .gitignore
+
+# Text twins (20 Nov 2026, next/research/built-for-people-and-agents.md): every page gets a Markdown
+# copy at the same address ending in .md, served as plain text for agents. GitHub Pages always runs
+# jekyll-optional-front-matter, which would otherwise render each .md into an .html page with the
+# same name as the real page and clash with it. Dropping "md" from Jekyll's Markdown extensions makes
+# .md files plain static files. Undo: delete this line.
+markdown_ext: "markdown,mkdown,mkdn,mkd"
