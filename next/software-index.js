@@ -1,39 +1,38 @@
-/* Software index: the status key filters the list (direction A); plates draw in as they scroll into view (direction B).
-   Without JavaScript the whole list shows and nothing is hidden. Respects reduced motion. */
+/* Software section. Direction B: plates draw in as they scroll into view. Product pages: the "On this page" list marks the
+   section you are reading, and the flow line of "How it works" draws in. Without JavaScript or with reduced motion
+   everything shows at once and nothing is hidden. */
 (function () {
   'use strict';
   var d = document, root = d.documentElement;
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  var key = d.querySelector('.sx-a .key');
-  if (key) {
-    var items = [].slice.call(d.querySelectorAll('.sx-a .idx > li')), live = d.getElementById('sx-live');
-    var clear = d.getElementById('sx-clear'), clearWrap = clear && clear.parentNode, grp = d.getElementById('grp-health');
-    var names = {};
-    [].forEach.call(key.querySelectorAll('.kitem'), function (b) { names[b.dataset.f] = b.querySelector('.kt').textContent.replace(/\s*✕$/, ''); });
-    var apply = function (f) {
-      var n = 0;
-      items.forEach(function (li) { var show = !f || li.dataset.status === f; li.hidden = !show; if (show) n++; });
-      if (grp) grp.hidden = !grp.querySelector('li:not([hidden])');
-      [].forEach.call(key.querySelectorAll('.kitem'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.f === f)); });
-      if (clearWrap) clearWrap.hidden = !f;
-      if (live) live.textContent = f ? 'Showing ' + n + ' of ' + items.length + ': ' + names[f] + '.' : 'Showing all ' + items.length + '.';
-    };
-    var cur = '';
-    key.addEventListener('click', function (e) {
-      var b = e.target.closest('.kitem'); if (!b) return;
-      cur = cur === b.dataset.f ? '' : b.dataset.f; apply(cur);
-    });
-    if (clear) clear.addEventListener('click', function () { cur = ''; apply(''); });
-  }
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    root.getAttribute('data-lib-motion') === 'reduce';
+  if (!('IntersectionObserver' in window)) return;
 
   var plates = [].slice.call(d.querySelectorAll('.sx-b .plate'));
-  if (plates.length && 'IntersectionObserver' in window && !reduce && root.getAttribute('data-lib-motion') !== 'reduce') {
+  var steps = [].slice.call(d.querySelectorAll('.flow li'));
+  if ((plates.length || steps.length) && !reduce) {
     [].forEach.call(d.querySelectorAll('.plate .art path'), function (p) { p.setAttribute('pathLength', '1'); });
     root.classList.add('sx-armed');
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold: 0.2 });
-    plates.forEach(function (p) { io.observe(p); });
+    plates.concat(steps).forEach(function (p) { io.observe(p); });
+  }
+
+  var links = [].slice.call(d.querySelectorAll('.toc a'));
+  if (links.length) {
+    var byId = {};
+    links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+    var cur = null;
+    var so = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var a = byId[e.target.id];
+        if (!a || a === cur) return;
+        if (cur) cur.removeAttribute('aria-current');
+        a.setAttribute('aria-current', 'true'); cur = a;
+      });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    [].forEach.call(d.querySelectorAll('.ps-sec'), function (s) { so.observe(s); });
   }
 })();

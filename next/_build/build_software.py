@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Generate the Software section (index, alternative index, nine detail pages) from the copy register.
+"""Generate the Software section (index, alternative index, nine full product pages) from the copy register.
 
-Usage:  python -X utf8 build_software.py <copy-register.yaml> <next-dir>
+Usage:  python -X utf8 build_software.py <copy-register.d dir> <next-dir>
 
-Every text block is written with data-block-id equal to its register block_id and its text unchanged, so the page can
-later be generated from the database rows (ADR-0096, epoch#2182). The register is a DRAFT (home PR 1574); nothing here
-is approved copy. UI labels that are not in the register are listed in LABELS below so they can be reviewed as copy.
-Design record: home design/records/2026-11-20-software-index.md
+Reads every *.yaml in the register directory (home websites/foundation/copy-register.d, one file per product plus
+index.yaml). Every text block is written with data-block-id equal to its register block_id and its text unchanged,
+so the page can later be generated from the database rows (ADR-0096, epoch#2182). The register is a DRAFT; nothing
+here is approved copy. Words on the page that are not in the register are listed in LABELS so they can be reviewed
+as copy. No status words and no status key anywhere (Rosie, 20 Nov 2026).
+Design record: home design/records/2026-11-20-software-product-pages.md
 """
+import glob
 import html
 import pathlib
 import re
@@ -16,24 +19,30 @@ import sys
 import yaml
 
 reg, nxt = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
-blocks = {b["block_id"]: b["text"].strip() for b in yaml.safe_load(reg.read_text(encoding="utf8"))["blocks"]}
-OLD_SLUGS = ["epoch", "mindsweeper", "sketchin", "breathing-room", "org-graph", "choreotope", "would-you-rather-design"]
-ART_CACHE = nxt / "_build" / "art.cache.html"  # the seven existing pictures, kept so the build can be rerun
-if ART_CACHE.exists():
-    old = dict(zip(OLD_SLUGS, ART_CACHE.read_text(encoding="utf8").split("\n<!--split-->\n")))
-else:
-    old = {p: (nxt / "software" / f"{p}.html").read_text(encoding="utf8") for p in OLD_SLUGS}
-    old = {p: re.search(r'<svg class="art".*?</svg>', s, re.S).group(0) for p, s in old.items()}
-    ART_CACHE.write_text("\n<!--split-->\n".join(old[p] for p in OLD_SLUGS), encoding="utf8")
+blocks = {}
+for f in sorted(glob.glob(str(reg / "*.yaml"))):
+    for b in yaml.safe_load(pathlib.Path(f).read_text(encoding="utf8"))["blocks"]:
+        blocks[b["block_id"]] = b["text"].strip()
 
-PRODUCTS = ["epoch", "mindsweeper", "sketchin", "breathing-room", "org-graph", "choreotope",
-            "would-you-rather-design", "healthstory", "bodyscan"]  # register order
-HEALTH = {"healthstory", "bodyscan"}
-STATUS = {"In use internally": "use", "In development": "dev", "In design": "design", "Research prototype": "proto"}
-LABELS = {"who": "Who it is for", "detail": "In detail", "all": "All software", "clear": "Show all", "open_q": "Open question",
-          "oq_text": "The old card said: photograph a sketch and get text. The repository is a design-catalogue pipeline. "
-                     "Which one is the product is Rosie's call. Review note, not page copy."}
-RECORD = "home:design/records/2026-11-20-software-index.md"
+# page slug -> register key. The slug of Would You Rather stays as on the live preview so existing links keep working.
+SLUG = {"sketchin": "sketchin", "breathing-room": "breathing-room", "mindsweeper": "mindsweeper", "org-graph": "org-graph",
+        "choreotope": "choreotope", "would-you-rather-design": "would-you-rather", "epoch": "epoch",
+        "healthstory": "healthstory", "bodyscan": "bodyscan"}
+MAIN = ["sketchin", "breathing-room", "mindsweeper", "org-graph", "choreotope", "would-you-rather-design", "epoch"]
+HL = ["healthstory", "bodyscan"]
+PRODUCTS = MAIN + HL
+
+ART_CACHE = nxt / "_build" / "art.cache.html"  # the seven earlier pictures, kept so the build can be rerun
+OLD_SLUGS = ["epoch", "mindsweeper", "sketchin", "breathing-room", "org-graph", "choreotope", "would-you-rather-design"]
+old = dict(zip(OLD_SLUGS, ART_CACHE.read_text(encoding="utf8").split("\n<!--split-->\n")))
+
+# Words that are page furniture, not register copy. Listed so Rosie can review them as copy.
+LABELS = {"toc": "On this page", "problem": "The problem", "who": "Who it is for", "how": "How it works",
+          "today": "What exists today", "examples": "Examples", "next": "What comes next",
+          "all": "All software", "ph": "Placeholder", "ph_do": "Picture to come.",
+          "ph_perm": "Picture to come. Needs Rosie's permission before any of her sketches appear.",
+          "health": "Health"}
+RECORD = "home:design/records/2026-11-20-software-product-pages.md"
 ATMOS = ('<button class="atmos" type="button" id="atmos" role="switch" aria-checked="true" aria-label="Dark mode">'
          '<svg class="i-moon" viewBox="0 0 18 18" aria-hidden="true"><path d="M14.6 11.3A6.4 6.4 0 0 1 6.7 3.4a6.4 6.4 0 1 0 7.9 7.9z" fill="currentColor"/></svg>'
          '<svg class="i-sun" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="3.4" fill="currentColor"/>'
@@ -46,45 +55,54 @@ def esc(s):
     return html.escape(s, quote=False)
 
 
-def blk(bid, tag, cls="", inner=None, extra=""):
-    c = f' class="{cls}"' if cls else ""
-    return f'<{tag}{c} data-block-id="{bid}"{extra}>{inner if inner is not None else esc(blocks[bid])}</{tag}>'
+def B(p, slot):
+    return blocks[f"software.{SLUG[p]}.{slot}"]
 
 
-def lead(text):
+def bid(p, slot):
+    return f"software.{SLUG[p]}.{slot}"
+
+
+def paras(text):
+    return [re.sub(r"\s+", " ", t).strip() for t in text.split("\n") if t.strip()]
+
+
+def lead(text, cap):
     m = re.search(r"[.:](?=\s)", text)
-    if m and m.end() <= 72:
+    if m and m.end() <= cap:
         return f"<strong>{esc(text[:m.end()])}</strong>{esc(text[m.end():])}"
     return esc(text)
 
 
-def glyph(k, big=False):
-    return f'<svg class="st{" lg" if big else ""}" viewBox="0 0 14 14" aria-hidden="true"><use href="#g-{k}"/></svg>'
-
-
-SYMBOLS = (
-    '<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>'
-    '<symbol id="g-use" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="currentColor" stroke="currentColor" stroke-width="1.5"/></symbol>'
-    '<symbol id="g-dev" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 1.5a5.5 5.5 0 0 1 0 11z" fill="currentColor"/></symbol>'
-    '<symbol id="g-design" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.2 2.1"/></symbol>'
-    '<symbol id="g-proto" viewBox="0 0 14 14"><path d="M7 1.3L12.7 7 7 12.7 1.3 7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>'
-    '</defs></svg>')
-
-
-def status_of(p):
-    return STATUS[blocks[f"software.{p}.card-status"]]
-
-
-def title(p):
-    return blocks[f"software.{p}.card-title"]
+def steps(text):
+    """Split a how-it-works block into numbered steps plus any lines before or after them. Numbers are found in
+    sequence ('1. ', '2. ' ...), so figures such as '4 in and 6 out' are not mistaken for steps."""
+    pre, items, post = [], [], []
+    for line in paras(text):
+        n = len(items) + 1
+        pos = []
+        m = re.search(rf"(?:^|(?<=\s)){n}\. (?=\S)", line)
+        while m:
+            pos.append((m.start(), m.end()))
+            n += 1
+            m = re.compile(rf"(?<=\s){n}\. (?=\S)").search(line, m.end())
+        if pos:
+            if pos[0][0] > 0:
+                pre.append(line[:pos[0][0]].strip())
+            for i, (s, e) in enumerate(pos):
+                items.append(line[e:(pos[i + 1][0] if i + 1 < len(pos) else len(line))].strip())
+        elif items:
+            post.append(line)
+        else:
+            pre.append(line)
+    return pre, items, post
 
 
 def art(p, imgdir=""):
     if p in old:
         return old[p]
     if p == "healthstory":  # the engraving already on the site (PR #30), kept; its three sample marks are drawn over it
-        return (f'<img src="{imgdir}img/healthstory-gray-hand-1877.jpg" width="720" height="969" alt="Engraved plate of the bones of the back of the hand, '
-                'with three sample marks drawn on it: a solid ring, a dashed ring and a dotted ring.">'
+        return (f'<img src="{imgdir}img/healthstory-gray-hand-1877.jpg" width="720" height="969" alt="" loading="lazy">'
                 '<svg class="art" viewBox="0 0 720 969" preserveAspectRatio="xMidYMid slice" aria-hidden="true" fill="none" stroke="var(--falcon)" stroke-width="6">'
                 '<circle cx="355" cy="470" r="52" fill="color-mix(in srgb,var(--falcon) 25%,transparent)"/><circle cx="470" cy="190" r="40" stroke-dasharray="14 10"/>'
                 '<circle cx="215" cy="790" r="34" stroke-dasharray="2 12" stroke-linecap="round"/></svg>')
@@ -96,7 +114,7 @@ def art(p, imgdir=""):
     return s + f'<circle class="fl" cx="160" cy="{18 + 11 * 144 / 22:.1f}" r="3.5"/></svg>'
 
 
-def head(title_, desc, up, bid):
+def head(title_, desc, up, desc_id):
     return f'''<!doctype html>
 <html lang="en-GB" data-theme="dark" data-lib-a11y-themes="light dark" class="no-js">
 <head>
@@ -104,7 +122,7 @@ def head(title_, desc, up, bid):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>{esc(title_)}</title>
-<meta name="description" content="{html.escape(desc)}" data-block-id="{bid}">
+<meta name="description" content="{html.escape(desc)}" data-block-id="{desc_id}">
 <meta name="design-record" content="{RECORD}">
 <meta name="color-scheme" content="dark light">
 <link rel="preload" href="{up}../fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -122,7 +140,6 @@ def shell(body, up):
     return f'''<body>
 <a class="skip" href="#main">Skip to the content</a>
 <div class="grain" aria-hidden="true"></div>
-{SYMBOLS}
 <div class="page">
 <header class="axis"><nav aria-label="Main" class="wrap"><a class="mark" href="{up}index.html">Mangrove</a><ol>{nav}</ol>{ATMOS}</nav></header>
 <main id="main">
@@ -140,93 +157,101 @@ CREDIT = ('<p class="credit">Engraving: a hand from Henry Gray, <i>Anatomy, Desc
 PAUSE = '<button class="pausebtn" type="button" data-pause="#art" aria-pressed="false">Pause</button>'
 
 
-def oq(p):
-    if p != "sketchin":
-        return ""
-    return f'<span class="oq" data-review-only="open-question"><b>{LABELS["open_q"]}.</b> {esc(LABELS["oq_text"])}</span>'
+def title_html(p):
+    t = B(p, "title")
+    m = re.match(r"^(.*?)\s*\((name open)\)$", t)
+    if m:
+        return f'{esc(m.group(1))} <span class="open">({esc(m.group(2))})</span>'
+    return esc(t)
 
 
-def key_items():
-    t = blocks["software.status-key"]
-    pos = sorted((t.index(x + ": "), x) for x in STATUS)
-    out = []
-    for i, (a, term) in enumerate(pos):
-        b = pos[i + 1][0] if i + 1 < len(pos) else len(t)
-        out.append((term, t[a + len(term) + 2:b].strip()))
-    return out
-
-
-MAIN = [p for p in PRODUCTS if p not in HEALTH]
-HL = [p for p in PRODUCTS if p in HEALTH]
+def name_only(p):  # the title without the "(name open)" note, for a link label
+    return re.sub(r"\s*\(name open\)$", "", B(p, "title"))
 
 
 def index_a():
-    ki = "".join(
-        f'<button type="button" class="kitem" data-f="{STATUS[term]}" aria-pressed="false"><span class="kh">{glyph(STATUS[term], True)}</span>'
-        f'<span class="kt">{esc(term)}</span><span class="kd">{esc(d)}</span></button>' for term, d in key_items())
-
     def row(i, p):
-        s = status_of(p)
-        return (f'<li data-status="{s}" style="--i:{i}"><a class="row" href="software/{p}.html">'
-                f'{blk(f"software.{p}.card-title", "h3", "rn")}{blk(f"software.{p}.card-summary", "p", "rs")}'
-                f'<span class="rst">{glyph(s)}{blk(f"software.{p}.card-status", "span", "rw")}</span>'
+        return (f'<li style="--i:{i}"><a class="row" href="software/{p}.html">'
+                f'<span class="rf" aria-hidden="true"><span class="frame">{art(p, "software/")}</span></span>'
+                f'<h3 class="rn" data-block-id="{bid(p, "title")}">{title_html(p)}</h3>'
+                f'<p class="rs" data-block-id="{bid(p, "card-summary")}">{esc(B(p, "card-summary"))}</p>'
                 f'<svg class="go" viewBox="0 0 18 12" aria-hidden="true"><path d="M1 6h15M11 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>'
-                f'{oq(p)}</a></li>')
+                f'</a></li>')
 
-    body = f'''<div class="room wrap sx sx-a"><header class="room-head"><h1>Software</h1>{blk("software.index.intro", "p", "claim")}</header>
-<div class="key" role="group" aria-label="Filter the list by status" data-block-id="software.status-key">{ki}</div>
-<p class="sr" role="status" aria-live="polite" id="sx-live"></p>
+    body = f'''<div class="room wrap sx sx-a"><header class="room-head"><h1>Software</h1><p class="claim" data-block-id="software.index.intro">{esc(blocks["software.index.intro"])}</p></header>
 <ol class="idx" id="idx-main">{"".join(row(i, p) for i, p in enumerate(MAIN))}</ol>
-<section class="grp" id="grp-health" aria-labelledby="h-health">{blk("software.health.group-heading", "h2", "", extra=' id="h-health"')}
-<ol class="idx" id="idx-health">{"".join(row(len(MAIN) + i, p) for i, p in enumerate(HL))}</ol></section>
-<p class="clear" hidden><button type="button" id="sx-clear">{LABELS["clear"]}</button></p></div>'''
-    return head("Software · Mangrove", blocks["software.index.meta-description"], "", "software.index.meta-description") + shell(body, "")
+<section class="grp" id="grp-health" aria-labelledby="h-health"><h2 id="h-health" data-block-id="software.health.group-heading">{LABELS["health"]}</h2>
+<ol class="idx" id="idx-health">{"".join(row(len(MAIN) + i, p) for i, p in enumerate(HL))}</ol></section></div>'''
+    return head("Software · Mangrove", blocks["software.index.intro"], "", "software.index.intro") + shell(body, "")
 
 
 def index_b():
     def plate(i, p, lead_=False):
-        s = status_of(p)
         return (f'<li class="plate{" plate-lead" if lead_ else ""}" style="--i:{i}"><a href="software/{p}.html">'
                 f'<div class="frame">{art(p, "software/")}</div><div class="pt">'
-                f'{blk(f"software.{p}.card-title", "h3", "pn")}'
-                f'<span class="rst">{glyph(s)}{blk(f"software.{p}.card-status", "span", "rw")}</span>'
-                f'{blk(f"software.{p}.card-summary", "p", "ps")}{oq(p)}</div></a></li>')
+                f'<h3 class="pn" data-block-id="{bid(p, "title")}">{title_html(p)}</h3>'
+                f'<p class="ps" data-block-id="{bid(p, "card-summary")}">{esc(B(p, "card-summary"))}</p></div></a></li>')
 
-    kd = "".join(f'<div>{glyph(STATUS[t])}<dt>{esc(t)}</dt><dd>{esc(d)}</dd></div>' for t, d in key_items())
-    body = f'''<div class="room wrap sx sx-b"><header class="room-head"><h1>Software</h1>{blk("software.index.intro", "p", "claim")}</header>
+    body = f'''<div class="room wrap sx sx-b"><header class="room-head"><h1>Software</h1><p class="claim" data-block-id="software.index.intro">{esc(blocks["software.index.intro"])}</p></header>
 <ol class="plates">{plate(0, MAIN[0], True)}{"".join(plate(i + 1, p) for i, p in enumerate(MAIN[1:]))}</ol>
-<section class="grp" aria-labelledby="h-health">{blk("software.health.group-heading", "h2", "", extra=' id="h-health"')}<ol class="plates">{"".join(plate(i, p) for i, p in enumerate(HL))}</ol></section>
-<dl class="keyfoot" data-block-id="software.status-key">{kd}</dl></div>'''
-    return head("Software (catalogue direction) · Mangrove", blocks["software.index.meta-description"], "", "software.index.meta-description") + shell(body, "")
+<section class="grp" aria-labelledby="h-health"><h2 id="h-health" data-block-id="software.health.group-heading">{LABELS["health"]}</h2><ol class="plates">{"".join(plate(i, p) for i, p in enumerate(HL))}</ol></section></div>'''
+    return head("Software (catalogue direction) · Mangrove", blocks["software.index.intro"], "", "software.index.intro") + shell(body, "")
+
+
+def prose(p, slot, cls=""):
+    ps = paras(B(p, slot))
+    return f'<div class="prose {cls}" data-block-id="{bid(p, slot)}">' + "".join(f"<p>{esc(t)}</p>" for t in ps) + "</div>"
+
+
+def flow(p):
+    pre, items, post = steps(B(p, "how-it-works"))
+    lis = "".join(f"<li>{lead(t, 34)}</li>" for t in items)
+    return (f'<div class="flowwrap" data-block-id="{bid(p, "how-it-works")}">'
+            + "".join(f'<p class="fnote">{esc(t)}</p>' for t in pre)
+            + f'<ol class="flow">{lis}</ol>'
+            + "".join(f'<p class="fnote">{esc(t)}</p>' for t in post) + "</div>")
+
+
+def examples(p):
+    ps = paras(B(p, "examples"))
+    n = 3 if len(ps) >= 3 else 2
+    perm = p == "sketchin"
+    msg = LABELS["ph_perm"] if perm else LABELS["ph_do"]
+    tiles = "".join(
+        f'<div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/>'
+        f'<path d="M3.5 16l5-5 4 4 3-3 5 5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="16.5" cy="9.5" r="1.3" fill="currentColor"/></svg>'
+        f'<span class="ph-t"><b>{LABELS["ph"]}.</b> {msg}</span></div>' for _ in range(n))
+    return f'<div class="phs" style="--c:{n}">{tiles}</div>' + prose(p, "examples")
+
+
+SECTIONS = [("problem", lambda p: prose(p, "problem", "big")),
+            ("who", lambda p: prose(p, "who-for", "ruled")),
+            ("how", flow),
+            ("today", lambda p: prose(p, "today", "ruled")),
+            ("examples", examples),
+            ("next", lambda p: prose(p, "next", "ruled"))]
 
 
 def detail(p, idx):
-    s = status_of(p)
-    t = title(p)
-    caps = sorted((k for k in blocks if k.startswith(f"software.{p}.capability-")), key=lambda k: int(k.rsplit("-", 1)[1]))
-    still = f"software.{p}.in-design"
     pn = PRODUCTS[idx + 1] if idx + 1 < len(PRODUCTS) else None
-    sid, who = f"software.{p}.status", f"software.{p}.who-for"
-    side = (f'<aside class="dl-side"><div class="stat">{glyph(s, True)}{blk(sid, "p", "stw", inner=lead(blocks[sid]))}</div>'
-            + (f'<div class="who"><h2>{LABELS["who"]}</h2>{blk(who, "p")}</div>' if who in blocks else "") + oq(p) + "</aside>")
-    main = blk(f"software.{p}.detail-intro", "p", "lede")
-    if caps:
-        main += (f'<h2 class="dh">{LABELS["detail"]}</h2><ol class="caps">'
-                 + "".join(f"<li>{blk(k, 'p', inner=lead(blocks[k]))}</li>" for k in caps) + "</ol>")
-    if still in blocks:
-        main += blk(still, "p", "still", inner=lead(blocks[still]))
+    toc = "".join(f'<li><a href="#s-{k}">{LABELS[k]}</a></li>' for k, _ in SECTIONS)
+    secs = "".join(f'<section class="ps-sec" id="s-{k}" aria-labelledby="h-{k}"><h2 id="h-{k}">{LABELS[k]}</h2><div class="ps-body">{fn(p)}</div></section>'
+                   for k, fn in SECTIONS)
     pager = f'<a href="../software.html"><span aria-hidden="true">←</span> {LABELS["all"]}</a>'
     if pn:
-        pager += f'<a class="nx" href="{pn}.html">{esc(title(pn))} <span aria-hidden="true">→</span></a>'
-    body = f'''<div class="room wrap sx sx-d"><p class="crumb"><a href="../software.html"><span aria-hidden="true">←</span> Software</a></p><header class="room-head">{blk(f"software.{p}.card-title", "h1")}{blk(f"software.{p}.card-summary", "p", "claim")}</header>
-<div class="frame" id="art">{art(p)}{PAUSE if p == "breathing-room" else ""}</div>
-<div class="dl">{side}<div class="dl-main">{main}</div></div>
-{CREDIT if p == "healthstory" else ""}<nav class="pager" aria-label="More">{pager}</nav></div>'''
-    return head(f"{t} · Software · Mangrove", blocks[f"software.{p}.card-summary"], "../", f"software.{p}.card-summary") + shell(body, "../")
+        pager += f'<a class="nx" href="{pn}.html">{esc(name_only(pn))} <span aria-hidden="true">→</span></a>'
+    body = f'''<div class="room wrap sx sx-d"><p class="crumb"><a href="../software.html"><span aria-hidden="true">←</span> Software</a></p>
+<div class="hero-p"><header class="room-head"><h1 data-block-id="{bid(p, "title")}">{title_html(p)}</h1><p class="claim" data-block-id="{bid(p, "summary")}">{esc(B(p, "summary"))}</p></header>
+<div class="frame" id="art">{art(p)}{PAUSE if p == "breathing-room" else ""}</div></div>
+{CREDIT if p == "healthstory" else ""}
+<div class="pp"><nav class="toc" aria-label="{LABELS["toc"]}"><h2>{LABELS["toc"]}</h2><ol>{toc}</ol></nav><div class="pp-main">{secs}</div></div>
+<nav class="pager" aria-label="More">{pager}</nav></div>'''
+    return head(f"{name_only(p)} · Software · Mangrove", B(p, "summary"), "../", bid(p, "summary")) + shell(body, "../")
 
 
-(nxt / "software.html").write_text(index_a(), encoding="utf8")
-(nxt / "software-b.html").write_text(index_b(), encoding="utf8")
-for i, p in enumerate(PRODUCTS):
-    (nxt / "software" / f"{p}.html").write_text(detail(p, i), encoding="utf8")
-print("built", len(PRODUCTS) + 2, "pages")
+if __name__ == "__main__":
+    (nxt / "software.html").write_text(index_a(), encoding="utf8")
+    (nxt / "software-b.html").write_text(index_b(), encoding="utf8")
+    for i, p in enumerate(PRODUCTS):
+        (nxt / "software" / f"{p}.html").write_text(detail(p, i), encoding="utf8")
+    print("built", len(PRODUCTS) + 2, "pages")
