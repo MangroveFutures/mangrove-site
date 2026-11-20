@@ -88,3 +88,6 @@ tmp/
 
 # --- Generated diagrams that are rebuilt from source (see docs/architecture/c4/README.md) ---
 # (Committed on purpose, so nothing is listed here. Add a line only if a generated file should not be committed.)
+node_modules/
+dist/
+.wrangler/

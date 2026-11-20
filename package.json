@@ -1,0 +1,10 @@
+{
+  "name": "mangrove-site",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/stage-site.mjs",
+    "test": "node --test scripts/",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "devDependencies": { "wrangler": "^4.157.0" }
+}
