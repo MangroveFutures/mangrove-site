@@ -1,0 +1,114 @@
+/* Software section, index and detail pages. Loaded after site.css: same tokens, fonts and atmospheres; adds only
+   the index, the plates and the product detail layout. Design record: home design/records/2026-11-20-software-index.md */
+
+.st.lg{width:22px;height:22px;}
+.rst{display:inline-flex;align-items:center;gap:.5rem;font-size:.92rem;color:var(--ink-soft);white-space:nowrap;}
+.rst .st{color:var(--falcon);}
+.sx .oq{display:block;margin-top:.7rem;padding:.55rem .75rem;border:1px dashed var(--line-strong);font-size:.85rem;line-height:1.4;color:var(--ink-soft);max-width:60ch;}
+.sx .oq b{color:var(--ink);font-weight:600;}
+
+/* ── Direction A: a ruled index. A status key that also filters, then one row per product. ── */
+.sx-a .key{display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--line-strong);margin-bottom:clamp(1.6rem,4vh,2.6rem);}
+@media (min-width:40rem){.sx-a .key{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.6rem;}}
+@media (min-width:64rem){.sx-a .key{grid-template-columns:repeat(4,minmax(0,1fr));}}
+.kitem{appearance:none;background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);font:inherit;text-align:left;cursor:pointer;
+  display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:.2rem;padding:.9rem 0 1rem;min-height:44px;position:relative;}
+@media (min-width:64rem){.kitem{border-bottom:0;padding-right:1.4rem;}}
+.kh{display:flex;align-items:center;gap:.6rem;color:var(--falcon);}
+.kh::after{content:"";flex:1;height:1px;opacity:.5;background:repeating-linear-gradient(90deg,var(--ink-soft) 0 1px,transparent 1px 12px);}
+.kitem:last-child .kh::after{display:none;}
+.kt{font-weight:600;font-size:1rem;margin-top:.25rem;}
+.kd{color:var(--ink-soft);font-size:.9rem;line-height:1.45;max-width:36ch;}
+.kitem::before{content:"";position:absolute;left:0;top:-1px;height:2px;width:0;background:var(--falcon);transition:width .35s cubic-bezier(.2,.8,.2,1);}
+.kitem:hover::before,.kitem[aria-pressed="true"]::before{width:100%;}
+.kitem:hover .kt{text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px;}
+.kitem[aria-pressed="true"] .kt::after{content:" ✕";font-weight:400;color:var(--ink-soft);}
+.clear{margin:1.2rem 0 0;}
+.clear button{appearance:none;background:none;border:1px solid var(--line-strong);color:var(--ink);font:inherit;font-size:.92rem;min-height:44px;padding:.3rem 1rem;cursor:pointer;}
+.clear button:hover{border-color:var(--ink);}
+
+.idx{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-strong);}
+.idx>li{border-bottom:1px solid var(--line);}
+.idx>li[hidden]{display:none;}
+.row{display:grid;grid-template-columns:minmax(0,1fr);gap:.35rem;position:relative;padding:1.1rem 2.2rem 1.15rem 0;text-decoration:none;color:var(--ink);
+  transition:background .25s,padding .25s;}
+.row:hover,.row:focus-visible{background:var(--well);padding-left:.8rem;}
+.rn{margin:0;font-family:"Bricolage Grotesque",ui-sans-serif,sans-serif;font-variation-settings:"opsz" 28,"wdth" 92;font-weight:560;
+  font-size:clamp(1.3rem,2.2vw,1.65rem);line-height:1.1;letter-spacing:-.015em;}
+.rs{margin:0;color:var(--ink-soft);font-size:1rem;line-height:1.5;max-width:62ch;text-wrap:pretty;}
+.row .go{position:absolute;right:.5rem;top:1.35rem;width:18px;height:12px;color:var(--falcon);opacity:0;transform:translateX(-6px);transition:opacity .25s,transform .25s;}
+.row:hover .go,.row:focus-visible .go{opacity:1;transform:none;}
+@media (min-width:52rem){
+  .row{grid-template-columns:minmax(11rem,17rem) minmax(0,1fr) 12.5rem;column-gap:2rem;align-items:baseline;padding:1.25rem 2.2rem 1.3rem 0;}
+  .row .oq{grid-column:2/3;}
+  .row .rst{justify-self:start;}
+  .row .go{top:1.6rem;}
+}
+.grp{margin-top:clamp(2rem,5vh,3.2rem);}
+.grp[hidden]{display:none;}
+.grp>h2{margin:0 0 .9rem;font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 48;font-size:clamp(1.5rem,2.6vw,2rem);letter-spacing:-.015em;}
+.sx-a .room-head{margin-bottom:clamp(1.2rem,3vh,2rem);}
+
+@media (prefers-reduced-motion:no-preference){
+  html:not([data-lib-motion="reduce"]) .sx-a .idx>li{animation:sx-rise .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*45ms);}
+  @keyframes sx-rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+}
+
+/* ── Direction B: a catalogue. One drawn plate per product, Epoch larger than the rest. ── */
+.plates{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.6rem,4vh,2.6rem) 2.6rem;}
+@media (min-width:52rem){.plates{grid-template-columns:repeat(2,minmax(0,1fr));}.plate-lead{grid-column:1/-1;}}
+.plate>a{display:grid;grid-template-columns:minmax(0,1fr);gap:.9rem;text-decoration:none;color:var(--ink);border-top:1px solid var(--line-strong);padding-top:1rem;height:100%;align-content:start;}
+@media (min-width:52rem){.plate-lead>a{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:2.2rem;align-items:end;}}
+.plate .frame{transition:border-color .25s;}
+.plate>a:hover .frame,.plate>a:focus-visible .frame{border-color:var(--falcon);}
+.plate .pt{display:grid;gap:.45rem;align-content:start;}
+.pn{margin:0;font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 72;font-size:clamp(1.7rem,3.2vw,2.4rem);line-height:1.02;letter-spacing:-.02em;}
+.plate-lead .pn{font-size:clamp(2.2rem,5vw,3.8rem);}
+.plate>a:hover .pn{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em;}
+.ps{margin:0;color:var(--ink-soft);font-size:1rem;line-height:1.5;max-width:52ch;}
+.plate .breathe{animation:none;}
+.plate>a:hover .breathe,.plate>a:focus-visible .breathe{animation:breathe 9s ease-in-out infinite;}
+@media (prefers-reduced-motion:reduce){.plate>a:hover .breathe{animation:none;}}
+html[data-lib-motion="reduce"] .plate>a:hover .breathe{animation:none;}
+html.sx-armed .plate .art path{stroke-dasharray:1;stroke-dashoffset:1;}
+html.sx-armed .plate.in .art path{stroke-dashoffset:0;transition:stroke-dashoffset 1.5s cubic-bezier(.3,.7,.2,1);transition-delay:calc(var(--i,0)*60ms);}
+.keyfoot{margin:clamp(2.2rem,5vh,3.4rem) 0 0;padding-top:1rem;border-top:1px solid var(--line);display:grid;gap:.9rem 2rem;grid-template-columns:minmax(0,1fr);}
+@media (min-width:52rem){.keyfoot{grid-template-columns:repeat(4,minmax(0,1fr));}}
+.keyfoot>div{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.1rem .6rem;align-items:center;}
+.keyfoot .st{color:var(--falcon);}
+.keyfoot dt{font-weight:600;font-size:.95rem;}
+.keyfoot dd{grid-column:1/-1;margin:0;color:var(--ink-soft);font-size:.88rem;line-height:1.45;}
+.sx-b .grp>h2{margin-bottom:1.1rem;}
+
+/* ── Product detail page (shared by both directions) ── */
+.sx-d .room-head h1{font-size:clamp(2.4rem,6.2vw,4.6rem);}
+.dl{display:grid;gap:2rem 3.5rem;margin-top:clamp(1.6rem,4vh,2.6rem);}
+@media (min-width:56rem){.dl{grid-template-columns:minmax(0,4fr) minmax(0,8fr);align-items:start;}.dl-side{position:sticky;top:5.5rem;}}
+.dl-side{border-top:1px solid var(--line-strong);padding-top:1rem;display:grid;gap:1.4rem;}
+.stat{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.7rem;align-items:start;}
+.stat .st{color:var(--falcon);margin-top:.2rem;}
+.stat p{margin:0;font-size:.98rem;line-height:1.5;color:var(--ink-soft);}
+.stat p strong{display:block;color:var(--ink);font-size:1.1rem;font-weight:600;margin-bottom:.15rem;}
+.who h2,.dh{margin:0 0 .5rem;font-family:"Bricolage Grotesque",sans-serif;font-size:.95rem;font-weight:600;color:var(--ink-soft);}
+.who p{margin:0;font-size:.98rem;line-height:1.5;max-width:42ch;}
+.dl-main{border-top:1px solid var(--line-strong);padding-top:1rem;}
+.lede{margin:0 0 2rem;font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 48;font-size:clamp(1.3rem,2.2vw,1.7rem);line-height:1.4;letter-spacing:-.01em;max-width:44ch;text-wrap:pretty;}
+.caps{list-style:none;margin:0;padding:0;counter-reset:cap;border-top:1px solid var(--line);}
+.caps li{counter-increment:cap;display:grid;grid-template-columns:2.2rem minmax(0,1fr);padding:.95rem 0;border-bottom:1px solid var(--line);}
+.caps li::before{content:counter(cap,decimal-leading-zero);color:var(--ink-soft);font-size:.85rem;padding-top:.2rem;font-variant-numeric:tabular-nums;}
+.caps p{margin:0;max-width:62ch;line-height:1.55;}
+.caps strong,.still strong{font-weight:600;}
+.still{margin:1.6rem 0 0;max-width:62ch;color:var(--ink-soft);}
+.still strong{color:var(--ink);}
+.sx-d .frame{margin-top:0;}
+.frame>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%;filter:grayscale(.3) contrast(1.05);}
+[data-theme="dark"] .frame>img{filter:grayscale(.3) invert(.88) contrast(1.05);}
+.credit{margin:.7rem 0 0;font-size:.82rem;color:var(--ink-soft);max-width:70ch;}
+/* phone: the key is a compact 2 x 2 of glyph and word; a definition opens under the word you choose */
+@media (max-width:39.99rem){
+  .sx-a .key{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1rem;}
+  .kitem{padding:.7rem 0 .8rem;border-bottom:0;}
+  .kitem:not([aria-pressed="true"]) .kd{display:none;}
+  .kitem[aria-pressed="true"]{grid-column:1/-1;}
+  .kh::after{display:none;}
+}
