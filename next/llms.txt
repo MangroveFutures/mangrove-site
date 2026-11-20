@@ -1,0 +1,9 @@
+# Mangrove
+
+> Mangrove is a speculative design studio and research lab. It studies how a person and their AI think together, and builds software that fits the person. This file lists the pages on the new Mangrove site (preview, November 2026) that have a plain text version written for agents.
+
+Each text version has the same address as its web page, ending in .md. More are added as the site is built.
+
+## Research
+
+- [Built for people and for agents](https://mangrove.org.uk/next/research/built-for-people-and-agents.md): how and why the Mangrove site is built in two layers, one adaptive layer for people and one for agents with no buttons. Written 20 November 2026.
