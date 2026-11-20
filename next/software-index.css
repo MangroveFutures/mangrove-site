@@ -1,0 +1,108 @@
+/* Software section: the index (two directions) and the full product pages. Loaded after site.css: same tokens, fonts and
+   atmospheres; adds only the index, the plates and the product page layout. No status marks (Rosie, 20 Nov 2026).
+   Design record: home design/records/2026-11-20-software-product-pages.md */
+
+/* ── Direction A: a ruled index. One row per product: a small drawing, the name, one sentence. ── */
+.idx{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-strong);}
+.idx>li{border-bottom:1px solid var(--line);}
+.row{display:grid;grid-template-columns:minmax(0,1fr);gap:.35rem;position:relative;padding:1.1rem 2.2rem 1.15rem 0;text-decoration:none;color:var(--ink);
+  transition:background .25s,padding .25s;}
+.row:hover,.row:focus-visible{background:var(--well);padding-left:.8rem;}
+.rf{display:none;}
+.rn{margin:0;font-family:"Bricolage Grotesque",ui-sans-serif,sans-serif;font-variation-settings:"opsz" 28,"wdth" 92;font-weight:560;
+  font-size:clamp(1.3rem,2.2vw,1.65rem);line-height:1.1;letter-spacing:-.015em;}
+.rn .open,.pn .open{font-family:"Bricolage Grotesque",sans-serif;font-weight:400;font-size:.62em;color:var(--ink-soft);letter-spacing:0;white-space:nowrap;}
+.rs{margin:0;color:var(--ink-soft);font-size:1rem;line-height:1.5;max-width:62ch;text-wrap:pretty;}
+.row .go{position:absolute;right:.5rem;top:1.35rem;width:18px;height:12px;color:var(--falcon);opacity:0;transform:translateX(-6px);transition:opacity .25s,transform .25s;}
+.row:hover .go,.row:focus-visible .go{opacity:1;transform:none;}
+@media (min-width:52rem){
+  .row{grid-template-columns:9.5rem minmax(11rem,15rem) minmax(0,1fr);column-gap:2rem;align-items:center;padding:1rem 2.6rem 1rem 0;}
+  .rf{display:block;}
+  .rf .frame{margin:0;display:block;border-color:var(--line);}
+  .rf .breathe{animation:none;}
+  .row .go{top:50%;margin-top:-6px;}
+}
+.grp{margin-top:clamp(2rem,5vh,3.2rem);}
+.grp>h2{margin:0 0 .9rem;font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 48;font-size:clamp(1.5rem,2.6vw,2rem);letter-spacing:-.015em;}
+.sx-a .room-head{margin-bottom:clamp(1.2rem,3vh,2rem);}
+
+@media (prefers-reduced-motion:no-preference){
+  html:not([data-lib-motion="reduce"]) .sx-a .idx>li{animation:sx-rise .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*45ms);}
+  @keyframes sx-rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+}
+
+/* ── Direction B: a catalogue. One drawn plate per product, the first larger than the rest. ── */
+.plates{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.6rem,4vh,2.6rem) 2.6rem;}
+@media (min-width:52rem){.plates{grid-template-columns:repeat(2,minmax(0,1fr));}.plate-lead{grid-column:1/-1;}}
+.plate>a{display:grid;grid-template-columns:minmax(0,1fr);gap:.9rem;text-decoration:none;color:var(--ink);border-top:1px solid var(--line-strong);padding-top:1rem;height:100%;align-content:start;}
+@media (min-width:52rem){.plate-lead>a{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:2.2rem;align-items:end;}}
+.plate .frame{transition:border-color .25s;}
+.plate>a:hover .frame,.plate>a:focus-visible .frame{border-color:var(--falcon);}
+.plate .pt{display:grid;gap:.45rem;align-content:start;}
+.pn{margin:0;font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 72;font-size:clamp(1.7rem,3.2vw,2.4rem);line-height:1.02;letter-spacing:-.02em;}
+.plate-lead .pn{font-size:clamp(2.2rem,5vw,3.8rem);}
+.plate>a:hover .pn{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em;}
+.ps{margin:0;color:var(--ink-soft);font-size:1rem;line-height:1.5;max-width:52ch;}
+.plate .breathe{animation:none;}
+.plate>a:hover .breathe,.plate>a:focus-visible .breathe{animation:breathe 9s ease-in-out infinite;}
+@media (prefers-reduced-motion:reduce){.plate>a:hover .breathe{animation:none;}}
+html[data-lib-motion="reduce"] .plate>a:hover .breathe{animation:none;}
+html.sx-armed .plate .art path{stroke-dasharray:1;stroke-dashoffset:1;}
+html.sx-armed .plate.in .art path{stroke-dashoffset:0;transition:stroke-dashoffset 1.5s cubic-bezier(.3,.7,.2,1);transition-delay:calc(var(--i,0)*60ms);}
+.sx-b .grp>h2{margin-bottom:1.1rem;}
+
+/* ── Product page ── */
+.frame>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 42%;filter:grayscale(.3) contrast(1.05);}
+[data-theme="dark"] .frame>img{filter:grayscale(.3) invert(.88) contrast(1.05);}
+.credit{margin:.7rem 0 0;font-size:.82rem;color:var(--ink-soft);max-width:70ch;}
+.sx-d .room-head{display:block;margin:0;}
+.sx-d .room-head h1{font-size:clamp(2.6rem,7vw,5rem);margin:0 0 1rem;}
+.sx-d .room-head h1 .open{display:block;margin-top:.5rem;font-family:"Bricolage Grotesque",sans-serif;font-variation-settings:normal;font-weight:400;
+  font-size:.9rem;letter-spacing:0;color:var(--ink-soft);}
+.sx-d .claim{max-width:34ch;font-size:clamp(1.15rem,1.9vw,1.45rem);}
+.hero-p{display:grid;gap:1.4rem 3rem;align-items:end;margin-bottom:clamp(2rem,6vh,3.6rem);}
+@media (min-width:56rem){.hero-p{grid-template-columns:minmax(0,5fr) minmax(0,7fr);}}
+.hero-p .frame{margin:0;}
+
+.pp{display:grid;gap:1.6rem 3.5rem;}
+@media (min-width:64rem){.pp{grid-template-columns:12.5rem minmax(0,1fr);align-items:start;}}
+.toc{border-top:1px solid var(--line-strong);padding-top:.9rem;}
+@media (min-width:64rem){.toc{position:sticky;top:5.5rem;}}
+.toc h2{margin:0 0 .4rem;font-family:"Bricolage Grotesque",sans-serif;font-size:.92rem;font-weight:600;color:var(--ink-soft);}
+.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:0 1.3rem;}
+@media (min-width:64rem){.toc ol{display:block;border-left:1px solid var(--line);}}
+.toc a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink-soft);text-decoration:none;font-size:.98rem;position:relative;}
+@media (min-width:64rem){.toc a{display:flex;min-height:36px;padding-left:.9rem;}.toc a::before{content:"";position:absolute;left:-1px;top:6px;bottom:6px;width:2px;background:var(--falcon);transform:scaleY(0);transition:transform .25s;}}
+.toc a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:.2em;}
+.toc a[aria-current="true"]{color:var(--ink);font-weight:600;}
+@media (min-width:64rem){.toc a[aria-current="true"]::before{transform:none;}}
+
+.ps-sec{border-top:1px solid var(--line-strong);padding-top:1.1rem;margin-bottom:clamp(2.4rem,7vh,4.2rem);scroll-margin-top:5.5rem;}
+.ps-sec>h2{margin:0 0 1.2rem;font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 48;font-size:clamp(1.55rem,2.6vw,2.1rem);line-height:1.1;letter-spacing:-.015em;}
+.prose p{margin:0 0 1rem;max-width:62ch;font-size:1.05rem;line-height:1.62;text-wrap:pretty;}
+.prose.big p:first-child{font-family:"Newsreader",Georgia,serif;font-weight:300;font-variation-settings:"opsz" 48;font-size:clamp(1.3rem,2.3vw,1.75rem);line-height:1.38;letter-spacing:-.01em;max-width:44ch;}
+.prose.ruled{border-top:1px solid var(--line);}
+.prose.ruled p{margin:0;padding:.95rem 0;border-bottom:1px solid var(--line);}
+
+/* how it works: numbered steps on a flow line */
+.flow{list-style:none;margin:0;padding:0;counter-reset:st;}
+.flow li{counter-increment:st;position:relative;padding:0 0 1.5rem 3.6rem;max-width:calc(62ch + 3.6rem);font-size:1.05rem;line-height:1.58;}
+.flow li:last-child{padding-bottom:0;}
+.flow li::before{content:counter(st);position:absolute;left:0;top:-.1rem;width:2.3rem;height:2.3rem;border:1.5px solid var(--falcon);border-radius:50%;
+  display:grid;place-items:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.95rem;font-variant-numeric:tabular-nums;background:var(--sky-top);color:var(--ink);}
+.flow li:not(:last-child)::after{content:"";position:absolute;left:calc(1.15rem - .75px);top:2.4rem;bottom:.1rem;width:1.5px;background:var(--line-strong);transform-origin:top;}
+.flow li strong{font-weight:600;}
+.fnote{margin:1.2rem 0 0;max-width:62ch;color:var(--ink-soft);font-size:1rem;line-height:1.55;}
+.flowwrap>.fnote:first-child{margin:0 0 1.2rem;}
+html.sx-armed .flow li:not(:last-child)::after{transform:scaleY(0);}
+html.sx-armed .flow li.in:not(:last-child)::after{transform:none;transition:transform .6s cubic-bezier(.3,.7,.2,1) .15s;}
+
+/* examples: marked placeholders, never invented pictures */
+.phs{display:grid;gap:.9rem;grid-template-columns:minmax(0,1fr);margin-bottom:1.6rem;}
+@media (min-width:44rem){.phs{grid-template-columns:repeat(var(--c,3),minmax(0,1fr));}}
+.ph{border:1.5px dashed var(--line-strong);padding:.9rem 1rem;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.8rem;align-items:center;color:var(--ink-soft);min-height:5.5rem;}
+@media (min-width:44rem){.ph{grid-template-columns:minmax(0,1fr);align-content:end;aspect-ratio:4/3;gap:.6rem;align-items:end;}}
+.ph svg{width:28px;height:28px;color:var(--ink-soft);}
+.ph-t{font-size:.9rem;line-height:1.4;}
+.ph-t b{color:var(--ink);font-weight:600;}
+.pager{margin-top:clamp(1rem,3vh,2rem);}

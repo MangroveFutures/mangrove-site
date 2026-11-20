@@ -5,57 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>HealthStory AI · Software · Mangrove</title>
-<meta name="description" content="Your own health story, kept as your own record. Early-stage research, not available yet.">
-<meta name="design-record" content="design/records/2026-11-20-healthstory-page.md">
+<meta name="description" content="Your health story, in your words and in order, kept as a record you own and can turn into whatever a doctor, a family member or a researcher needs." data-block-id="software.healthstory.card-summary">
+<meta name="design-record" content="home:design/records/2026-11-20-software-index.md">
 <meta name="color-scheme" content="dark light">
 <link rel="preload" href="../../fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../../fonts/bricolage-grotesque-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../site.css">
+<link rel="stylesheet" href="../software-index.css">
 <script src="../site.js"></script>
-<style>
-.hs-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:1.6rem;margin-top:1.6rem}
-@media (min-width:56rem){.hs-grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:start}}
-.hs-fig{margin:0}.hs-fig .pl{position:relative;border:1px solid var(--line)}
-.hs-fig img{display:block;width:100%;height:auto}
-.hs-fig svg{position:absolute;inset:0;width:100%;height:100%}
-.hs-fig figcaption{margin-top:.6rem;font-size:1rem;color:var(--ink-soft);max-width:62ch}
-.hs-key{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:.7rem;font-size:1rem}
-.hs-key li{display:flex;gap:.8rem;align-items:center}
-.hs-key svg{width:64px;height:14px;flex:none;color:var(--ink)}
-.hs-two{display:grid;grid-template-columns:minmax(0,1fr);gap:1.6rem;margin-top:1.6rem}
-@media (min-width:56rem){.hs-two{grid-template-columns:1fr 1fr}}
-.hs-two h2{font-size:1.3rem;margin:0 0 .5rem}
-.hs-two p{max-width:56ch}
-.hs-note{font-size:1rem;color:var(--ink-soft);max-width:62ch}
-</style>
+<script src="../software-index.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
 <div class="grain" aria-hidden="true"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="g-use" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="currentColor" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="g-dev" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 1.5a5.5 5.5 0 0 1 0 11z" fill="currentColor"/></symbol><symbol id="g-design" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.2 2.1"/></symbol><symbol id="g-proto" viewBox="0 0 14 14"><path d="M7 1.3L12.7 7 7 12.7 1.3 7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol></defs></svg>
 <div class="page">
 <header class="axis"><nav aria-label="Main" class="wrap"><a class="mark" href="../index.html">Mangrove</a><ol><li><a href="../work-with-us.html">Work with us</a></li><li><a href="../advisors.html">Advisors</a></li><li><a href="../work.html">Work</a></li><li><a href="../software.html" aria-current="true">Software</a></li><li><a href="../research/index.html">Research</a></li><li><a href="../research/tangential-thinking.html">Book</a></li></ol><button class="atmos" type="button" id="atmos" role="switch" aria-checked="true" aria-label="Dark mode"><svg class="i-moon" viewBox="0 0 18 18" aria-hidden="true"><path d="M14.6 11.3A6.4 6.4 0 0 1 6.7 3.4a6.4 6.4 0 1 0 7.9 7.9z" fill="currentColor"/></svg><svg class="i-sun" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="3.4" fill="currentColor"/><path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.7 3.7l1.4 1.4M12.9 12.9l1.4 1.4M3.7 14.3l1.4-1.4M12.9 5.1l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></button></nav></header>
 <main id="main">
-<div class="room wrap"><p class="crumb"><a href="../software.html"><span aria-hidden="true">←</span> Software</a></p><header class="room-head"><h1>HealthStory AI</h1><p class="claim">Your own health story, kept as your own record.</p></header>
-<p class="status"><svg class="st" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Early-stage research. Not available yet.</p>
-<div class="hs-grid">
-<figure class="hs-fig"><div class="pl"><img src="img/healthstory-gray-hand-1877.jpg" width="720" height="969" alt="Engraved plate of the bones of the back of the hand, with three sample marks drawn on it: a solid ring, a dashed ring and a dotted ring."><svg viewBox="0 0 720 969" aria-hidden="true" fill="none" stroke="var(--falcon)" stroke-width="6"><circle cx="355" cy="470" r="52" fill="color-mix(in srgb,var(--falcon) 25%,transparent)"/><circle cx="470" cy="190" r="40" stroke-dasharray="14 10"/><circle cx="215" cy="790" r="34" stroke-dasharray="2 12" stroke-linecap="round"/></svg></div><figcaption>BodyScan: mark where it hurts on a body chart, and see it change over time. The three marks are an invented example. The engraving is a hand from Henry Gray, <i>Anatomy, Descriptive and Surgical</i> (1877), public domain, via the Internet Archive and Wikimedia Commons.</figcaption></figure>
-<div class="prose">
-<p>Most of us tell our health story again and again, to one clinician after another, and each retelling loses some of the detail, the order and our own explanation. The record that does exist usually belongs to the clinic, not to us.</p>
-<p>HealthStory AI is a different starting point. You tell your story in your own words and in your own order. It is kept as a structured record that is yours: a graph of conditions, symptoms, medicines, appointments and life events, with time running through it. You can correct it, export it, and give it back in whatever form someone needs, such as a short summary for a GP or a plain account for family.</p>
-<p>It is meant to run on your own device, with no subscription and no need for a clinician to approve it.</p>
-<ul class="hs-key" aria-label="How a mark shows how settled it is">
-<li><svg viewBox="0 0 64 14" aria-hidden="true"><path d="M2 7h60" stroke="currentColor" stroke-width="3"/></svg><span><b>Solid</b>: written down when it happened.</span></li>
-<li><svg viewBox="0 0 64 14" aria-hidden="true"><path d="M2 7h60" stroke="currentColor" stroke-width="3" stroke-dasharray="10 6"/></svg><span><b>Dashed</b>: suggested by the app. You decide.</span></li>
-<li><svg viewBox="0 0 64 14" aria-hidden="true"><path d="M3 7h58" stroke="currentColor" stroke-width="3" stroke-dasharray="1 7" stroke-linecap="round"/></svg><span><b>Dotted</b>: remembered later, and not sure.</span></li>
-</ul>
-</div></div>
-<div class="hs-two">
-<section aria-labelledby="h-hs"><h2 id="h-hs">HealthStory AI</h2><p>The record itself, drawn as swimlanes in time: body, care and readings side by side, so you can see what happened around what. Every entry carries its own mark for how settled it is, so a guess never looks like a fact.</p></section>
-<section aria-labelledby="h-bs"><h2 id="h-bs">BodyScan</h2><p>The body-chart part. You are guided from toe to head, mark where something hurts, say what it feels like and for how long, and come back later to compare. It makes a note you can hand to your GP. It does not diagnose or triage.</p></section>
-</div>
-<figure class="hs-fig" style="margin-top:2rem;max-width:44rem"><div class="pl"><img src="img/healthstory-nightingale-1858.jpg" width="800" height="438" alt="Florence Nightingale's 1858 polar area diagram of deaths in the army in the East: blue, red and black wedges by month."></div><figcaption>The look borrows from a famous health chart: Florence Nightingale, causes of mortality in the army in the East, 1858 (public domain). The size of each wedge carries the meaning.</figcaption></figure>
-<p class="hs-note" style="margin-top:1.6rem">This page is a draft of the idea. HealthStory AI is an early research product and nothing is available to use yet. The look, the name and these words may change.</p>
-<nav class="pager" aria-label="More"><a href="breathing-room.html"><span aria-hidden="true">←</span> Breathing Room</a><a class="nx" href="../software.html">All software <span aria-hidden="true">→</span></a></nav></div>
+<div class="room wrap sx sx-d"><p class="crumb"><a href="../software.html"><span aria-hidden="true">←</span> Software</a></p><header class="room-head"><h1 data-block-id="software.healthstory.card-title">HealthStory AI</h1><p class="claim" data-block-id="software.healthstory.card-summary">Your health story, in your words and in order, kept as a record you own and can turn into whatever a doctor, a family member or a researcher needs.</p></header>
+<div class="frame" id="art"><img src="img/healthstory-gray-hand-1877.jpg" width="720" height="969" alt="Engraved plate of the bones of the back of the hand, with three sample marks drawn on it: a solid ring, a dashed ring and a dotted ring."><svg class="art" viewBox="0 0 720 969" preserveAspectRatio="xMidYMid slice" aria-hidden="true" fill="none" stroke="var(--falcon)" stroke-width="6"><circle cx="355" cy="470" r="52" fill="color-mix(in srgb,var(--falcon) 25%,transparent)"/><circle cx="470" cy="190" r="40" stroke-dasharray="14 10"/><circle cx="215" cy="790" r="34" stroke-dasharray="2 12" stroke-linecap="round"/></svg></div>
+<div class="dl"><aside class="dl-side"><div class="stat"><svg class="st lg" viewBox="0 0 14 14" aria-hidden="true"><use href="#g-design"/></svg><p class="stw" data-block-id="software.healthstory.status"><strong>In design.</strong> The method works and the product is written down. The software has not been built, and we are not collecting anyone's health information through it.</p></div><div class="who"><h2>Who it is for</h2><p data-block-id="software.healthstory.who-for">Adults with a long, complex or hard-to-diagnose condition, including people with ADHD and other neurodivergent people, for whom telling a story in order in a short appointment is hard. Not for hospitals as buyers, not for diagnosis, and not for children.</p></div></aside><div class="dl-main"><p class="lede" data-block-id="software.healthstory.detail-intro">People with long or unclear health histories tell their story again and again, and each retelling loses detail and order. HealthStory AI lets you tell it once, in your own words and your own order. It keeps the story as structured data that you own and can export, and gives it back in the form each reader needs: a one-page summary for a clinician, a narrative for family, or a data export.</p><h2 class="dh">In detail</h2><ol class="caps"><li><p data-block-id="software.healthstory.capability-1"><strong>A tested interview method:</strong> a 60 to 90 minute conversation in a fixed set of moves, in time order, which produced three different documents for three readers from a single interview.</p></li><li><p data-block-id="software.healthstory.capability-2"><strong>Designed, not yet built:</strong> a private store with consent recorded for each purpose, so words shared for one study are not used for another, with a way to withdraw and have them removed.</p></li><li><p data-block-id="software.healthstory.capability-3"><strong>Designed, not yet built:</strong> your story as a graph of conditions, symptoms, medicines, appointments and life events over time, with export in the HL7 FHIR standard as the aim.</p></li></ol></div></div>
+<p class="credit">Engraving: a hand from Henry Gray, <i>Anatomy, Descriptive and Surgical</i> (1877), public domain, via the Internet Archive and Wikimedia Commons. The three marks are an invented example. Carried over from the earlier HealthStory page; not register copy.</p><nav class="pager" aria-label="More"><a href="../software.html"><span aria-hidden="true">←</span> All software</a><a class="nx" href="bodyscan.html">BodyScan <span aria-hidden="true">→</span></a></nav></div>
 </main>
 <footer class="foot wrap" aria-labelledby="h-write"><h2 class="lead" id="h-write">Write to us</h2><a class="email" href="mailto:info@mangrove.org.uk">info@mangrove.org.uk</a><div class="foot-row"><span>Mangrove · a speculative design studio and research lab</span><a href="../work-with-us.html">Work with us</a></div></footer>
 </div>
