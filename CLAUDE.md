@@ -19,5 +19,5 @@ This file holds pointers only. Decisions live in the files below — read them, 
 
 ## Working rules
 - Don't change the Boids hero without discussion with Rosie.
-- Never edit `vendor/ripple/` by hand. It is a copy of a tagged version of the pond in the private studio repo (`packages/ripple`), made by `scripts/sync-ripple.mjs <tag>` (22 Nov 2026, studio#45). To change the pond: edit it in studio, tag it, re-run the script. `node scripts/sync-ripple.mjs --check` fails if the copy differs from `vendor/ripple/MANIFEST.json`; add `--studio ../studio` to compare with the tag itself. Tests: `node --test scripts/`.
+- Never edit `vendor/ripple/` by hand. It is a copy of a tagged version of the pond in the private studio repo (`packages/ripple`), made by `scripts/sync-ripple.mjs <tag>` (22 Nov 2026, studio#45). To change the pond: edit it in studio, tag it, re-run the script. `node scripts/sync-ripple.mjs --check` fails if the copy differs from `vendor/ripple/MANIFEST.json`; add `--studio ../studio` to compare with the tag itself. Tests: `node --test scripts/*.test.mjs`.
 - Design, colour and copy choices are Rosie's. Agents gather, structure and flag; they don't decide.

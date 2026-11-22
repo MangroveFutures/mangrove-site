@@ -1,4 +1,4 @@
-/* Tests for the sync script's check. Run: node --test scripts/ */
+/* Tests for the sync script's check. Run: node --test scripts/*.test.mjs */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { FILES, sha256, verifyAgainstManifest } from './sync-ripple.mjs';

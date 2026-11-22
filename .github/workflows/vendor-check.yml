@@ -22,4 +22,4 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: node scripts/sync-ripple.mjs --check
-      - run: node --test scripts/
+      - run: node --test scripts/*.test.mjs
