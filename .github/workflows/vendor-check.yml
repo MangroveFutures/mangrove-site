@@ -1,0 +1,25 @@
+# Checks that vendor/ripple/ (the pond) is an unedited copy of the studio tag named in its MANIFEST.json, and
+# runs the check's own tests. Studio is private, so CI compares against the manifest's hashes; the comparison with
+# the tag itself runs where studio is checked out (see scripts/sync-ripple.mjs). No secrets needed.
+# Actions are pinned to a commit SHA (the tag is in the comment), as in docs-links.yml.
+name: Vendor check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ripple:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: node scripts/sync-ripple.mjs --check
+      - run: node --test scripts/*.test.mjs
