@@ -8,6 +8,10 @@ exclude:
   - .editorconfig
   - .github
   - .gitignore
+  # Paused by Rosie on 22 Nov 2026: the draft was written without the record (about 1,300 turns on Health Story
+  # since Jan 2025). Kept in the repository as a labelled example of what not to do; not published. Undo: delete these two lines.
+  - next/software/healthstory.html
+  - next/software/img/healthstory-*
 
 # Text twins (20 Nov 2026, next/research/built-for-people-and-agents.md): every page gets a Markdown
 # copy at the same address ending in .md, served as plain text for agents. GitHub Pages always runs
