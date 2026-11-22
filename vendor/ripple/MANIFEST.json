@@ -1,0 +1,15 @@
+{
+  "note": "Made by scripts/sync-ripple.mjs from the private studio repo. Do not edit these files: change packages/ripple in studio, tag it, and run the script again.",
+  "source": "MangroveFutures/studio",
+  "path": "packages/ripple",
+  "tag": "ripple-v1.0.0",
+  "commit": "c1d7cced50039065aa4166ec803638c3963a25cb",
+  "files": {
+    "ripple.js": "72a47d2c7e754de9303ec17717b2bfad96fc109bdb707ef3b95d649ccc2b0c48",
+    "settings.js": "2f1ba11ceebfd124b06df210a266cfd458a157ee26c4407efe77d08762bd35ec",
+    "sim.js": "98e29238732d2891bb7aea7aaa2634415e92abd9239aa449d67ad2305e88e4f0",
+    "render.js": "6641da98f8d68d525e8d054fb11619c3dcaf5825a7ba29a5b681d1656f664e5a",
+    "fx.js": "a95dc94ae6a491445b77c07244b6f712c12224af22342a3ce8e4968b9f1054fc",
+    "tune.js": "ee15824510ea10fcc92f5ceffac2261032ba8563f5cbb5803fabf19db1e8ec8b"
+  }
+}
