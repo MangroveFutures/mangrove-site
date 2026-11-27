@@ -15,8 +15,8 @@
     lexend: { name: 'Lexend', family: '"Lexend",system-ui,sans-serif', css: null, local: true }
   } };
   /* Where "Sign in" goes. Each client's space sits behind Cloudflare Access (an emailed one-time code, no password).
-     Empty until the shared client address exists; the button then asks for a sign-in link by email instead. */
-  window.MANGROVE_PORTAL = '';
+     If empty, the button asks for a sign-in link by email instead. */
+  window.MANGROVE_PORTAL = 'https://mangrove-portal.rosie-2af.workers.dev/';
 </script>
 <link rel="preload" href="fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/bricolage-grotesque-var.woff2" as="font" type="font/woff2" crossorigin>
