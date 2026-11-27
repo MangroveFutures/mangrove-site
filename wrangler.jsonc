@@ -1,0 +1,15 @@
+{
+  // Public site for mangrove.org.uk as a Worker with static assets (decision: home ORG note, 20 Nov 2026).
+  // Only dist/ is uploaded; scripts/stage-site.mjs fills it from an allow-list. Deploy by hand: npm run deploy.
+  "name": "mangrove-site",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "observability": { "enabled": true }
+  // Later: add "main" (a Worker for private rooms and the reply endpoint) and "run_worker_first" for those paths only.
+  // Custom domain mangrove.org.uk is attached at cutover (guided page), not here, so a deploy cannot move DNS.
+}
